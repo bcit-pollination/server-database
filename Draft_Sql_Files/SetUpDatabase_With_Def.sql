@@ -37,7 +37,7 @@ CREATE TABLE Vote
 ,PRIMARY KEY (vote_id)
 ,FOREIGN KEY (user_id) 
 	REFERENCES Users(user_id)
-      ON DELETE CASCADE
+      ON DELETE RESTRICT
       ON UPDATE CASCADE
 );
 
