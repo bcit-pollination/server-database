@@ -13,20 +13,20 @@ DROP TABLE IF EXISTS Users;
 
 CREATE TABLE Users
 (user_id         INT            NOT NULL    AUTO_INCREMENT       
-,first_name      VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
-,last_name       VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
-,uuid            BIGINT         NOT NULL    DEFAULT(0) /** UUID cannot be zero (zero indicates that UUID is unknown)*/
-,identification  VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
+,first_name      VARCHAR(40)    NOT NULL    
+,last_name       VARCHAR(40)    NOT NULL
+,uuid            BIGINT         NOT NULL    DEFAULT(UUID())
+,identification  VARCHAR(40)    NOT NULL
 ,PRIMARY KEY (user_id)
 );
 
 CREATE TABLE Location
 (location_id     INT            NOT NULL    AUTO_INCREMENT
-,country         VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
-,street_address  VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
-,city            VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
-,postal_code     VARCHAR(20)    NOT NULL    DEFAULT ('Unknown')
-,province_state  VARCHAR(40)    NOT NULL    DEFAULT ('Unknown')
+,country         VARCHAR(40)    NOT NULL    
+,street_address  VARCHAR(40)    NOT NULL    
+,city            VARCHAR(40)    NOT NULL    
+,postal_code     VARCHAR(20)    NOT NULL    
+,province_state  VARCHAR(40)    NOT NULL    
 ,PRIMARY KEY (location_id)
 );
 
@@ -43,9 +43,7 @@ CREATE TABLE Vote
 
 CREATE TABLE Organization
 (org_id          INT          NOT NULL    AUTO_INCREMENT
-,org_name        VARCHAR(40) /** Organization name can be null, 
-                             but it's not recommended to leave blank.
-                             It's not required to be filled out.*/
+,org_name        VARCHAR(40)  NOT NULL    DEFAULT('Unknown')
 ,PRIMARY KEY (org_id)
 );
 
@@ -72,8 +70,7 @@ CREATE TABLE Election
 ,start_time      TIMESTAMP    NOT NULL    DEFAULT(CURRENT_TIMESTAMP) /** Start date is automatically the first day the election was made.*/
 ,end_time        TIMESTAMP    NOT NULL    DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)) /** End date is automatically thirty days after 
 																	                        admin creates the election, if no other time is specified*/
-,status          VARCHAR(40)  NOT NULL    DEFAULT ('Incomplete') /** Status is automatically incomplete unless otherwise specified.*/
-,is_published    BOOLEAN      NOT NULL    DEFAULT (TRUE) /** Is published is automatically true. */
+,is_published    BOOLEAN      NOT NULL    DEFAULT (FALSE) /** Is published is automatically false. */
 ,is_anonymous    BOOLEAN      NOT NULL    DEFAULT (TRUE) /** It's anonymous automatically */
 ,PRIMARY KEY (election_id)
 ,FOREIGN KEY(org_id) 
