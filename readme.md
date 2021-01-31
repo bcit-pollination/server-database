@@ -26,9 +26,9 @@ How to connect to the database:
 
 6) Change the "SSH Hostname" field to "ec2-52-13-226-39.us-west-2.compute.amazonaws.com:22".
 
-7) Change the "SSH Username" field to "ubuntu".
+7) Change the "SSH Username" field to <deleted>.
 
-8) Change the "SSH Password" to "d@rcy_Pr0!ject".
+8) Change the "SSH Password" to <deleted>
 
 9) In the "SSH Key File", you must locate the .ppk file for this
 project's server.
