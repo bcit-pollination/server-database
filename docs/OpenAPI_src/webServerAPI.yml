@@ -1,0 +1,621 @@
+openapi: "3.0.2"
+info:
+  title: Pollination Web Server
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+tags:
+  - name: user
+    description: A user can be a voter, and an admin or a verifier
+  - name: org
+    description: An org aggregates users who can vote, administrate, or verify elections
+  - name: org.users
+    description: Related to the users of an org
+  - name: org.rpis
+    description: Related to the RPIs of an org. RPI stands for Raspberry Pi
+  - name: org.locations
+    description: Related to the management of election locations
+  - name: org.verifiers
+    description: Related to the management of id verifiers
+  - name: org.elections
+    description: Related to the management of org elections
+
+paths:      
+
+  /api/user:
+    get:
+      tags:
+        - user
+      summary: Get user info
+      operationId: getUser
+      parameters:
+        - name: uid
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+    post:
+      tags:
+        - user
+      summary: Create user
+      operationId: createUser
+      responses:
+        "400":
+          description: Invalid syntax
+      requestBody:
+        $ref: "#/components/requestBodies/User"
+
+    put:
+      tags:
+        - user
+      summary: Update user info
+      operationId: updateUser
+      responses:
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+      requestBody:
+        $ref: "#/components/requestBodies/User"
+
+  /api/org:
+    get:
+      tags:
+        - org
+      summary: Get org info
+      operationId: getOrg
+      responses:
+        '200':
+          $ref: '#/components/responses/Org'
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+    post:
+      tags:
+        - org
+      summary: Create org
+      operationId: createORg
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+      requestBody:
+        $ref: "#/components/requestBodies/Org"
+
+    put:
+      tags:
+        - org
+      summary: Update org info
+      operationId: updateOrg
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+      requestBody:
+        $ref: "#/components/requestBodies/Org"
+    
+    delete:
+      tags:
+        - org
+      summary: Disband org
+      operationId: disbandOrg
+      description: 
+        An org can only be disbanded by it's owner
+      responses:
+        '200':
+          description: OK
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+      requestBody:
+        $ref: "#/components/requestBodies/Org"
+
+
+  /api/org/users:
+    get:
+      tags:
+        - org.users
+      description: Fetch all the user list of org
+      operationId: 
+        getOrgUsers
+      summary: Fetch org users
+      
+      responses:
+        '200':
+          $ref: '#/components/responses/OrgUsers'
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+    
+    post:
+      tags:
+        - org.users
+      summary: Add user to org
+      description: 
+        Use this to invite user to org
+      operationId:
+        addOrgUser
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+    delete:
+      tags:
+        - org.users
+      summary: Kick user from org
+      operationId:
+        kickOrgUser
+      requestBody:
+        $ref: '#/components/requestBodies/KickUser'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+  /api/org/users/privileges:
+    put:
+      tags:
+        - org.users
+      summary: Change user privileges
+      description: 
+        'User privileges are:<br>
+        - invited<br>
+        - member<br>
+        - verifier<br>
+        - admin<br>
+        - owner'
+      operationId:
+        changeUserPrivilege
+      requestBody:
+        $ref: '#/components/requestBodies/ChangeUserPrivileges'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+
+  /api/org/rpis:
+    get:
+      tags:
+        - org.rpis
+      summary: Get the RPIs belonging to this organization
+      operationId:
+        getRPIs
+      responses:
+        '200':
+          $ref: '#/components/responses/OrgRPIs'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+    post:
+      tags:
+        - org.rpis
+      summary: Add RPI
+      operationId: 
+        addRPI
+      requestBody:
+        content:
+          application/json: {}
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    put:
+      tags:
+        - org.rpis
+      summary: Assign RPI
+      operationId: 
+        assignRPI
+      requestBody:
+        $ref: '#/components/requestBodies/AssignRPI'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    delete:
+      tags:
+        - org.rpis
+      summary: Discard RPI
+      operationId:
+        discardRPI
+      requestBody:
+        $ref: '#/components/requestBodies/DiscardRPI'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+  
+  /api/org/locations:
+    get:
+      tags:
+        - org.locations
+      summary: Get all the org voting locations
+      description: 
+        In principle this information should be available to the public
+      operationId:
+        getLocations
+      responses:
+        '200':
+          $ref: '#/components/responses/OrgLocations'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+    post:
+      tags:
+        - org.locations
+      summary: Add location
+      operationId: 
+        addLocation
+      requestBody:
+        content:
+          application/json: {}
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    delete:
+      tags:
+        - org.locations
+      summary: Discard location
+      operationId:
+        discardLocation
+      requestBody:
+        $ref: '#/components/requestBodies/DiscardLocation'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /api/org/verifier/assign:
+    put:
+      tags:
+        - org.verifiers
+      summary: Assign verifier to location
+      operationId:
+        assignVerifier
+      requestBody:
+        $ref: '#/components/requestBodies/AssignVerifier'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+components:
+  schemas:
+    OrgUsers:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+          description: An array of all users subscribed to vote
+        verifiers:
+          type: array
+          items:
+            type: integer
+          description: An array of uids for org verifiers
+        admins:
+          type: array
+          items:
+              type: integer
+          description: An array of uids for org admins
+    
+    location:
+      type: object
+      description: A voting location. Multiple stations can be assigned to one location
+      properties:
+        id:
+          type: integer
+        streetAddress:
+          type: string
+          description: building number followed by street name
+        city:
+          type: string
+        postalCode:
+          type: string
+        province:
+          type: string
+        country:
+          type: string
+  
+    RPI:
+      type: object
+      properties:
+        stationId:
+          type: integer
+          description: The id of the station this RPI is assigned to
+        location: 
+          $ref: '#/components/schemas/location'
+          description: location assigned to this RPI
+        orgId:
+          type: integer
+          description: Id of the owner org
+
+    OrgRPIs:
+      type: object
+      properties:
+        rpis:
+          type: array
+          items: 
+            $ref: '#/components/schemas/RPI'
+      
+    OrgLocations:
+      type: array
+      items: 
+        $ref: '#/components/schemas/location'
+    
+    User:
+      type: object
+      description: A user. User can be voters, and admins or verifiers
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        votingToken:
+          type: string
+          description: Token to be passed to the RPI at the time of voting
+
+    NewUser:
+      type: object
+      description: The difference with User is that NewUser does not have id or votingToken
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        
+    Org:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: A unique identifier
+        name:
+          type: string
+          description: The name of the org
+
+  responses:
+    default:
+      description: ok
+    '400':
+      description: Invalid syntax
+    '401':
+      description: Not Authorized
+    '404': 
+      description: Not found
+    
+    Org:
+      description: Contains all the information relating to the user of the org
+      content:
+        application/json:
+          schema:
+            properties:
+              org:
+                type: 
+                $ref: '#/components/schemas/Org'
+              privileges:
+                type: integer
+                description: The privileges of the current user within the org
+              
+
+    OrgUsers:
+      description: A list of all users in the org, together with lists of admin, verifier id's
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrgUsers'
+
+    OrgRPIs:
+      description: A list of all the rpis belonging to this org
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrgRPIs'
+
+    OrgLocations:
+      description: A list of all the locations for a given election
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrgLocations'
+
+  requestBodies:
+
+    NewUser:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewUser'
+      description: New User to be added.  
+
+    User:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+      description: User to be added
+
+    Org:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Org'
+      description: Org to be added
+    
+    KickUser:
+      description: Information about user to be kicked
+      content:
+        application/json:
+          schema:
+            properties:
+              uid:
+                type: integer
+                description: User id of user to be kicked
+              orgId:
+                type: 
+                  integer
+                description: The id of the org in which to change the privileges
+            
+    ChangeUserPrivileges:
+      description: Information about the user to have the privileges changed
+      content:
+        application/json:
+          schema:
+            properties:    
+              uid:
+                type: integer
+                description: user id of the user to changed
+              newPrivileges:
+                type: 
+                  integer
+                description: 
+                  the new privileges for the user
+              orgId:
+                type: 
+                  integer
+                description: The id of the org in which to change the privileges
+            
+
+    AssignRPI:
+      description: data needed to associate rpi with a certain location
+      content:
+        application/json:
+          schema:
+            properties:
+              rpiId:
+                type: integer
+              locationId:
+                type: 
+                  integer
+                description: The id of the location to assign the rpi to
+
+    DiscardRPI:
+      content:
+        application/json:
+          schema:
+            properties:
+              rpiId:
+                type: integer
+
+    DiscardLocation:
+      content:
+        application/json:
+          schema:
+            properties:
+              locationId:
+                type: integer
+
+    AssignVerifier:
+      content:
+        application/json:
+          schema:
+            properties:
+              locationId:
+                type: integer
+                description: The id of the location to assign the verifier
+              uid:
+                type: integer
+                description: user id of the verifier to be assigned
+    
+    
