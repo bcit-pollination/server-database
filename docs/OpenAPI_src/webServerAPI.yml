@@ -140,7 +140,7 @@ paths:
     get:
       tags:
         - org.users
-      description: Fetch all the user list of org
+      description: Get all users
       operationId: 
         getOrgUsers
       summary: Fetch org users
@@ -475,6 +475,50 @@ components:
           type: string
           description: The name of the org
 
+    Election:
+      description: >
+        Models an election.
+
+        The election has voter list, id verifiers, voting stations, and locations associated with it.
+
+        Elections can be anonymous or non-anonymous
+
+        The election has a predetermined window of time during which it is active. 
+        Before the active window begins, the election can be edited. 
+        However, it cannot be edited once it has begun.
+
+
+        Times must be provided in UTC.
+      type: object
+      properties:
+        electionId:
+          type: integer
+        orgId:
+          type: integer
+          description: The id of the organization holding the election
+        startTime:
+          type: string
+          format: date-time
+          pattern: YYYY-MM-DDTHH-mm-ss
+          description: The time and date that an election will be open for polling
+        endTime:
+          type: string
+          format: date-time
+          pattern: YYYY-MM-DDTHH-mm-ss
+          description: The time and date that an election will be closed for polling
+        status:
+          type: integer
+          description: >
+            The status of the election:<br>
+            - 0 := Draft<br>
+            - 1 := Called<br>
+            - 2 := Active<br>
+            - 3 := Closed<br>
+            - 4 := Published
+        anonymous:
+          type: boolean
+          description: Whether this election is anonymous. True for anonymous, else non-anonymous
+        
   responses:
     default:
       description: ok
