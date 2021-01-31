@@ -389,8 +389,8 @@ components:
           description: An array of uids for org admins
     
     location:
-      type: object
       description: A voting location. Multiple stations can be assigned to one location
+      type: object
       properties:
         id:
           type: integer
@@ -407,6 +407,7 @@ components:
           type: string
   
     RPI:
+      description: Models a Raspoberry Pi
       type: object
       properties:
         stationId:
@@ -420,6 +421,7 @@ components:
           description: Id of the owner org
 
     OrgRPIs:
+      description: Models a list of RPIs belonging to an organization
       type: object
       properties:
         rpis:
@@ -428,13 +430,14 @@ components:
             $ref: '#/components/schemas/RPI'
       
     OrgLocations:
+      description: Models a list of locations for a given organization
       type: array
       items: 
         $ref: '#/components/schemas/location'
     
     User:
-      type: object
       description: A user. User can be voters, and admins or verifiers
+      type: object
       properties:
         id:
           type: integer
@@ -452,8 +455,12 @@ components:
           description: Token to be passed to the RPI at the time of voting
 
     NewUser:
+      description: >
+        Models the data collected from user upon registration.
+
+
+        The difference with User is that NewUser does not have id or votingToken
       type: object
-      description: The difference with User is that NewUser does not have id or votingToken
       properties:
         firstName:
           type: string
@@ -465,6 +472,7 @@ components:
           type: string
         
     Org:
+      description: Models an organization
       type: object
       properties:
         id:
@@ -474,7 +482,98 @@ components:
         name:
           type: string
           description: The name of the org
+    
+    QuestionChoice:
+      description: Models a possible choice within an election question
+      type: object
+      properties:
+        choiceId:
+          type: integer
+        description:
+          type: string
+          description: The text describing the possible answer to a question
+          
 
+    Question:
+      description: >
+        Models an election question.
+
+
+        Election questions can be:<br>
+        - Single choice<br>
+        - Multiple choice<br>
+        - Yes or no
+      type: object
+      properties:
+        questionId:
+          type: integer
+        electionId:
+          type: integer
+          description: The id of the parent election of this question
+        description:
+          type: string
+          description: The question posed. The textual description of the matter.
+        selectionLimit:
+          type: integer
+          description:
+            The number of choices that can be made when answaring this question.
+        required:
+          type: boolean
+          description: Is the question required to be answered
+        choices:
+          type: array
+          items: 
+          $ref: "#/components/schemas/QuestionChoice"
+          description: The possible answers to this question
+    
+    Election:
+      description: >
+        Models an election.
+
+
+        The election has voter list, id verifiers, voting stations, and locations 
+        associated with it.
+
+
+        Elections can be anonymous or non-anonymous
+
+
+        The election has a predetermined window of time during which it is active. 
+        Before the active window begins, the election can be edited. 
+        However, it cannot be edited once it has begun.
+
+
+        Times must be provided in UTC.
+      type: object
+      properties:
+        electionId:
+          type: integer
+        orgId:
+          type: integer
+          description: The id of the organization holding the election
+        startTime:
+          type: string
+          format: date-time
+          pattern: YYYY-MM-DDTHH-mm-ss
+          description: The time and date that an election will be open for polling
+        endTime:
+          type: string
+          format: date-time
+          pattern: YYYY-MM-DDTHH-mm-ss
+          description: The time and date that an election will be closed for polling
+        status:
+          type: integer
+          description: >
+            The status of the election:<br>
+            - 0 := Draft<br>
+            - 1 := Called<br>
+            - 2 := Active<br>
+            - 3 := closed<br>
+            - 4 := Published
+        anonymous:
+          type: boolean
+          description: Whether this election is anonymous. True for anonymous, else non-anonymous
+        
   responses:
     default:
       description: ok
@@ -617,5 +716,8 @@ components:
               uid:
                 type: integer
                 description: user id of the verifier to be assigned
+
+
+
     
     
