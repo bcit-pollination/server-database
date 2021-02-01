@@ -13,37 +13,37 @@ DROP TABLE IF EXISTS Users;
 
 CREATE TABLE Users
 (user_id         INT            NOT NULL    AUTO_INCREMENT       
-,first_name      VARCHAR(40)    NOT NULL
+,first_name      VARCHAR(40)    NOT NULL    
 ,last_name       VARCHAR(40)    NOT NULL
-,uuid            BIGINT         NOT NULL
+,uuid            BIGINT         NOT NULL    DEFAULT(UUID())
 ,identification  VARCHAR(40)    NOT NULL
 ,PRIMARY KEY (user_id)
 );
 
 CREATE TABLE Location
 (location_id     INT            NOT NULL    AUTO_INCREMENT
-,country         VARCHAR(40)    NOT NULL
-,street_address  VARCHAR(40)    NOT NULL
-,city            VARCHAR(40)    NOT NULL
-,postal_code     VARCHAR(20)    NOT NULL
-,province_state  VARCHAR(40)    NOT NULL
+,country         VARCHAR(40)    NOT NULL    
+,street_address  VARCHAR(40)    NOT NULL    
+,city            VARCHAR(40)    NOT NULL    
+,postal_code     VARCHAR(20)    NOT NULL    
+,province_state  VARCHAR(40)    NOT NULL    
 ,PRIMARY KEY (location_id)
 );
 
 CREATE TABLE Vote
 (vote_id         INT          NOT NULL     AUTO_INCREMENT
-,user_id         INT          NOT NULL
-,time_stamp      TIMESTAMP    NOT NULL
+,user_id         INT          NOT NULL     
+,time_stamp      TIMESTAMP    NOT NULL     DEFAULT (CURRENT_TIMESTAMP)
 ,PRIMARY KEY (vote_id)
 ,FOREIGN KEY (user_id) 
 	REFERENCES Users(user_id)
-      ON DELETE CASCADE
+      ON DELETE RESTRICT
       ON UPDATE CASCADE
 );
 
 CREATE TABLE Organization
 (org_id          INT          NOT NULL    AUTO_INCREMENT
-,org_name        VARCHAR(40)  NOT NULL
+,org_name        VARCHAR(40)  NOT NULL    DEFAULT('Unknown')
 ,PRIMARY KEY (org_id)
 );
 
@@ -51,7 +51,8 @@ CREATE TABLE Enrollment
 (enrollment_id   INT          NOT NULL    AUTO_INCREMENT
 ,user_id         INT          NOT NULL
 ,org_id          INT          NOT NULL
-,privilege_level INT          NOT NULL
+,privilege_level INT          NOT NULL    DEFAULT (1) /** 1 (I presume) is the lowest possible level
+                                                 a user can be, so I msde it the default.*/
 ,PRIMARY KEY (enrollment_id)
 ,FOREIGN KEY (user_id) 
     REFERENCES Users(user_id)
@@ -66,11 +67,11 @@ CREATE TABLE Enrollment
 CREATE TABLE Election
 (election_id     INT          NOT NULL    AUTO_INCREMENT
 ,org_id          INT          NOT NULL
-,start_time      TIMESTAMP    NOT NULL
-,end_time        TIMESTAMP    NOT NULL
-,status          VARCHAR(40)  NOT NULL
-,is_published    BOOLEAN      NOT NULL
-,is_anonymous    BOOLEAN      NOT NULL
+,start_time      TIMESTAMP    NOT NULL    DEFAULT(CURRENT_TIMESTAMP) /** Start date is automatically the first day the election was made.*/
+,end_time        TIMESTAMP    NOT NULL    DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)) /** End date is automatically thirty days after 
+																	                        admin creates the election, if no other time is specified*/
+,status          INT          NOT NULL    DEFAULT(0)
+,is_anonymous    BOOLEAN      NOT NULL    DEFAULT (TRUE) /** It's anonymous automatically */
 ,PRIMARY KEY (election_id)
 ,FOREIGN KEY(org_id) 
       REFERENCES Organization(org_id)
@@ -152,3 +153,4 @@ CREATE TABLE Verifier (
         REFERENCES Station (station_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
+
