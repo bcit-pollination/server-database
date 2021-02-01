@@ -15,7 +15,7 @@ CREATE TABLE Users (
     user_id 			INT 			NOT NULL 	AUTO_INCREMENT,
     first_name 			VARCHAR(40) 	NOT NULL,
     last_name 			VARCHAR(40) 	NOT NULL,
-    uuid 				VARCHAR(36) 	NOT NULL 	DEFAULT(UUID()),
+    voting_token		VARCHAR(36) 	NOT NULL 	DEFAULT(UUID()),
     identification 		VARCHAR(40) 	NOT NULL,
     PRIMARY KEY (user_id)
 );
