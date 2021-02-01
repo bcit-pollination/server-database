@@ -70,7 +70,7 @@ CREATE TABLE Election
 ,start_time      TIMESTAMP    NOT NULL    DEFAULT(CURRENT_TIMESTAMP) /** Start date is automatically the first day the election was made.*/
 ,end_time        TIMESTAMP    NOT NULL    DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)) /** End date is automatically thirty days after 
 																	                        admin creates the election, if no other time is specified*/
-,status          INT          NOT NULL    DEFAULT(0)
+,status          ENUM('DRAFT', 'CALLED', 'ACTIVE', 'CLOSED', 'PUBLISHED')          NOT NULL    DEFAULT(0)
 ,is_anonymous    BOOLEAN      NOT NULL    DEFAULT (TRUE) /** It's anonymous automatically */
 ,PRIMARY KEY (election_id)
 ,FOREIGN KEY(org_id) 
