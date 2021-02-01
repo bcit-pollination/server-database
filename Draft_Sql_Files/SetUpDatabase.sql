@@ -16,7 +16,6 @@ CREATE TABLE Users (
     first_name 			VARCHAR(40) 	NOT NULL,
     last_name 			VARCHAR(40) 	NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL 	DEFAULT(UUID()),
-    identification 		VARCHAR(40) 	NOT NULL,
     PRIMARY KEY (user_id)
 );
 
@@ -47,10 +46,11 @@ CREATE TABLE Organization (
 );
 
 CREATE TABLE Enrollment (
-    enrollment_id 		INT 	NOT NULL 	AUTO_INCREMENT,
-    user_id 			INT 	NOT NULL,
-    org_id 				INT 	NOT NULL,
-    privilege_level 	INT 	NOT NULL 	DEFAULT(1), /* Lowest privilege level is 1. */
+    enrollment_id 		INT 			NOT NULL 	AUTO_INCREMENT,
+    user_id 			INT 			NOT NULL,
+    org_id 				INT 			NOT NULL,
+    privilege_level 	INT 			NOT NULL 	DEFAULT(1), /* Lowest privilege level is 1. */
+	identification 		VARCHAR(40)		NOT NULL,
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
         REFERENCES Users (user_id)
