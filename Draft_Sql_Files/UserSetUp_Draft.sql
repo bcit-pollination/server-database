@@ -1,5 +1,3 @@
-USE test_schema;
-
 DROP USER IF EXISTS 'server'@'localhost';
 DROP USER IF EXISTS 'adminMa'@'localhost';
 DROP USER IF EXISTS 'adminHuang'@'localhost';
