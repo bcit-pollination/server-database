@@ -30,3 +30,13 @@ BEGIN
 	WHERE user_id = id;
 END //
 DELIMITER ;
+
+/** Gets the elections that are available to user.*/
+DELIMITER //
+CREATE get_user_organization(IN id INT)
+BEGIN
+	SELECT first_name, last_name, voting_token FROM users
+	WHERE user_id = id;
+END //
+DELIMITER ;
+
