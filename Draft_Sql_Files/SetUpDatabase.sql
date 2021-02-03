@@ -17,6 +17,8 @@ CREATE TABLE Users (
     last_name 			VARCHAR(40) 	NOT NULL,
 	email               VARCHAR(40)     NOT NULL,
 	DOB                 DATE            NOT NULL,
+	password_salt       VARCHAR(40)     NOT NULL,
+	password_hash       VARCHAR(40)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
     PRIMARY KEY (user_id)
 );
