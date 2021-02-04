@@ -5,10 +5,10 @@ DROP PROCEDURE IF EXISTS get_organization_users;
 DROP PROCEDURE IF EXISTS get_user_elections_alternate;
 DROP PROCEDURE IF EXISTS RegisterUser;
 DROP PROCEDURE IF EXISTS CreateOrg;
-DROP PROCEDURE IF EXISTS EnrollUser;
+DROP PROCEDURE IF EXISTS CreateUser;
 
 DELIMITER //
-CREATE PROCEDURE RegisterUser(
+CREATE PROCEDURE CreateUser(
 	IN first_name VARCHAR(40), 
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
