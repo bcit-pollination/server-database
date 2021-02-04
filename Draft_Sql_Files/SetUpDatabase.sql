@@ -54,7 +54,7 @@ CREATE TABLE Enrollment (
     user_id 			INT 			NOT NULL,
     org_id 				INT 			NOT NULL,
     privilege_level 	INT 			NOT NULL 	DEFAULT(1), /* Lowest privilege level is 1. */
-	identification 		VARCHAR(40)		NOT NULL,
+	identification 		VARCHAR(40),
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
         REFERENCES Users (user_id)
