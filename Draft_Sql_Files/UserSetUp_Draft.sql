@@ -19,3 +19,4 @@ GRANT GRANT OPTION ON test_schema.* TO 'adminHuang'@'localhost';
 GRANT INSERT ON test_schema.* TO 'adminHuang'@'localhost';
 
 FLUSH PRIVILEGES;
+
