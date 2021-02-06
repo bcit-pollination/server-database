@@ -380,6 +380,7 @@ paths:
                 properties:
                   rpi_id:
                     description: The id of the RPI just added
+                    type: integer
 
         '400':
           $ref: '#/components/responses/400'
@@ -1018,7 +1019,6 @@ components:
           type: integer
           description: The privilege level within the org
         org:
-          type: 
           $ref: "#/components/schemas/org"
        
 
@@ -1028,7 +1028,7 @@ components:
       properties:
         option_id:
           type: integer
-        option_description:
+        option_text:
           description: 
             The text describing a posible selection to be made
           type: string
@@ -1046,6 +1046,7 @@ components:
             - 0 := multiple choice
             - 1 := single answer
             - 2 := yes or no
+          type: integer
         options:
           description: The options given
           type: array
@@ -1413,7 +1414,6 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
             $ref: '#/components/schemas/org'
     
     kick_user:
@@ -1501,7 +1501,6 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
             $ref: "#/components/schemas/election"
 
 
