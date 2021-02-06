@@ -67,6 +67,7 @@ CREATE TABLE Enrollment (
 CREATE TABLE Election (
     election_id 	INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			INT 		NOT NULL,
+    location_id     INT         NOT NULL,
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
     status 			ENUM('DRAFT', 'CALLED', 'ACTIVE', 'CLOSED', 'PUBLISHED') 
@@ -75,6 +76,9 @@ CREATE TABLE Election (
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (location_id)
+		REFERENCES Location (location_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -113,43 +117,30 @@ CREATE TABLE Selection (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Station (
-    station_id 		INT 	NOT NULL 	AUTO_INCREMENT,
-    election_id 	INT 	NOT NULL,
-	location_id 	INT 	NOT NULL,
-    PRIMARY KEY (station_id),
-    FOREIGN KEY (election_id)
-        REFERENCES Election (election_id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (location_id)
-        REFERENCES Location (location_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE RPI (
     rpi_id 		INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 		INT 		NOT NULL,
-    station_id 	INT,
+    location_id INT         NOT NULL    DEFAULT(0),
     rpi_code 	VARCHAR(40) NOT NULL,
     PRIMARY KEY (rpi_id),
 	FOREIGN KEY (org_id)
 		REFERENCES Organization (org_id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (station_id)
-        REFERENCES Station (station_id)
-        ON DELETE SET NULL ON UPDATE CASCADE
+	FOREIGN KEY (location_id)
+        REFERENCES Location (location_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Verifier (
     verifier_id 	INT 	NOT NULL 	AUTO_INCREMENT,
     user_id 		INT 	NOT NULL,
-    station_id 		INT 	NOT NULL,
+    location_id 	INT 	NOT NULL,
     PRIMARY KEY (verifier_id),
     FOREIGN KEY (user_id)
         REFERENCES Users (user_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (station_id)
-        REFERENCES Station (station_id)
+    FOREIGN KEY (location_id)
+        REFERENCES Location (location_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
