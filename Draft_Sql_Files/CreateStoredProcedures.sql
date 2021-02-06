@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS get_user_organization;
 DROP PROCEDURE IF EXISTS get_user_elections;
 DROP PROCEDURE IF EXISTS get_organization_users;
 DROP PROCEDURE IF EXISTS get_user_elections_alternate;
-DROP PROCEDURE IF EXISTS RegisterUser;
+/**DROP PROCEDURE IF EXISTS RegisterUser; */
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS CreateUser;
 
@@ -115,4 +115,18 @@ DELIMITER ;
 		
 	END //
 	DELIMITER ;	
+
+GRANT EXECUTE ON PROCEDURE get_user TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_organization TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_elections TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_organization_users TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_elections_alternate TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE CreateOrg TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE CreateUser TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE EnrollUser TO 'server'@'localhost';
+
+FLUSH PRIVILEGES;
+
+
+
 	
