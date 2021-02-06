@@ -115,4 +115,18 @@ DELIMITER ;
 		
 	END //
 	DELIMITER ;	
+
+GRANT EXECUTE ON PROCEDURE get_user TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_organization TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_elections TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_organization_users TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE get_user_elections_alternate TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE CreateOrg TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE CreateUser TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE EnrollUser TO 'server'@'localhost';
+
+FLUSH PRIVILEGES;
+
+
+
 	
