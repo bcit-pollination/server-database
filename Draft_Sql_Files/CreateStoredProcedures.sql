@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS get_user_organization;
 DROP PROCEDURE IF EXISTS get_user_elections;
 DROP PROCEDURE IF EXISTS get_organization_users;
 DROP PROCEDURE IF EXISTS get_user_elections_alternate;
-DROP PROCEDURE IF EXISTS RegisterUser;
+DROP PROCEDURE IF EXISTS EnrollUser;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS CreateUser;
 
