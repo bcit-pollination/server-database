@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="pollination.live" id="8c713c4a-3a09-4795-a035-9eec8d2a0be4" keyPath="C:\Users\Karl_\OneDrive\ssh_keys\pollination.ppk" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" />
+    </configs>
+  </component>
+</project>
