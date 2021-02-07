@@ -5,6 +5,8 @@ info:
 servers:
   - url: https://localhost:8080
 tags:
+  - name: user.auth
+    description: Related to the authentication/authorization of users
   - name: user
     description: A user can be a voter, and an admin or a verifier
   - name: org
@@ -30,6 +32,37 @@ tags:
   
 
 paths:      
+  /api/user/login:
+    post:
+      tags:
+        - user.auth
+      summary: Login user
+      operationId: login
+      requestBody: 
+        $ref: "#/components/requestBodies/login"
+      responses:
+        "200":
+          $ref: "#/components/responses/jwt"
+          description: User logged in
+        "400":
+          description: Invalid syntax
+        "401":
+          $ref:  "#/components/responses/401"
+
+
+  /api/user/logout:
+    post:
+      tags:
+        - user.auth
+      summary: Login user
+      operationId: login
+      responses:
+        "200":
+          description: User loged out
+        "400":
+          description: Invalid syntax
+        "401":
+          $ref:  "#/components/responses/401"
 
   /api/user:
     get:
@@ -51,24 +84,18 @@ paths:
       tags:
         - user
       summary: Create user
-      operationId: createUser
+      operationId: app.createUser
       security: []     
       requestBody:
         $ref: "#/components/requestBodies/new_user"
       responses:
         "200":
+          $ref: "#/components/responses/jwt"
           description: User created
-          content:
-            application/json:
-              schema:
-                additionalProperties: false
-                properties:
-                  uid:
-                    type: integer
-                    description: The id of the user account just created
         "400":
           description: Invalid syntax
-
+        "409": 
+          description: Account already exists
 
     put:
       tags:
@@ -99,7 +126,7 @@ paths:
           description: Unauthorized
         "404":
           description: Not found
-
+  
 
   /api/org/get/list:
     post:
@@ -1165,6 +1192,19 @@ components:
     '404': 
       description: Not found
 
+
+    jwt: 
+      description: A token used to authenticate requests
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              jwt:
+                type: string
+                description: Authentication token for new user
+
+
     user:
       description: Contains the user id, info, enrolled orgs, privileges, upcoming elections
       content:
@@ -1344,6 +1384,19 @@ components:
                 $ref: "#/components/schemas/election"
 
   requestBodies:
+
+    login:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+
     new_user:
       description: New user info to be added.  
       content:
@@ -1548,6 +1601,8 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      x-bearerInfoFunc: app.decode_token
+
 security:
   - JWT: []
 
