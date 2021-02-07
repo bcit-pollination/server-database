@@ -1,8 +1,8 @@
-DROP PROCEDURE IF EXISTS get_user;
-DROP PROCEDURE IF EXISTS get_user_organization;
-DROP PROCEDURE IF EXISTS get_user_elections;
-DROP PROCEDURE IF EXISTS get_organization_users;
-DROP PROCEDURE IF EXISTS get_user_elections_alternate;
+DROP PROCEDURE IF EXISTS GetUser;
+DROP PROCEDURE IF EXISTS GetUserOrganization;
+DROP PROCEDURE IF EXISTS GetUserElections;
+DROP PROCEDURE IF EXISTS GetOrganizationUsers;
+DROP PROCEDURE IF EXISTS GetUserElectionsAlternate;
 DROP PROCEDURE IF EXISTS EnrollUser;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS CreateUser;
@@ -44,7 +44,7 @@ END; //
 /** Takes in a user id, and returns the user's data
 	(non-sensitive data). */
 DELIMITER //
-CREATE PROCEDURE get_user(IN id INT)
+CREATE PROCEDURE GetUser(IN id INT)
 BEGIN
 	SELECT user_id, first_name, last_name, email, DOB, voting_token FROM users
 	WHERE user_id = id;
@@ -54,7 +54,7 @@ DELIMITER ;
 /** Takes in a user's id, and returns the data of the organizations
 	that the user specified belongs to.*/
 DELIMITER //
-CREATE PROCEDURE get_user_organization(IN id INT)
+CREATE PROCEDURE GetUserOrganization(IN id INT)
 BEGIN
 	SELECT o.org_id, o.org_name, e.privilege_level FROM users u
 		INNER JOIN enrollment e
@@ -68,7 +68,7 @@ DELIMITER ;
 /** Takes in a user's id, and gets the elections 
     that are available to them.*/
 DELIMITER //
-CREATE PROCEDURE get_user_elections(IN id INT)
+CREATE PROCEDURE GetUserElections(IN id INT)
 BEGIN
 	SELECT election_id, el.org_id, start_time,
 		end_time, status, is_anonymous FROM users u
@@ -86,7 +86,7 @@ DELIMITER ;
 	This includes their id, firstname, lastname, email, DOB, and voting_token
 	(I avoided any sensitive information such as their passwords of course).*/
 DELIMITER //
-CREATE PROCEDURE get_organization_users(IN id INT)
+CREATE PROCEDURE GetOrganizationUsers(IN id INT)
 BEGIN
 	SELECT e.user_id, first_name, last_name, email, DOB, voting_token FROM users u
 		INNER JOIN enrollment e
@@ -103,7 +103,7 @@ DELIMITER ;
 	are listed alongside the organization they belong to, as well
 	as the election.*/
 		DELIMITER //
-	CREATE PROCEDURE get_user_elections_alternate(IN id INT)
+	CREATE PROCEDURE GetUserElectionsAlternate(IN id INT)
 	BEGIN
 		SELECT e.user_id, e.org_id, election_id, privilege_level, 
 		start_time, end_time, status, is_anonymous FROM users u
@@ -116,11 +116,11 @@ DELIMITER ;
 	END //
 	DELIMITER ;	
 
-GRANT EXECUTE ON PROCEDURE get_user TO 'server'@'localhost';
-GRANT EXECUTE ON PROCEDURE get_user_organization TO 'server'@'localhost';
-GRANT EXECUTE ON PROCEDURE get_user_elections TO 'server'@'localhost';
-GRANT EXECUTE ON PROCEDURE get_organization_users TO 'server'@'localhost';
-GRANT EXECUTE ON PROCEDURE get_user_elections_alternate TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE GetUser TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE GetUserOrganization TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE GetUserElections TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE GetOrganizationUsers TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE GetUserElectionsAlternate TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE CreateOrg TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE CreateUser TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE EnrollUser TO 'server'@'localhost';
