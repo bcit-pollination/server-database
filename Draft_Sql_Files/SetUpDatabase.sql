@@ -15,7 +15,7 @@ CREATE TABLE Users (
     user_id 			INT 			NOT NULL 	AUTO_INCREMENT,
     first_name 			VARCHAR(40) 	NOT NULL,
     last_name 			VARCHAR(40) 	NOT NULL,
-	email               VARCHAR(40)     NOT NULL,
+	email               VARCHAR(40)     NOT NULL	UNIQUE,
 	DOB                 DATE            NOT NULL,
 	password_salt       VARCHAR(40)     NOT NULL,
 	password_hash       VARCHAR(40)     NOT NULL,

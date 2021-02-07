@@ -6,8 +6,21 @@ DROP PROCEDURE IF EXISTS GetUserElectionsAlternate;
 DROP PROCEDURE IF EXISTS EnrollUser;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS CreateUser;
+DROP PROCEDURE IF EXISTS LoginUser;
 
 DELIMITER //
+CREATE PROCEDURE LoginUser(
+	IN in_email VARCHAR(40),
+    IN in_password_salt VARCHAR(40),
+    IN in_password_hash VARCHAR(40))
+BEGIN
+	SELECT user_id FROM Users
+    WHERE in_email = email 
+    AND in_password_salt = password_salt 
+    AND in_password_hash = password_hash;
+END;//
+
+
 CREATE PROCEDURE CreateUser(
 	IN first_name VARCHAR(40), 
     IN last_name VARCHAR(40), 
@@ -17,10 +30,11 @@ CREATE PROCEDURE CreateUser(
     IN password_hash VARCHAR(40),
     IN voting_token VARCHAR(36))
 BEGIN
-  INSERT INTO Users(first_name, last_name, email, DOB, 
-	password_salt, password_hash, voting_token)
-  VALUES(first_name, last_name, email, DOB, 
-	password_salt, password_hash, voting_token);
+	INSERT INTO Users(first_name, last_name, email, DOB, 
+		password_salt, password_hash, voting_token)
+	VALUES(first_name, last_name, email, DOB, 
+		password_salt, password_hash, voting_token);
+	SELECT LAST_INSERT_ID();
 END; //
 
 CREATE PROCEDURE CreateOrg(
@@ -124,6 +138,7 @@ GRANT EXECUTE ON PROCEDURE GetUserElectionsAlternate TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE CreateOrg TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE CreateUser TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE EnrollUser TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE LoginUser TO 'server'@'localhost';
 
 FLUSH PRIVILEGES;
 
