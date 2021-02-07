@@ -1,6 +1,6 @@
 .travis.yaml
 .swagger-codegen-ignore
-README.md
+SWAGGER_README.md
 tox.ini
 git_push.sh
 test-requirements.txt
