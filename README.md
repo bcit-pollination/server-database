@@ -33,4 +33,45 @@ A voting system created by BCIT Datacomm students
 1. Go to the server folder and run it
     sudo python -m swagger_server
 
+#### Install Database
+
+1. Install MySQL
+1. Deploy the schema found in ... by doing ... 
+
 #### Install depedencies
+1. Install python3.9
+1. Install mysqlclient
+    
+
+    sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+
+    sudo apt install python-dev python3-dev python3.9-dev
+
+    pip install mysqlclient
+
+1. Go to server root directory and enter
+   
+    pip install -r requirements.txt
+
+1. Create file ~/.my.cnf
+    
+    Type: 
+   
+        [client]
+        user=root
+        password="pass"
+        
+        [mysql]
+        user=root
+        password="pass"
+        
+        [mysqldump]
+        user=root
+        password="pass"
+        
+        [mysqldiff]
+        user=root
+        password="pass"
+    
+    
+   
