@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS Choice;
 DROP TABLE IF EXISTS Question;
 DROP TABLE IF EXISTS RPI;
 DROP TABLE IF EXISTS Verifier;
-DROP TABLE IF EXISTS Station;
 DROP TABLE IF EXISTS Election;
 DROP TABLE IF EXISTS Organization;
 DROP TABLE IF EXISTS Vote;
@@ -17,8 +16,7 @@ CREATE TABLE Users (
     last_name 			VARCHAR(40) 	NOT NULL,
 	email               VARCHAR(40)     NOT NULL	UNIQUE,
 	DOB                 DATE            NOT NULL,
-	password_salt       VARCHAR(40)     NOT NULL,
-	password_hash       VARCHAR(40)     NOT NULL,
+	password	        VARCHAR(72)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
     PRIMARY KEY (user_id)
 );

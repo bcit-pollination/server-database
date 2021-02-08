@@ -11,13 +11,11 @@ DROP PROCEDURE IF EXISTS LoginUser;
 DELIMITER //
 CREATE PROCEDURE LoginUser(
 	IN in_email VARCHAR(40),
-    IN in_password_salt VARCHAR(40),
-    IN in_password_hash VARCHAR(40))
+    IN in_password VARCHAR(72))
 BEGIN
 	SELECT user_id FROM Users
     WHERE in_email = email 
-    AND in_password_salt = password_salt 
-    AND in_password_hash = password_hash;
+    AND in_password = password;
 END;//
 
 
@@ -26,14 +24,13 @@ CREATE PROCEDURE CreateUser(
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
     IN DOB DATE,
-    IN password_salt VARCHAR(40),
-    IN password_hash VARCHAR(40),
+    IN password VARCHAR(40),
     IN voting_token VARCHAR(36))
 BEGIN
 	INSERT INTO Users(first_name, last_name, email, DOB, 
-		password_salt, password_hash, voting_token)
+		password, voting_token)
 	VALUES(first_name, last_name, email, DOB, 
-		password_salt, password_hash, voting_token);
+		password, voting_token);
 	SELECT LAST_INSERT_ID();
 END; //
 
