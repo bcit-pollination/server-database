@@ -10,6 +10,7 @@ CREATE TABLE Users (
 	date_of_birth       DATE            NOT NULL,
 	password	        VARCHAR(72)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
+    disabled			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)
 );
 
@@ -43,8 +44,9 @@ CREATE TABLE Enrollment (
     enrollment_id 		INT 			NOT NULL 	AUTO_INCREMENT,
     user_id 			INT 			NOT NULL,
     org_id 				INT 			NOT NULL,
-    privilege_level 	INT 			NOT NULL 	DEFAULT(1), /* Lowest privilege level is 1. */
+    privilege_level 	INT 			NOT NULL 	DEFAULT(0), /* Lowest privilege level is 0. */
 	identification 		VARCHAR(40),
+    disabled			BOOLEAN			NOT NULL 	DEFAULT(FALSE),
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
         REFERENCES Users (user_id)
@@ -61,8 +63,7 @@ CREATE TABLE Election (
     description		VARCHAR(40)	NOT NULL,
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
-    status 			ENUM('DRAFT', 'CALLED', 'ACTIVE', 'CLOSED', 'PUBLISHED') 
-								NOT NULL 	DEFAULT('DRAFT'),
+    status 			INT			NOT NULL	DEFAULT(0), 	 /* Lowest privilege level is 0. */
     is_anonymous 	BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
@@ -110,24 +111,12 @@ CREATE TABLE RPI (
     org_id 		INT 		NOT NULL,
     location_id INT         NOT NULL    DEFAULT(0),
     rpi_code 	VARCHAR(40) NOT NULL,
+    password	VARCHAR(72)	NOT NULL,
     PRIMARY KEY (rpi_id),
 	FOREIGN KEY (org_id)
 		REFERENCES Organization (org_id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (location_id)
-        REFERENCES Location (location_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE Verifier (
-    verifier_id 	INT 	NOT NULL 	AUTO_INCREMENT,
-    user_id 		INT 	NOT NULL,
-    location_id 	INT 	NOT NULL,
-    PRIMARY KEY (verifier_id),
-    FOREIGN KEY (user_id)
-        REFERENCES Users (user_id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (location_id)
         REFERENCES Location (location_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
