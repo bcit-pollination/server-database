@@ -7,8 +7,22 @@ DROP PROCEDURE IF EXISTS EnrollUser;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS CreateUser;
 DROP PROCEDURE IF EXISTS LoginUser;
+DROP PROCEDURE IF EXISTS CreateElection;
 
 DELIMITER //
+CREATE PROCEDURE CreateElection(
+	IN org_id INT, 
+    IN description VARCHAR(40),
+    IN start_time TIMESTAMP,
+    IN end_time TIMESTAMP,
+    IN status VARCHAR(40),
+    IN is_anonymous BOOLEAN)
+BEGIN
+	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous)
+    VALUES(org_id, description, start_time, end_time, is_anonymous);
+	SELECT LAST_INSERT_ID();
+END;//
+
 CREATE PROCEDURE LoginUser(
 	IN in_email VARCHAR(40),
     IN in_password VARCHAR(72))
@@ -38,18 +52,20 @@ CREATE PROCEDURE CreateOrg(
 	IN user_id INT, 
     IN org_name VARCHAR(40))
 BEGIN
-  INSERT INTO Organization(org_name)
-  VALUES(org_name);
-  INSERT INTO Enrollment(user_id, org_id)
-  VALUES(user_id, LAST_INSERT_ID());
+	INSERT INTO Organization(org_name)
+	VALUES(org_name);
+	SELECT LAST_INSERT_ID();
+	INSERT INTO Enrollment(user_id, org_id)
+	VALUES(user_id, LAST_INSERT_ID());
 END; //
 
 CREATE PROCEDURE EnrollUser(
 	IN user_id INT, 
     IN org_id INT)
 BEGIN
-  INSERT INTO Enrollment(user_id, org_id)
-  VALUES(user_id, org_id);
+	INSERT INTO Enrollment(user_id, org_id)
+	VALUES(user_id, org_id);
+	SELECT LAST_INSERT_ID();
 END; //
 
 /** Takes in a user id, and returns the user's data
@@ -136,6 +152,7 @@ GRANT EXECUTE ON PROCEDURE CreateOrg TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE CreateUser TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE EnrollUser TO 'server'@'localhost';
 GRANT EXECUTE ON PROCEDURE LoginUser TO 'server'@'localhost';
+GRANT EXECUTE ON PROCEDURE CreateElection TO 'server'@'localhost';
 
 FLUSH PRIVILEGES;
 
