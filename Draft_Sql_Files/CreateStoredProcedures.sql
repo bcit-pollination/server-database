@@ -36,13 +36,13 @@ CREATE PROCEDURE CreateUser(
 	IN first_name VARCHAR(40), 
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
-    IN DOB DATE,
+    IN date_of_birth DATE,
     IN password VARCHAR(40),
     IN voting_token VARCHAR(36))
 BEGIN
-	INSERT INTO Users(first_name, last_name, email, DOB, 
+	INSERT INTO Users(first_name, last_name, email, date_of_birth, 
 		password, voting_token)
-	VALUES(first_name, last_name, email, DOB, 
+	VALUES(first_name, last_name, email, date_of_birth, 
 		password, voting_token);
 	SELECT LAST_INSERT_ID();
 END; //
@@ -72,7 +72,7 @@ END; //
 DELIMITER //
 CREATE PROCEDURE GetUser(IN id INT)
 BEGIN
-	SELECT user_id, first_name, last_name, email, DOB, voting_token FROM users
+	SELECT user_id, first_name, last_name, email, date_of_birth, voting_token FROM users
 	WHERE user_id = id;
 END //
 DELIMITER ;
@@ -109,12 +109,12 @@ DELIMITER ;
 
 /** Takes in the id of an organization as a parameter, and
 	displays all of the users who are currently in that organization.
-	This includes their id, firstname, lastname, email, DOB, and voting_token
+	This includes their id, firstname, lastname, email, date_of_birth, and voting_token
 	(I avoided any sensitive information such as their passwords of course).*/
 DELIMITER //
 CREATE PROCEDURE GetOrganizationUsers(IN id INT)
 BEGIN
-	SELECT e.user_id, first_name, last_name, email, DOB, voting_token FROM users u
+	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token FROM users
 		INNER JOIN enrollment e
 		   ON u.user_id = e.user_id
 		INNER JOIN organization o

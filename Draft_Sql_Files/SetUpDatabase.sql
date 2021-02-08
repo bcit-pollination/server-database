@@ -1,21 +1,13 @@
-DROP TABLE IF EXISTS Enrollment;
-DROP TABLE IF EXISTS Selection;
-DROP TABLE IF EXISTS Choice;
-DROP TABLE IF EXISTS Question;
-DROP TABLE IF EXISTS RPI;
-DROP TABLE IF EXISTS Verifier;
-DROP TABLE IF EXISTS Election;
-DROP TABLE IF EXISTS Organization;
-DROP TABLE IF EXISTS Vote;
-DROP TABLE IF EXISTS Location;
-DROP TABLE IF EXISTS Users;
+DROP DATABASE IF EXISTS voting_system;
+CREATE DATABASE voting_system;
+USE voting_system;
 
 CREATE TABLE Users (
     user_id 			INT 			NOT NULL 	AUTO_INCREMENT,
     first_name 			VARCHAR(40) 	NOT NULL,
     last_name 			VARCHAR(40) 	NOT NULL,
 	email               VARCHAR(40)     NOT NULL	UNIQUE,
-	DOB                 DATE            NOT NULL,
+	date_of_birth       DATE            NOT NULL,
 	password	        VARCHAR(72)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
     PRIMARY KEY (user_id)
