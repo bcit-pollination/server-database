@@ -56,8 +56,6 @@ paths:
         - user.auth
       summary: Login user
       operationId: logout
-      parameters:
-        - $ref: "#/components/parameters/jwt_token"
       responses:
         "200":
           description: User loged out
