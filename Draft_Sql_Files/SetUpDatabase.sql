@@ -66,7 +66,6 @@ CREATE TABLE Enrollment (
 CREATE TABLE Election (
     election_id 	INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			INT 		NOT NULL,
-    location_id     INT         NOT NULL,
     description		VARCHAR(40)	NOT NULL,
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
@@ -76,9 +75,6 @@ CREATE TABLE Election (
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (location_id)
-		REFERENCES Location (location_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
