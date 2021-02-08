@@ -15,7 +15,6 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN status VARCHAR(40),
     IN is_anonymous BOOLEAN)
 BEGIN
 	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous)
