@@ -32,6 +32,7 @@ DROP PROCEDURE IF EXISTS CreateElection;
 DROP PROCEDURE IF EXISTS UpdateElection;
 DROP PROCEDURE IF EXISTS DeleteElection;
 
+DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 
 DELIMITER //
@@ -68,7 +69,7 @@ END; //
 
 /** Takes in a user id, and returns the user's token
 	(non-sensitive data). */
-CREATE PROCEDURE GetUser(IN id INT)
+CREATE PROCEDURE GetUserToken(IN id INT)
 BEGIN
 	SELECT voting_token FROM users
 	WHERE user_id = id;
@@ -162,6 +163,22 @@ END; //
 
 
 
+
+/** Gets the users who have joined an organization from
+the org id. */
+CREATE PROCEDURE GetJoinedUsers(IN id INT)
+BEGIN
+	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM users
+		INNER JOIN enrollment e
+		   ON u.user_id = e.user_id
+		INNER JOIN organization o
+		   ON o.org_id = e.org_id
+	WHERE o.org_id = id
+	AND e.privilege_level = 1;
+END; //
+
+
+
 /** Takes in information, and uses it to create an election.*/
 CREATE PROCEDURE CreateElection(
 	IN org_id INT, 
@@ -217,9 +234,5 @@ END; //
 		WHERE e.user_id = id;
 		
 	END; //
-
-FLUSH PRIVILEGES;
-
-
 
 	
