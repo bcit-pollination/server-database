@@ -3,6 +3,7 @@
   <component name="SshConfigs">
     <configs>
       <sshConfig host="pollination.live" id="8c713c4a-3a09-4795-a035-9eec8d2a0be4" keyPath="C:\Users\Karl_\OneDrive\ssh_keys\pollination.ppk" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" />
+      <sshConfig host="pollination.live" id="0ac19d2a-b457-49eb-a7b1-83ad5e8f7cde" keyPath="$PROJECT_DIR$/../pollination.ppk" port="22" nameFormat="DESCRIPTIVE" username="ubuntu" />
     </configs>
   </component>
 </project>
