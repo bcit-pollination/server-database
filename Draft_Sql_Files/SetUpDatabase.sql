@@ -62,6 +62,7 @@ CREATE TABLE Election (
     election_id 	INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			INT 		NOT NULL,
     description		VARCHAR(40)	NOT NULL,
+	verified        BOOLEAN     NOT NULL,
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
     status 			INT			NOT NULL	DEFAULT(0), 	 /* Lowest privilege level is 0. */
