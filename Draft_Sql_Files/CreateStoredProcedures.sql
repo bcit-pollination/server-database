@@ -12,6 +12,7 @@ DROP PROCEDURE IF EXISTS DisbandOrg;
 DROP PROCEDURE IF EXISTS GetVerifierPassword;
 
 DROP PROCEDURE IF EXISTS GetUsersFromOrg;
+DROP PROCEDURE IF EXISTS InviteUser;
 DROP PROCEDURE IF EXISTS UpdatePrivilege;
 
 DROP PROCEDURE IF EXISTS GetLocationList;
@@ -155,6 +156,19 @@ BEGIN
 	AND e.privilege_level = privelege_level;
 END; //
 
+
+/** Takes in the id of a user and an organization, then 
+	invites a user into an organization.*/
+CREATE PROCEDURE InviteUser(
+	IN user_id INT, 
+    IN org_id INT)
+BEGIN
+	INSERT INTO Enrollment(user_id, org_id)
+	VALUES(user_id, org_id);
+	SELECT LAST_INSERT_ID();
+END; //
+
+
 /** Takes in information, and uses it to create an election.*/
 CREATE PROCEDURE CreateElection(
 	IN org_id INT, 
@@ -167,17 +181,6 @@ BEGIN
     VALUES(org_id, description, start_time, end_time, is_anonymous);
 	SELECT LAST_INSERT_ID();
 END;//
-
-/** Takes in the id of a user and an organization, then 
-	enrolls a user into an organization.*/
-CREATE PROCEDURE EnrollUser(
-	IN user_id INT, 
-    IN org_id INT)
-BEGIN
-	INSERT INTO Enrollment(user_id, org_id)
-	VALUES(user_id, org_id);
-	SELECT LAST_INSERT_ID();
-END; //
 
 
 /** Takes in a user's id, and gets the elections 
