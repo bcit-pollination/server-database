@@ -2,23 +2,17 @@ DROP PROCEDURE IF EXISTS LoginUser;
 DROP PROCEDURE IF EXISTS GetUser;
 DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS CreateUser;
+DROP PROCEDURE IF EXISTS DeactivateUser;
 
 DROP PROCEDURE IF EXISTS GetOrganizations;
 DROP PROCEDURE IF EXISTS GetOrganization;
 DROP PROCEDURE IF EXISTS CreateOrg;
+DROP PROCEDURE IF EXISTS UpdateOrg;
+DROP PROCEDURE IF EXISTS DisbandOrg;
+DROP PROCEDURE IF EXISTS GetVerifierPassword;
 
-DROP PROCEDURE IF EXISTS GetInvitedUsers;
-DROP PROCEDURE IF EXISTS GetJoinedUsers;
-DROP PROCEDURE IF EXISTS GetAllUsers;
-DROP PROCEDURE IF EXISTS InviteUser;
-DROP PROCEDURE IF EXISTS AcceptInvite;
-DROP PROCEDURE IF EXISTS KickUser;
+DROP PROCEDURE IF EXISTS GetUsersFromOrg;
 DROP PROCEDURE IF EXISTS UpdatePrivilege;
-
-DROP PROCEDURE IF EXISTS GetRPIList;
-DROP PROCEDURE IF EXISTS CreateRPI;
-DROP PROCEDURE IF EXISTS AssignRPI;
-DROP PROCEDURE IF EXISTS DeleteRPI;
 
 DROP PROCEDURE IF EXISTS GetLocationList;
 DROP PROCEDURE IF EXISTS CreateLocation;
@@ -132,10 +126,11 @@ END; //
 	then uses this information to create an organization.*/
 CREATE PROCEDURE CreateOrg(
 	IN user_id INT, 
-    IN org_name VARCHAR(40))
+    IN org_name VARCHAR(40),
+    IN verifier_password VARCHAR(72))
 BEGIN
-	INSERT INTO Organization(org_name)
-	VALUES(org_name);
+	INSERT INTO Organization(org_name, verifier_password)
+	VALUES(org_name, verifier_password);
 	SELECT LAST_INSERT_ID();
 	INSERT INTO Enrollment(user_id, org_id)
 	VALUES(user_id, LAST_INSERT_ID());
@@ -144,12 +139,12 @@ END; //
 
 
 
-/** Takes in the id of an organization as a parameter, and
+/** Takes in the id of an organization and the privilege level as parameters, and
 	displays all of the users who are currently in that organization.
 	This includes their id, firstname, lastname, email, date_of_birth, and voting_token
 	(I avoided any sensitive information such as their passwords of course).*/
 
-CREATE PROCEDURE GetInvitedUsers(IN id INT)
+CREATE PROCEDURE GetUsersFromOrg(IN id INT, IN privilege_level INT)
 BEGIN
 	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM users
 		INNER JOIN enrollment e
@@ -157,27 +152,8 @@ BEGIN
 		INNER JOIN organization o
 		   ON o.org_id = e.org_id
 	WHERE o.org_id = id
-	AND e.privilege_level = 0;
+	AND e.privilege_level = privelege_level;
 END; //
-
-
-
-
-
-/** Gets the users who have joined an organization from
-the org id. */
-CREATE PROCEDURE GetJoinedUsers(IN id INT)
-BEGIN
-	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM users
-		INNER JOIN enrollment e
-		   ON u.user_id = e.user_id
-		INNER JOIN organization o
-		   ON o.org_id = e.org_id
-	WHERE o.org_id = id
-	AND e.privilege_level = 1;
-END; //
-
-
 
 /** Takes in information, and uses it to create an election.*/
 CREATE PROCEDURE CreateElection(
@@ -207,10 +183,10 @@ END; //
 /** Takes in a user's id, and gets the elections 
     that are available to them.*/
 
-CREATE PROCEDURE GetUserElections(IN id INT)
+CREATE PROCEDURE GetElectionListUser(IN id INT)
 BEGIN
 	SELECT election_id, el.org_id, start_time,
-		end_time, status, is_anonymous FROM users u
+		end_time, verified, is_anonymous FROM users u
 			INNER JOIN enrollment e
 				ON e.user_id = u.user_id
 			INNER JOIN election el
@@ -226,7 +202,7 @@ END; //
 	CREATE PROCEDURE GetUserElectionsAlternate(IN id INT)
 	BEGIN
 		SELECT e.user_id, e.org_id, election_id, privilege_level, 
-		start_time, end_time, status, is_anonymous FROM users u
+		start_time, end_time, verified, is_anonymous FROM users u
 		INNER JOIN enrollment e
 			ON e.user_id = u.user_id
 		INNER JOIN election el

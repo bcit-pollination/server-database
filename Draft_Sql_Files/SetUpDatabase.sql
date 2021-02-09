@@ -65,7 +65,6 @@ CREATE TABLE Election (
 	verified        BOOLEAN     NOT NULL,
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
-    status 			INT			NOT NULL	DEFAULT(0), 	 /* Lowest privilege level is 0. */
     is_anonymous 	BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
@@ -105,21 +104,6 @@ CREATE TABLE Selection (
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (choice_id)
         REFERENCES Choice (choice_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE RPI (
-    rpi_id 		INT 		NOT NULL 	AUTO_INCREMENT,
-    org_id 		INT 		NOT NULL,
-    location_id INT         NOT NULL    DEFAULT(0),
-    rpi_code 	VARCHAR(40) NOT NULL,
-    password	VARCHAR(72)	NOT NULL,
-    PRIMARY KEY (rpi_id),
-	FOREIGN KEY (org_id)
-		REFERENCES Organization (org_id)
-		ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (location_id)
-        REFERENCES Location (location_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
