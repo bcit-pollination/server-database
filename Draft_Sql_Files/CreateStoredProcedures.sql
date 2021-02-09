@@ -120,7 +120,7 @@ END; //
 	an organization id.*/
 CREATE PROCEDURE GetOrganization(IN id INT)
 BEGIN
-	SELECT * FROM organization
+	SELECT org_id, org_name FROM organization
 	WHERE org_id = id;
 END; //
 
