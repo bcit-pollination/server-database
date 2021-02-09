@@ -2,9 +2,12 @@ openapi: "3.0.2"
 info:
   title: Pollination Web Server
   version: "0.85"
+  description: All values in this API are required and not nullable unless specifically stated
 servers:
   - url: https://pollination.live
 tags:
+  - name: sensitive
+    description: Sensitive information
   - name: user.auth
     description: Related to the authentication/authorization of users
   - name: user
@@ -17,8 +20,8 @@ tags:
     description: Related to the RPIs of an org. RPI stands for Raspberry Pi
   - name: org.locations
     description: Related to the management of election locations
-  - name: org.verifiers
-    description: Related to the management of id verifiers
+#  - name: org.verifiers
+#    description: Related to the management of id verifiers
   - name: org.elections
     description: Related to the management of org elections
   - name: org.election.results
@@ -32,13 +35,13 @@ tags:
   
 
 paths:
-
   /api/user/login:
     post:
       tags:
         - user.auth
       summary: Login user
       operationId: login
+      security: []
       requestBody:
         $ref: "#/components/requestBodies/login"
       responses:
@@ -97,11 +100,12 @@ paths:
         "409": 
           description: Account already exists
 
+# CURRENTLY NOT PROVIDED
     put:
       tags:
         - user
       summary: Update user info
-      operationId: update_user 
+      operationId: update_user
       responses:
         "200":
           description: user updated
@@ -126,17 +130,32 @@ paths:
           description: Unauthorized
         "404":
           description: Not found
-  
+
+  /api/user/voting_token:
+    get:
+      tags:
+        - user
+      summary: Get token used to vote
+      operationId: get_voting_token
+      responses:
+        "200":
+          $ref: "#/components/responses/voting_token"
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
 
   /api/org/get/list:
-    post:
+    get:
       tags:
         - org
       summary: Get org info
       operationId: get_org_list
       responses:
         '200':
-          $ref: '#/components/responses/org'
+          $ref: '#/components/responses/org_list'
         "400":
           description: Invalid syntax
         "401":
@@ -162,6 +181,25 @@ paths:
         "404":
           description: Not found
 
+  /api/org/verifier_password:
+    post:
+      tags:
+        - user
+      summary: Get token used to vote
+      operationId: get_verifier_password
+      requestBody:
+        $ref: "#/components/requestBodies/get_org"
+      responses:
+        "200":
+          $ref: "#/components/responses/verifier_password"
+        "400":
+          description: Invalid syntax
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+
   /api/org:
     post:
       tags:
@@ -169,19 +207,7 @@ paths:
       summary: Create org
       operationId: create_org
       requestBody:
-        content:
-          application/json:
-            schema:
-              additionalProperties: false
-              required:
-                - name
-              properties:
-                name: 
-                  type: string
-                  description: The name of the org being created
-                org_uid: 
-                  type: string
-                  description: The id of the user within
+        $ref: '#/components/requestBodies/post_org'
       responses:
         '200':
           description: Org created
@@ -203,6 +229,8 @@ paths:
         - org
       summary: Update org info
       operationId: update_org
+      requestBody:
+        $ref: "#/components/requestBodies/post_org"
       responses:
         '200':
           description: Org updated
@@ -212,9 +240,7 @@ paths:
           description: Unauthorized
         "404":
           description: Not found
-      requestBody:
-        $ref: "#/components/requestBodies/org"
-    
+
     delete:
       tags:
         - org
@@ -355,7 +381,8 @@ paths:
     get:
       tags:
         - org.rpis
-      summary: Get the voting machines belonging to this organization
+      summary: >
+        Get the voting machines belonging to this organization.
       operationId:
         get_rpis
       parameters:
@@ -568,50 +595,50 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/verifiers/list:
-
-    post:
-      tags:
-        - org.verifiers
-      operationId: 
-        get_org_verifiers
-      summary: Get all the verifiers for a given election
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                org_id:
-                  type: integer
-                  description: The id of the org to get verifiers for
-      responses:
-        "200": 
-          $ref:  "#/components/responses/verifiers"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
-        
-  /api/org/verifiers:
-    put:
-      tags:
-        - org.verifiers
-      summary: Assign verifier to location
-      operationId:
-        assign_verifier
-      requestBody:
-        $ref: '#/components/requestBodies/assign_verifier'
-      responses:
-        '200':
-          description: Assigned
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
+#  /api/org/verifiers/list:
+#
+#    post:
+#      tags:
+#        - org.verifiers
+#      operationId:
+#        get_org_verifiers
+#      summary: Get all the verifiers for a given election
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              properties:
+#                org_id:
+#                  type: integer
+#                  description: The id of the org to get verifiers for
+#      responses:
+#        "200":
+#          $ref:  "#/components/responses/verifiers"
+#        '400':
+#          $ref: '#/components/responses/400'
+#        '401':
+#          $ref: '#/components/responses/401'
+#        '404':
+#          $ref: '#/components/responses/404'
+#
+#  /api/org/verifiers:
+#    put:
+#      tags:
+#        - org.verifiers
+#      summary: Assign verifier to location
+#      operationId:
+#        assign_verifier
+#      requestBody:
+#        $ref: '#/components/requestBodies/assign_verifier'
+#      responses:
+#        '200':
+#          description: Assigned
+#        '400':
+#          $ref: '#/components/responses/400'
+#        '401':
+#          $ref: '#/components/responses/401'
+#        '404':
+#          $ref: '#/components/responses/404'
   
   /api/org/elections/get/list:
     post:
@@ -943,12 +970,20 @@ components:
           type: string
         email:
           type: string
-        password:
+        dob:
           type: string
-        voting_token:
-          type: string
-          description: Token to be passed to the RPI at the time of voting
-      
+          format: date
+          example: "yyyy-mm-dd"
+
+    password:
+      type: string
+      description: NULLABLE
+
+    voting_token:
+      type: string
+      description: Token to be passed to the RPI at the time of voting
+
+    # Considering deprecation
     verifier:
       type: object
       description: An ID verifier
@@ -972,6 +1007,10 @@ components:
         name:
           type: string
           description: The name of the org
+
+    verifier_password:
+      type: string
+      description: The password used by verifiers to login into voting machines
 
  
     org_user_invite:
@@ -1010,12 +1049,12 @@ components:
         start_time:
           type: string
           format: date-time
-          pattern: YYYY-MM-DDTHH-mm-ss
+          example: YYYY-MM-DDTHH-mm-ss
           description: The time and date that an election will be open for polling
         end_time:
           type: string
           format: date-time
-          pattern: YYYY-MM-DDTHH-mm-ss
+          example: YYYY-MM-DDTHH-mm-ss
           description: The time and date that an election will be closed for polling
         status:
           type: integer
@@ -1037,17 +1076,38 @@ components:
           type: boolean
         ballot:
           $ref: "#/components/schemas/ballot"
-        
+
+
     user_org:
       type: object
-      description: An org the user belongs to
+      description: An org the user belongs to, toghether with pertinent user info
       properties:
         privilege: 
           type: integer
           description: The privilege level within the org
+        user_org_id:
+          type: string
+          description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
         org:
           $ref: "#/components/schemas/org"
        
+
+    org_user:
+      type: object
+      description: A user that belongs to an org
+      allOf:
+        - $ref: "#/components/schemas/user"
+        - type: object
+          properties:
+            privilege:
+              type: integer
+              description: The privilege level within the org
+            user_org_id:
+                type: string
+                description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
+
+
+
 
     option:
       type: object
@@ -1126,7 +1186,7 @@ components:
           description: The time at which the vote was cast
           type: string
           format: date-time
-          pattern: YYYY-MM-DDTHH-mm-ss
+          example: YYYY-MM-DDTHH-mm-ss
         location_id:
           description: The id of the location where the vote was cast
           type: integer
@@ -1215,6 +1275,12 @@ components:
               user_info:
                 $ref: "#/components/schemas/user"
 
+    voting_token:
+      description: Contains the token used by the user to make a vote
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/voting_token"
     org_list:
       description: Contains all the information relating to the user of the org
       content:
@@ -1253,7 +1319,7 @@ components:
               users:
                 type: array
                 items:
-                  $ref: "#/components/schemas/user"
+                  $ref: "#/components/schemas/org_user"
                 description: An array of all users subscribed to vote
               verifiers:
                 type: array
@@ -1312,6 +1378,15 @@ components:
                 items:
                   $ref: "#/components/schemas/election"
 
+    verifier_password:
+      description: The password used by id verifiers to login to voting machine
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/verifier_password"
+
+
+    # Considering deprecation
     verifiers:
       description: All the id verifiers for a given org
       content:
@@ -1409,6 +1484,10 @@ components:
                 type: string
               email:
                 type: string
+              dob:
+                type: string
+                format: date
+                example: yyyy
               password:
                 type: string
 
@@ -1416,14 +1495,7 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
-            properties:
-              email:
-                type: integer
-                description: Id of the user to be added
-              org_id:
-                type: string
-                description: The ID of the user within the org
+            $ref: "#/components/schemas/user"
     
     org_user:
       content:
@@ -1461,12 +1533,25 @@ components:
                 description: The id of the org to get
                 type: integer
 
+    post_org:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              org_info:
+                $ref: '#/components/schemas/org'
+              user_org_id:
+                type: string
+                description: The id of the user within the organization (driver license, passport number, etc...)
+
+
     org:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/org'
-    
+
     kick_user:
       description: Information about user to be kicked
       content:

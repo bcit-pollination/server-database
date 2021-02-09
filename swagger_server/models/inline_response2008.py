@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user import User  # noqa: F401,E501
+from swagger_server.models.location import Location  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +15,20 @@ class InlineResponse2008(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, verifiers: List[User]=None):  # noqa: E501
+    def __init__(self, locations: List[Location]=None):  # noqa: E501
         """InlineResponse2008 - a model defined in Swagger
 
-        :param verifiers: The verifiers of this InlineResponse2008.  # noqa: E501
-        :type verifiers: List[User]
+        :param locations: The locations of this InlineResponse2008.  # noqa: E501
+        :type locations: List[Location]
         """
         self.swagger_types = {
-            'verifiers': List[User]
+            'locations': List[Location]
         }
 
         self.attribute_map = {
-            'verifiers': 'verifiers'
+            'locations': 'locations'
         }
-        self._verifiers = verifiers
+        self._locations = locations
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2008':
@@ -42,22 +42,22 @@ class InlineResponse2008(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def verifiers(self) -> List[User]:
-        """Gets the verifiers of this InlineResponse2008.
+    def locations(self) -> List[Location]:
+        """Gets the locations of this InlineResponse2008.
 
 
-        :return: The verifiers of this InlineResponse2008.
-        :rtype: List[User]
+        :return: The locations of this InlineResponse2008.
+        :rtype: List[Location]
         """
-        return self._verifiers
+        return self._locations
 
-    @verifiers.setter
-    def verifiers(self, verifiers: List[User]):
-        """Sets the verifiers of this InlineResponse2008.
+    @locations.setter
+    def locations(self, locations: List[Location]):
+        """Sets the locations of this InlineResponse2008.
 
 
-        :param verifiers: The verifiers of this InlineResponse2008.
-        :type verifiers: List[User]
+        :param locations: The locations of this InlineResponse2008.
+        :type locations: List[Location]
         """
 
-        self._verifiers = verifiers
+        self._locations = locations

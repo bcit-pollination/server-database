@@ -14,20 +14,20 @@ class Body9(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, election_id: int=None):  # noqa: E501
         """Body9 - a model defined in Swagger
 
-        :param org_id: The org_id of this Body9.  # noqa: E501
-        :type org_id: int
+        :param election_id: The election_id of this Body9.  # noqa: E501
+        :type election_id: int
         """
         self.swagger_types = {
-            'org_id': int
+            'election_id': int
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'election_id': 'election_id'
         }
-        self._org_id = org_id
+        self._election_id = election_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body9':
@@ -41,24 +41,24 @@ class Body9(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org_id(self) -> int:
-        """Gets the org_id of this Body9.
+    def election_id(self) -> int:
+        """Gets the election_id of this Body9.
 
-        The id of the org to get the election for  # noqa: E501
+        The id of the election to delete  # noqa: E501
 
-        :return: The org_id of this Body9.
+        :return: The election_id of this Body9.
         :rtype: int
         """
-        return self._org_id
+        return self._election_id
 
-    @org_id.setter
-    def org_id(self, org_id: int):
-        """Sets the org_id of this Body9.
+    @election_id.setter
+    def election_id(self, election_id: int):
+        """Sets the election_id of this Body9.
 
-        The id of the org to get the election for  # noqa: E501
+        The id of the election to delete  # noqa: E501
 
-        :param org_id: The org_id of this Body9.
-        :type org_id: int
+        :param election_id: The election_id of this Body9.
+        :type election_id: int
         """
 
-        self._org_id = org_id
+        self._election_id = election_id

@@ -44,7 +44,7 @@ class Body1(Model):
     def org_id(self) -> int:
         """Gets the org_id of this Body1.
 
-        The id of the implied org  # noqa: E501
+        The id of the org to add the rpi to  # noqa: E501
 
         :return: The org_id of this Body1.
         :rtype: int
@@ -55,10 +55,12 @@ class Body1(Model):
     def org_id(self, org_id: int):
         """Sets the org_id of this Body1.
 
-        The id of the implied org  # noqa: E501
+        The id of the org to add the rpi to  # noqa: E501
 
         :param org_id: The org_id of this Body1.
         :type org_id: int
         """
+        if org_id is None:
+            raise ValueError("Invalid value for `org_id`, must not be `None`")  # noqa: E501
 
         self._org_id = org_id

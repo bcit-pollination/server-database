@@ -1,8 +1,8 @@
 import connexion
 import six
 
-from swagger_server.models.body1 import Body1  # noqa: E501
-from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
+from swagger_server.models.body import Body  # noqa: E501
+from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
 from swagger_server import util
 
 
@@ -42,10 +42,10 @@ def get_org_users(body=None):  # noqa: E501
     :param body: 
     :type body: dict | bytes
 
-    :rtype: InlineResponse2004
+    :rtype: InlineResponse2005
     """
     if connexion.request.is_json:
-        body = Body1.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Body.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 

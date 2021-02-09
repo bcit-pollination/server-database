@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.location import Location  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,25 @@ class Body4(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, org_id: int=None, location: Location=None):  # noqa: E501
         """Body4 - a model defined in Swagger
 
         :param org_id: The org_id of this Body4.  # noqa: E501
         :type org_id: int
+        :param location: The location of this Body4.  # noqa: E501
+        :type location: Location
         """
         self.swagger_types = {
-            'org_id': int
+            'org_id': int,
+            'location': Location
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'org_id': 'org_id',
+            'location': 'location'
         }
         self._org_id = org_id
+        self._location = location
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body4':
@@ -44,7 +50,7 @@ class Body4(Model):
     def org_id(self) -> int:
         """Gets the org_id of this Body4.
 
-        The id of the org the RPI belongs to  # noqa: E501
+        The id of the org to add the location to  # noqa: E501
 
         :return: The org_id of this Body4.
         :rtype: int
@@ -55,10 +61,31 @@ class Body4(Model):
     def org_id(self, org_id: int):
         """Sets the org_id of this Body4.
 
-        The id of the org the RPI belongs to  # noqa: E501
+        The id of the org to add the location to  # noqa: E501
 
         :param org_id: The org_id of this Body4.
         :type org_id: int
         """
 
         self._org_id = org_id
+
+    @property
+    def location(self) -> Location:
+        """Gets the location of this Body4.
+
+
+        :return: The location of this Body4.
+        :rtype: Location
+        """
+        return self._location
+
+    @location.setter
+    def location(self, location: Location):
+        """Sets the location of this Body4.
+
+
+        :param location: The location of this Body4.
+        :type location: Location
+        """
+
+        self._location = location

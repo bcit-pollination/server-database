@@ -14,20 +14,20 @@ class Body2(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, rpi_id: int=None):  # noqa: E501
         """Body2 - a model defined in Swagger
 
-        :param org_id: The org_id of this Body2.  # noqa: E501
-        :type org_id: int
+        :param rpi_id: The rpi_id of this Body2.  # noqa: E501
+        :type rpi_id: int
         """
         self.swagger_types = {
-            'org_id': int
+            'rpi_id': int
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'rpi_id': 'rpi_id'
         }
-        self._org_id = org_id
+        self._rpi_id = rpi_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body2':
@@ -41,26 +41,24 @@ class Body2(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org_id(self) -> int:
-        """Gets the org_id of this Body2.
+    def rpi_id(self) -> int:
+        """Gets the rpi_id of this Body2.
 
-        The id of the org to add the rpi to  # noqa: E501
+        The id of the org the RPI belongs to  # noqa: E501
 
-        :return: The org_id of this Body2.
+        :return: The rpi_id of this Body2.
         :rtype: int
         """
-        return self._org_id
+        return self._rpi_id
 
-    @org_id.setter
-    def org_id(self, org_id: int):
-        """Sets the org_id of this Body2.
+    @rpi_id.setter
+    def rpi_id(self, rpi_id: int):
+        """Sets the rpi_id of this Body2.
 
-        The id of the org to add the rpi to  # noqa: E501
+        The id of the org the RPI belongs to  # noqa: E501
 
-        :param org_id: The org_id of this Body2.
-        :type org_id: int
+        :param rpi_id: The rpi_id of this Body2.
+        :type rpi_id: int
         """
-        if org_id is None:
-            raise ValueError("Invalid value for `org_id`, must not be `None`")  # noqa: E501
 
-        self._org_id = org_id
+        self._rpi_id = rpi_id

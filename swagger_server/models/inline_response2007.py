@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.location import Location  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +14,20 @@ class InlineResponse2007(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, locations: List[Location]=None):  # noqa: E501
+    def __init__(self, rpi_id: int=None):  # noqa: E501
         """InlineResponse2007 - a model defined in Swagger
 
-        :param locations: The locations of this InlineResponse2007.  # noqa: E501
-        :type locations: List[Location]
+        :param rpi_id: The rpi_id of this InlineResponse2007.  # noqa: E501
+        :type rpi_id: int
         """
         self.swagger_types = {
-            'locations': List[Location]
+            'rpi_id': int
         }
 
         self.attribute_map = {
-            'locations': 'locations'
+            'rpi_id': 'rpi_id'
         }
-        self._locations = locations
+        self._rpi_id = rpi_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2007':
@@ -42,22 +41,24 @@ class InlineResponse2007(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def locations(self) -> List[Location]:
-        """Gets the locations of this InlineResponse2007.
+    def rpi_id(self) -> int:
+        """Gets the rpi_id of this InlineResponse2007.
 
+        The id of the RPI just added  # noqa: E501
 
-        :return: The locations of this InlineResponse2007.
-        :rtype: List[Location]
+        :return: The rpi_id of this InlineResponse2007.
+        :rtype: int
         """
-        return self._locations
+        return self._rpi_id
 
-    @locations.setter
-    def locations(self, locations: List[Location]):
-        """Sets the locations of this InlineResponse2007.
+    @rpi_id.setter
+    def rpi_id(self, rpi_id: int):
+        """Sets the rpi_id of this InlineResponse2007.
 
+        The id of the RPI just added  # noqa: E501
 
-        :param locations: The locations of this InlineResponse2007.
-        :type locations: List[Location]
+        :param rpi_id: The rpi_id of this InlineResponse2007.
+        :type rpi_id: int
         """
 
-        self._locations = locations
+        self._rpi_id = rpi_id

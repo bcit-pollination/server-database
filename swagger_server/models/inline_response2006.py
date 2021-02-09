@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.rpi import Rpi  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,20 @@ class InlineResponse2006(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, rpi_id: int=None):  # noqa: E501
+    def __init__(self, rpis: List[Rpi]=None):  # noqa: E501
         """InlineResponse2006 - a model defined in Swagger
 
-        :param rpi_id: The rpi_id of this InlineResponse2006.  # noqa: E501
-        :type rpi_id: int
+        :param rpis: The rpis of this InlineResponse2006.  # noqa: E501
+        :type rpis: List[Rpi]
         """
         self.swagger_types = {
-            'rpi_id': int
+            'rpis': List[Rpi]
         }
 
         self.attribute_map = {
-            'rpi_id': 'rpi_id'
+            'rpis': 'rpis'
         }
-        self._rpi_id = rpi_id
+        self._rpis = rpis
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2006':
@@ -41,24 +42,22 @@ class InlineResponse2006(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def rpi_id(self) -> int:
-        """Gets the rpi_id of this InlineResponse2006.
+    def rpis(self) -> List[Rpi]:
+        """Gets the rpis of this InlineResponse2006.
 
-        The id of the RPI just added  # noqa: E501
 
-        :return: The rpi_id of this InlineResponse2006.
-        :rtype: int
+        :return: The rpis of this InlineResponse2006.
+        :rtype: List[Rpi]
         """
-        return self._rpi_id
+        return self._rpis
 
-    @rpi_id.setter
-    def rpi_id(self, rpi_id: int):
-        """Sets the rpi_id of this InlineResponse2006.
+    @rpis.setter
+    def rpis(self, rpis: List[Rpi]):
+        """Sets the rpis of this InlineResponse2006.
 
-        The id of the RPI just added  # noqa: E501
 
-        :param rpi_id: The rpi_id of this InlineResponse2006.
-        :type rpi_id: int
+        :param rpis: The rpis of this InlineResponse2006.
+        :type rpis: List[Rpi]
         """
 
-        self._rpi_id = rpi_id
+        self._rpis = rpis

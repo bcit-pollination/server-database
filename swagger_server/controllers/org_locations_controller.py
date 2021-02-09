@@ -1,11 +1,11 @@
 import connexion
 import six
 
+from swagger_server.models.body3 import Body3  # noqa: E501
 from swagger_server.models.body4 import Body4  # noqa: E501
 from swagger_server.models.body5 import Body5  # noqa: E501
 from swagger_server.models.body6 import Body6  # noqa: E501
-from swagger_server.models.body7 import Body7  # noqa: E501
-from swagger_server.models.inline_response2007 import InlineResponse2007  # noqa: E501
+from swagger_server.models.inline_response2008 import InlineResponse2008  # noqa: E501
 from swagger_server import util
 
 
@@ -20,7 +20,7 @@ def add_location(body=None):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Body6.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Body5.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -35,7 +35,7 @@ def delete_location(body=None):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Body7.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Body6.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -47,10 +47,10 @@ def get_locations_list(body=None):  # noqa: E501
     :param body: 
     :type body: dict | bytes
 
-    :rtype: InlineResponse2007
+    :rtype: InlineResponse2008
     """
     if connexion.request.is_json:
-        body = Body4.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Body3.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -65,5 +65,5 @@ def update_location(body=None):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Body5.from_dict(connexion.request.get_json())  # noqa: E501
+        body = Body4.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'

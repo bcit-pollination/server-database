@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.location import Location  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,25 +14,20 @@ class Body6(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None, location: Location=None):  # noqa: E501
+    def __init__(self, location_id: int=None):  # noqa: E501
         """Body6 - a model defined in Swagger
 
-        :param org_id: The org_id of this Body6.  # noqa: E501
-        :type org_id: int
-        :param location: The location of this Body6.  # noqa: E501
-        :type location: Location
+        :param location_id: The location_id of this Body6.  # noqa: E501
+        :type location_id: int
         """
         self.swagger_types = {
-            'org_id': int,
-            'location': Location
+            'location_id': int
         }
 
         self.attribute_map = {
-            'org_id': 'org_id',
-            'location': 'location'
+            'location_id': 'location_id'
         }
-        self._org_id = org_id
-        self._location = location
+        self._location_id = location_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body6':
@@ -47,45 +41,24 @@ class Body6(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org_id(self) -> int:
-        """Gets the org_id of this Body6.
+    def location_id(self) -> int:
+        """Gets the location_id of this Body6.
 
-        The id of the org to add the location to  # noqa: E501
+        The id of the location to delete  # noqa: E501
 
-        :return: The org_id of this Body6.
+        :return: The location_id of this Body6.
         :rtype: int
         """
-        return self._org_id
+        return self._location_id
 
-    @org_id.setter
-    def org_id(self, org_id: int):
-        """Sets the org_id of this Body6.
+    @location_id.setter
+    def location_id(self, location_id: int):
+        """Sets the location_id of this Body6.
 
-        The id of the org to add the location to  # noqa: E501
+        The id of the location to delete  # noqa: E501
 
-        :param org_id: The org_id of this Body6.
-        :type org_id: int
+        :param location_id: The location_id of this Body6.
+        :type location_id: int
         """
 
-        self._org_id = org_id
-
-    @property
-    def location(self) -> Location:
-        """Gets the location of this Body6.
-
-
-        :return: The location of this Body6.
-        :rtype: Location
-        """
-        return self._location
-
-    @location.setter
-    def location(self, location: Location):
-        """Sets the location of this Body6.
-
-
-        :param location: The location of this Body6.
-        :type location: Location
-        """
-
-        self._location = location
+        self._location_id = location_id

@@ -14,20 +14,20 @@ class Body7(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, location_id: int=None):  # noqa: E501
+    def __init__(self, org_id: int=None):  # noqa: E501
         """Body7 - a model defined in Swagger
 
-        :param location_id: The location_id of this Body7.  # noqa: E501
-        :type location_id: int
+        :param org_id: The org_id of this Body7.  # noqa: E501
+        :type org_id: int
         """
         self.swagger_types = {
-            'location_id': int
+            'org_id': int
         }
 
         self.attribute_map = {
-            'location_id': 'location_id'
+            'org_id': 'org_id'
         }
-        self._location_id = location_id
+        self._org_id = org_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body7':
@@ -41,24 +41,24 @@ class Body7(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def location_id(self) -> int:
-        """Gets the location_id of this Body7.
+    def org_id(self) -> int:
+        """Gets the org_id of this Body7.
 
-        The id of the location to delete  # noqa: E501
+        The id of the org to get the election for  # noqa: E501
 
-        :return: The location_id of this Body7.
+        :return: The org_id of this Body7.
         :rtype: int
         """
-        return self._location_id
+        return self._org_id
 
-    @location_id.setter
-    def location_id(self, location_id: int):
-        """Sets the location_id of this Body7.
+    @org_id.setter
+    def org_id(self, org_id: int):
+        """Sets the org_id of this Body7.
 
-        The id of the location to delete  # noqa: E501
+        The id of the org to get the election for  # noqa: E501
 
-        :param location_id: The location_id of this Body7.
-        :type location_id: int
+        :param org_id: The org_id of this Body7.
+        :type org_id: int
         """
 
-        self._location_id = location_id
+        self._org_id = org_id

@@ -14,20 +14,25 @@ class Body8(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, org_id: int=None, election_id: int=None):  # noqa: E501
         """Body8 - a model defined in Swagger
 
         :param org_id: The org_id of this Body8.  # noqa: E501
         :type org_id: int
+        :param election_id: The election_id of this Body8.  # noqa: E501
+        :type election_id: int
         """
         self.swagger_types = {
-            'org_id': int
+            'org_id': int,
+            'election_id': int
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'org_id': 'org_id',
+            'election_id': 'election_id'
         }
         self._org_id = org_id
+        self._election_id = election_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body8':
@@ -44,7 +49,7 @@ class Body8(Model):
     def org_id(self) -> int:
         """Gets the org_id of this Body8.
 
-        The id of the org to get verifiers for  # noqa: E501
+        The id of the org to get the election for  # noqa: E501
 
         :return: The org_id of this Body8.
         :rtype: int
@@ -55,10 +60,33 @@ class Body8(Model):
     def org_id(self, org_id: int):
         """Sets the org_id of this Body8.
 
-        The id of the org to get verifiers for  # noqa: E501
+        The id of the org to get the election for  # noqa: E501
 
         :param org_id: The org_id of this Body8.
         :type org_id: int
         """
 
         self._org_id = org_id
+
+    @property
+    def election_id(self) -> int:
+        """Gets the election_id of this Body8.
+
+        The id of the election to get  # noqa: E501
+
+        :return: The election_id of this Body8.
+        :rtype: int
+        """
+        return self._election_id
+
+    @election_id.setter
+    def election_id(self, election_id: int):
+        """Sets the election_id of this Body8.
+
+        The id of the election to get  # noqa: E501
+
+        :param election_id: The election_id of this Body8.
+        :type election_id: int
+        """
+
+        self._election_id = election_id
