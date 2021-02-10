@@ -175,10 +175,11 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN)
+    IN is_anonymous BOOLEAN,
+	IN is_public BOOLEAN)
 BEGIN
-	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous)
-    VALUES(org_id, description, start_time, end_time, is_anonymous);
+	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous, is_public)
+    VALUES(org_id, description, start_time, end_time, is_anonymous, is_public);
 	SELECT LAST_INSERT_ID();
 END;//
 
@@ -189,7 +190,7 @@ END;//
 CREATE PROCEDURE GetElectionListUser(IN id INT)
 BEGIN
 	SELECT election_id, el.org_id, start_time,
-		end_time, verified, is_anonymous FROM users u
+		end_time, verified, is_anonymous, is_public FROM users u
 			INNER JOIN enrollment e
 				ON e.user_id = u.user_id
 			INNER JOIN election el
@@ -205,7 +206,7 @@ END; //
 	CREATE PROCEDURE GetUserElectionsAlternate(IN id INT)
 	BEGIN
 		SELECT e.user_id, e.org_id, election_id, privilege_level, 
-		start_time, end_time, verified, is_anonymous FROM users u
+		start_time, end_time, verified, is_anonymous, is_public FROM users u
 		INNER JOIN enrollment e
 			ON e.user_id = u.user_id
 		INNER JOIN election el
