@@ -37,11 +37,13 @@ project's server.
 
 11) Change the "MySQL Server Port" to "3306".
 
-12) Change the "Username" to "root".
+12) Change the "Username" to "server".
 
-13) Leave all the remaining fields blank, and click "Test Connection".
+13) Password: "j20mak1#*1152t"
 
-14) Your workspace should now be connected to the server's database, so you can now work on it remotely.
+14) Leave all the remaining fields blank, and click "Test Connection".
+
+15) Your workspace should now be connected to the server's database, so you can now work on it remotely.
 
 How to run an sql file on the database:
 
