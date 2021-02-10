@@ -18,6 +18,7 @@ def app_create_user(body=None):  # noqa: E501
 
     :rtype: InlineResponse200
     """
+    print(body)
     if connexion.request.is_json:
         body = object.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
