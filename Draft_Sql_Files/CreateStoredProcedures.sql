@@ -51,7 +51,7 @@ END;//
 	(non-sensitive data). */
 CREATE PROCEDURE GetUser(IN id INT)
 BEGIN
-	SELECT user_id, first_name, last_name, email, date_of_birth FROM users
+	SELECT user_id, first_name, last_name, email, date_of_birth FROM Users
 	WHERE user_id = id;
 END; //
 
@@ -60,7 +60,7 @@ END; //
 	(non-sensitive data). */
 CREATE PROCEDURE GetUserToken(IN id INT)
 BEGIN
-	SELECT voting_token FROM users
+	SELECT voting_token FROM Users
 	WHERE user_id = id;
 END; //
 
@@ -108,10 +108,10 @@ END; //
 	that the user specified belongs to.*/
 CREATE PROCEDURE GetOrganizations(IN id INT)
 BEGIN
-	SELECT e.privilege_level, o.org_id, o.org_name FROM users u
-		INNER JOIN enrollment e
+	SELECT e.privilege_level, o.org_id, o.org_name FROM Users u
+		INNER JOIN Enrollment e
 			ON u.user_id = e.user_id
-		INNER JOIN organization o
+		INNER JOIN Organization o
 			ON e.org_id = o.org_id
 	WHERE e.user_id = id;
 END; //
@@ -121,7 +121,7 @@ END; //
 	an organization id.*/
 CREATE PROCEDURE GetOrganization(IN id INT)
 BEGIN
-	SELECT org_id, org_name FROM organization
+	SELECT org_id, org_name FROM Organization
 	WHERE org_id = id;
 END; //
 
@@ -178,10 +178,10 @@ END; //
 
 CREATE PROCEDURE GetUsersFromOrg(IN id INT, IN privilege_level INT)
 BEGIN
-	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM users
-		INNER JOIN enrollment e
+	SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM Users
+		INNER JOIN Enrollment e
 		   ON u.user_id = e.user_id
-		INNER JOIN organization o
+		INNER JOIN Organization o
 		   ON o.org_id = e.org_id
 	WHERE o.org_id = id
 	AND e.privilege_level = privelege_level;
@@ -220,10 +220,11 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN)
+    IN is_anonymous BOOLEAN,
+	IN is_public BOOLEAN)
 BEGIN
-	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous)
-    VALUES(org_id, description, start_time, end_time, is_anonymous);
+	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous, is_public)
+    VALUES(org_id, description, start_time, end_time, is_anonymous, is_public);
 	SELECT LAST_INSERT_ID();
 END;//
 
@@ -234,10 +235,10 @@ END;//
 CREATE PROCEDURE GetElectionListUser(IN id INT)
 BEGIN
 	SELECT election_id, el.org_id, start_time,
-		end_time, verified, is_anonymous FROM users u
-			INNER JOIN enrollment e
+		end_time, verified, is_anonymous, is_public FROM Users u
+			INNER JOIN Enrollment e
 				ON e.user_id = u.user_id
-			INNER JOIN election el
+			INNER JOIN Election el
 				ON e.org_id = el.org_id	
 	WHERE e.user_id = id;
 END; //
@@ -250,10 +251,10 @@ END; //
 	CREATE PROCEDURE GetElectionsAlternate(IN id INT)
 	BEGIN
 		SELECT e.user_id, e.org_id, election_id, privilege_level, 
-		start_time, end_time, verified, is_anonymous FROM users u
-		INNER JOIN enrollment e
+		start_time, end_time, verified, is_anonymous, is_public FROM Users u
+		INNER JOIN Enrollment e
 			ON e.user_id = u.user_id
-		INNER JOIN election el
+		INNER JOIN Election el
 			ON el.org_id = e.org_id
 		WHERE e.user_id = id;
 		

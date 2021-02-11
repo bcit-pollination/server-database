@@ -66,6 +66,7 @@ CREATE TABLE Election (
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
     is_anonymous 	BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
+	is_public       BOOLEAN     NOT NULL    DEFAULT(FALSE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
