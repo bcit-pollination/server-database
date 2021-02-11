@@ -1,7 +1,10 @@
+USE voting_system;
+
 DROP PROCEDURE IF EXISTS LoginUser;
 DROP PROCEDURE IF EXISTS GetUser;
 DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS CreateUser;
+DROP PROCEDURE IF EXISTS UpdateUser;
 DROP PROCEDURE IF EXISTS DeactivateUser;
 
 DROP PROCEDURE IF EXISTS GetOrganizations;
@@ -32,11 +35,8 @@ DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DELIMITER //
 
-/** 
-	Takes in a user's login credentials,
-	then returns the user's id
-	*/
-
+/** Takes in a user's login credentials,
+	then returns the user's id. */
 CREATE PROCEDURE LoginUser(
 	IN in_email VARCHAR(40),
     IN in_password VARCHAR(72))
@@ -45,9 +45,6 @@ BEGIN
     WHERE in_email = email 
     AND in_password = password;
 END;//
-
-
-
 
 
 /** Takes in a user id, and returns the user's data
@@ -59,9 +56,6 @@ BEGIN
 END; //
 
 
-
-
-
 /** Takes in a user id, and returns the user's token
 	(non-sensitive data). */
 CREATE PROCEDURE GetUserToken(IN id INT)
@@ -69,9 +63,6 @@ BEGIN
 	SELECT voting_token FROM users
 	WHERE user_id = id;
 END; //
-
-
-
 
 
 /** Takes in user information, and uses it
@@ -91,10 +82,28 @@ BEGIN
 	SELECT LAST_INSERT_ID();
 END; //
 
+
+/** Changes user password given the specified user_id. */
+CREATE PROCEDURE UpdateUser(
+	IN in_user_id INT,
+    IN in_password INT
+)
+BEGIN
+	UPDATE Users
+    SET password = in_password
+	WHERE user_id = in_user_id;
+END; //
+
+
+/* Deactivates a user by setting the user's disabled flag. */
+CREATE PROCEDURE DeactivateUser(IN id INT)
+BEGIN
+	UPDATE Users
+    SET disabled = TRUE
+	WHERE user_id = id;
+END; //
+
 	
-
-
-
 /** Takes in a user's id, and returns the data of the organizations
 	that the user specified belongs to.*/
 CREATE PROCEDURE GetOrganizations(IN id INT)
@@ -108,9 +117,6 @@ BEGIN
 END; //
 
 
-
-
-
 /** Gets an organization's data from
 	an organization id.*/
 CREATE PROCEDURE GetOrganization(IN id INT)
@@ -118,9 +124,6 @@ BEGIN
 	SELECT org_id, org_name FROM organization
 	WHERE org_id = id;
 END; //
-
-
-
 
 
 /** Takes in a user id and a name for the organization,
@@ -138,8 +141,36 @@ BEGIN
 END; //
 
 
+/** Updates an organization's password and name. **/
+CREATE PROCEDURE UpdateOrg(
+	IN in_org_id INT, 
+    IN in_org_name VARCHAR(40),
+    IN in_verifier_password VARCHAR(72))
+BEGIN
+	UPDATE Organization
+    SET verifier_password = in_verifier_password
+	AND org_name = in_org_name
+	WHERE org_id = in_org_id;
+END; //
 
 
+/** Disbands an organization by setting its disabled flag. */
+CREATE PROCEDURE DisbandOrg(IN in_org_id INT)
+BEGIN
+	UPDATE Organization
+    SET disabled = TRUE
+	WHERE org_id = in_org_id;
+END; //
+
+
+/** Gets the verifier password for the specified organization. */
+CREATE PROCEDURE GetVerifierPassword(IN in_org_id INT)
+BEGIN
+	SELECT verifier_password FROM Organization
+	WHERE org_id = in_org_id;
+END; //
+
+ 
 /** Takes in the id of an organization and the privilege level as parameters, and
 	displays all of the users who are currently in that organization.
 	This includes their id, firstname, lastname, email, date_of_birth, and voting_token
@@ -154,6 +185,20 @@ BEGIN
 		   ON o.org_id = e.org_id
 	WHERE o.org_id = id
 	AND e.privilege_level = privelege_level;
+END; //
+
+
+/** Updates the prvilege level for a user. */
+CREATE PROCEDURE UpdatePrivilege(
+	IN in_user_id INT,
+	IN in_org_id INT,
+    IN in_privilege_level INT
+)
+BEGIN
+	UPDATE Enrollment
+    SET privilege_level = in_privilege_level
+	WHERE user_id = in_user_id
+    AND org_id = in_org_id;
 END; //
 
 
@@ -202,7 +247,7 @@ END; //
 	In this, all the elections that the user is associated with
 	are listed alongside the organization they belong to, as well
 	as the election.*/
-	CREATE PROCEDURE GetUserElectionsAlternate(IN id INT)
+	CREATE PROCEDURE GetElectionsAlternate(IN id INT)
 	BEGIN
 		SELECT e.user_id, e.org_id, election_id, privilege_level, 
 		start_time, end_time, verified, is_anonymous FROM users u
