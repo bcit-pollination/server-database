@@ -13,8 +13,8 @@ DROP PROCEDURE IF EXISTS DropQuestion; /** Tested */
 DROP PROCEDURE IF EXISTS UpdateQuestion; /** Tested*/
 
 DROP PROCEDURE IF EXISTS AddChoice; /** Tested */
-DROP PROCEDURE IF EXISTS DropChoice; /** May need to redesign.*/
-DROP PROCEDURE IF EXISTS UpdateChoice; /** May need to double test this one. */
+DROP PROCEDURE IF EXISTS DropChoice; /** Tested*/
+DROP PROCEDURE IF EXISTS UpdateChoice; /** Tested. */
 DROP PROCEDURE IF EXISTS GetQuestionSelection; /** Tested */
 
 DELIMITER //
@@ -198,13 +198,15 @@ CREATE PROCEDURE DropChoice(
 	IN id INT
 )
 BEGIN
-	DELETE FROM Choice
-	WHERE choice_id = id;
+
+	UPDATE Question q
+	INNER JOIN Choice c ON q.question_id = c.question_id
+	SET selection_limit = selection_limit - 1
+	WHERE c.choice_id = id;
 	
-	UPDATE Question
-		SET selection_limit = selection_limit - 1
-		WHERE question_id = (SELECT question_id FROM Choice
-			WHERE choice_id = id);
+	DELETE FROM Choice
+	WHERE choice_id = id; 
+	
 END; //
 
 /** Updates choice for question.*/
@@ -214,9 +216,9 @@ CREATE PROCEDURE UpdateChoice(
 	IN descr VARCHAR(40)
 )
 BEGIN
-	UPDATE Question q
+	UPDATE Choice
 	SET description = descr
-	WHERE question_id = id;
+	WHERE choice_id = id;
 END; //
 
 CREATE PROCEDURE GetQuestionSelection(
