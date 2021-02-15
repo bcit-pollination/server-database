@@ -32,6 +32,8 @@ DROP PROCEDURE IF EXISTS CreateElection; /** Tested */
 
 DROP PROCEDURE IF EXISTS CreateVote;
 DROP PROCEDURE IF EXISTS CreateSelection;
+DROP PROCEDURE IF EXISTS GetVoteResults;
+
 DROP PROCEDURE IF EXISTS GetPublicElectionList;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
@@ -275,7 +277,7 @@ BEGIN
         WHERE u.voting_token = voting_token
 	);
     SET previous_vote = (
-		SELECT election_id FROM Election el
+		SELECT v.vote_id FROM Election el
 			INNER JOIN Question q
 				ON el.election_id = q.election_id
 			INNER JOIN Choice c
@@ -287,15 +289,15 @@ BEGIN
 	);
     
     IF (COUNT(previous_vote) > 0) THEN
-		IF (time_stamp > (SELECT prev_time_stamp FROM previous_vote)) THEN
+		IF (time_stamp > previous_vote) THEN
 			INSERT INTO Vote(user_id, time_stamp)
             VALUES(var_user_id, time_stamp);
             SELECT LAST_INSERT_ID();
         END IF;
-		ELSE
-			INSERT INTO Vote(user_id, time_stamp)
-            VALUES(var_user_id, time_stamp);
-            SELECT LAST_INSERT_ID();
+	ELSE
+		INSERT INTO Vote(user_id, time_stamp)
+		VALUES(var_user_id, time_stamp);
+		SELECT LAST_INSERT_ID();
     END IF;
 END; //
 
@@ -314,6 +316,23 @@ BEGIN
 	);
 	INSERT INTO Selection(var_user_id, choice_id)
 	VALUES(var_user_id, choice_id);
+END; //
+
+
+/** Gets votes with selected choices for questions for a particular election. */
+CREATE PROCEDURE GetVoteResults(
+	IN election_id INT
+)
+BEGIN
+	SELECT v.vote_id, s.*, c.*, q.question_id, q.description FROM Election el
+		INNER JOIN Question q
+			ON el.election_id = q.election_id
+		INNER JOIN Choice c
+			ON c.question_id = c.question_id
+		INNER JOIN Selection s
+			ON s.choice_id = c.choice_id
+		INNER JOIN Vote v
+			ON v.vote_id = s.vote_id;
 END; //
 
 
