@@ -30,8 +30,11 @@ DROP PROCEDURE IF EXISTS CreateElection;
 DROP PROCEDURE IF EXISTS UpdateElection;
 DROP PROCEDURE IF EXISTS DeleteElection;
 
-DROP PROCEDURE IF EXISTS GetElectionsAlternate;
+DROP PROCEDURE IF EXISTS CreateVote;
+DROP PROCEDURE IF EXISTS CreateSelection;
+DROP PROCEDURE IF EXISTS GetPublicElectionList;
 
+DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DELIMITER //
 
@@ -243,6 +246,64 @@ BEGIN
 	WHERE e.user_id = id;
 END; //
 
+/** Adds a vote. */
+CREATE PROCEDURE CreateVote(
+	IN voting_token VARCHAR(36),
+    IN time_stamp TIMESTAMP,
+    IN election_id INT
+)
+BEGIN
+	DECLARE var_user_id INT;
+    DECLARE previous_vote INT;
+
+    SET var_user_id = (
+		SELECT user_id 
+        FROM Users u
+        WHERE u.voting_token = voting_token
+	);
+    SET previous_vote = (
+		SELECT election_id FROM Election el
+			INNER JOIN Question q
+				ON el.election_id = q.election_id
+			INNER JOIN Choice c
+				ON c.question_id = c.question_id
+			INNER JOIN Selection s
+				ON s.choice_id = c.choice_id
+			INNER JOIN Vote v
+				ON v.vote_id = s.vote_id
+	);
+    
+    IF (COUNT(previous_vote) > 0) THEN
+		IF (time_stamp > (SELECT prev_time_stamp FROM previous_vote)) THEN
+			INSERT INTO Vote(user_id, time_stamp)
+            VALUES(var_user_id, time_stamp);
+            SELECT LAST_INSERT_ID();
+        END IF;
+		ELSE
+			INSERT INTO Vote(user_id, time_stamp)
+            VALUES(var_user_id, time_stamp);
+            SELECT LAST_INSERT_ID();
+    END IF;
+END; //
+
+
+/** Adds a selection. */
+CREATE PROCEDURE CreateSelection(
+	IN voting_token VARCHAR(36),
+    IN choice_id INT
+)
+BEGIN
+	DECLARE var_user_id INT;
+    SET var_user_id = (
+		SELECT user_id 
+        FROM Users u
+        WHERE u.voting_token = voting_token
+	);
+	INSERT INTO Selection(var_user_id, choice_id)
+	VALUES(var_user_id, choice_id);
+END; //
+
+
 /** A combined version of the first three functions,
 	which was what was asked for on the queries document.
 	In this, all the elections that the user is associated with
@@ -259,5 +320,4 @@ END; //
 		WHERE e.user_id = id;
 		
 	END; //
-
 	
