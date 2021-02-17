@@ -55,7 +55,8 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	UNIQUE KEY (user_id, org_id)
+	UNIQUE KEY (user_id, org_id),
+    CHECK (privilege_level BETWEEN 0 AND 3)
 );
 
 CREATE TABLE Election (

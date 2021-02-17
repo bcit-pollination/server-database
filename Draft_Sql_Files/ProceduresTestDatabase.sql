@@ -47,4 +47,10 @@ CALL UpdateQuestion(1, 'What language is the best?', 1); /** Changes the questio
 
 CALL UpdateElection(1, 'Web Dev Survey', FALSE, '2021-10-05', '2021-11-09', TRUE, FALSE); /** Updates election name to web dev survey. */
 
+CALL DeactivateUser(1);
+
+CALL UpdateUser(1, "Hello world");
+
+CALL UpdatePrivilege(2, 2, 0);
+
 
