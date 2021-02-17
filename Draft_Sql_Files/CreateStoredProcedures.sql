@@ -172,10 +172,10 @@ BEGIN
 END; //
 
 
-/** Disbands an organization by setting everyone's disabled flag. */
+/** Disbands an organization by setting its disabled flag. */
 CREATE PROCEDURE DisbandOrg(IN in_org_id INT)
 BEGIN
-	UPDATE Enrollment
+	UPDATE Organization
     SET disabled = TRUE
 	WHERE org_id = in_org_id;
 END; //
