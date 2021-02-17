@@ -166,16 +166,16 @@ CREATE PROCEDURE UpdateOrg(
     IN in_verifier_password VARCHAR(72))
 BEGIN
 	UPDATE Organization
-    SET verifier_password = in_verifier_password
-	AND org_name = in_org_name
+    SET verifier_password = in_verifier_password,
+    org_name = in_org_name
 	WHERE org_id = in_org_id;
 END; //
 
 
-/** Disbands an organization by setting its disabled flag. */
+/** Disbands an organization by setting everyone's disabled flag. */
 CREATE PROCEDURE DisbandOrg(IN in_org_id INT)
 BEGIN
-	UPDATE Organization
+	UPDATE Enrollment
     SET disabled = TRUE
 	WHERE org_id = in_org_id;
 END; //
