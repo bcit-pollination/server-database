@@ -91,7 +91,7 @@ END; //
 /** Changes user password given the specified user_id. */
 CREATE PROCEDURE UpdateUser(
 	IN in_user_id INT,
-    IN in_password INT
+    IN in_password VARCHAR(72)
 )
 BEGIN
 	UPDATE Users
