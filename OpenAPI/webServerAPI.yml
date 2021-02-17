@@ -39,7 +39,7 @@ tags:
 
 
 paths:
-  /api/user/login:
+  /user/login:
     post:
       tags:
         - user.auth
@@ -57,7 +57,7 @@ paths:
           $ref:  "#/components/responses/401"
 
 
-  /api/user/logout:
+  /user/logout:
     post:
       tags:
         - user.auth
@@ -71,7 +71,7 @@ paths:
         "401":
           $ref:  "#/components/responses/401"
 
-  /api/user:
+  /user:
     get:
       tags:
         - user
@@ -135,7 +135,7 @@ paths:
         "404":
           description: Not found
 
-  /api/user/voting_token:
+  /user/voting_token:
     get:
       tags:
         - user
@@ -151,7 +151,7 @@ paths:
         "404":
           description: Not found
 
-  /api/org/list:
+  /org/list:
     get:
       tags:
         - org
@@ -167,7 +167,7 @@ paths:
         "404":
           description: Not found
 
-  /api/org:
+  /org:
     get:
       tags:
         - org
@@ -243,7 +243,7 @@ paths:
           description: Not found
 
 
-  /api/org/users:
+  /org/users:
     get:
       tags:
         - org.users
@@ -263,7 +263,7 @@ paths:
         "404":
           description: Not found
 
-  /api/org/users/invite:
+  /org/users/invite:
     post:
       tags:
         - org.users
@@ -284,7 +284,7 @@ paths:
         '404':
           $ref: '#/components/responses/bad_users'
 
-  /api/org/users/invite/accept:
+  /org/users/invite/accept:
     get:
       tags:
         - org.users
@@ -309,7 +309,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/users/delete:
+  /org/users/delete:
     post:
       tags:
         - org.users
@@ -328,7 +328,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/users/privileges:
+  /org/users/privileges:
     put:
       tags:
         - org.users
@@ -353,7 +353,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/verifier_password:
+  /org/verifier_password:
     post:
       tags:
         - org
@@ -372,7 +372,7 @@ paths:
           description: Not found
 
 
-  /api/org/locations/list:
+  /org/locations/list:
     get:
       tags:
         - org.locations
@@ -393,7 +393,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/locations:
+  /org/locations:
     post:
       tags:
         - org.locations
@@ -461,7 +461,7 @@ paths:
           $ref: '#/components/responses/404'
 
 
-  /api/org/elections/list:
+  /org/elections/list:
     get:
       description: Get list of elections for a given org
       tags:
@@ -481,7 +481,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/elections:
+  /org/elections:
     get:
       description: Get one election
       tags:
@@ -571,7 +571,7 @@ paths:
           $ref: '#/components/responses/404'
 
 
-  /api/org/elections/public/get/list:
+  /org/elections/public/get/list:
     get:
       description: >
         Get a list of elections with results open to the public
@@ -604,7 +604,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/elections/public/get:
+  /org/elections/public/get:
     get:
       description: >
         Get a list of elections with results open to the public
@@ -631,7 +631,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/elections/results:
+  /org/elections/results:
     get:
       description: >
         Get the voting results for an election.
@@ -657,7 +657,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /api/org/election/votes:
+  /org/election/votes:
     post:
       description: >
         Create/Update election results.
@@ -681,7 +681,7 @@ paths:
           $ref: '#/components/responses/404'
 
 
-  /api/org/election/download:
+  /org/election/download:
     get:
       tags:
         - org.election.download
