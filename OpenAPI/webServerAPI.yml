@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "0.9"
+  version: "0.95"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -13,10 +13,10 @@ info:
      3 := owner
 
 servers:
-  - url: https://pollination.live
+  - url: https://api.pollination.live/
 tags:
 
-  - name: user.auth
+  - name: user.authks
     description: Related to the authentication/authorization of users
   - name: user
     description: A user can be a voter, and an admin or a verifier

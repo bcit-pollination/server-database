@@ -4,14 +4,14 @@ info:
   description: |
     All values in this API are required and not nullable unless specifically stated.
 
-    User privileges are:<br>
+    Org user privileges are:<br>
      0 := invited<br>
      1 := member<br>
      2 := admin<br>
      3 := owner
-  version: "0.86"
+  version: "0.9"
 servers:
-- url: https://pollination.live
+- url: https://pollination.live/api
 security:
 - jwt: []
 tags:
@@ -36,7 +36,7 @@ tags:
 - name: elections.results.public
   description: Provide API for the general public to access election results
 paths:
-  /api/user/login:
+  /user/login:
     post:
       tags:
       - user.auth
@@ -57,7 +57,7 @@ paths:
           description: Not Authorized
       security: []
       x-openapi-router-controller: swagger_server.controllers.user_auth_controller
-  /api/user/logout:
+  /user/logout:
     post:
       tags:
       - user.auth
@@ -71,7 +71,7 @@ paths:
         "401":
           description: Not Authorized
       x-openapi-router-controller: swagger_server.controllers.user_auth_controller
-  /api/user:
+  /user:
     get:
       tags:
       - user
@@ -143,7 +143,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.user_controller
-  /api/user/voting_token:
+  /user/voting_token:
     get:
       tags:
       - user
@@ -163,7 +163,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.user_controller
-  /api/org/list:
+  /org/list:
     get:
       tags:
       - org
@@ -183,7 +183,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_controller
-  /api/org:
+  /org:
     get:
       tags:
       - org
@@ -265,7 +265,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_controller
-  /api/org/users:
+  /org/users:
     get:
       tags:
       - org.users
@@ -296,7 +296,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
-  /api/org/users/invite:
+  /org/users/invite:
     post:
       tags:
       - org.users
@@ -319,7 +319,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_404'
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
-  /api/org/users/invite/accept:
+  /org/users/invite/accept:
     get:
       tags:
       - org.users
@@ -344,7 +344,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
-  /api/org/users/delete:
+  /org/users/delete:
     post:
       tags:
       - org.users
@@ -362,7 +362,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
-  /api/org/users/privileges:
+  /org/users/privileges:
     put:
       tags:
       - org.users
@@ -382,7 +382,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
-  /api/org/verifier_password:
+  /org/verifier_password:
     post:
       tags:
       - org
@@ -404,7 +404,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_controller
-  /api/org/locations/list:
+  /org/locations/list:
     get:
       tags:
       - org.locations
@@ -434,7 +434,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_locations_controller
-  /api/org/locations:
+  /org/locations:
     put:
       tags:
       - org.locations
@@ -499,7 +499,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_locations_controller
-  /api/org/elections/list:
+  /org/elections/list:
     get:
       tags:
       - org.elections
@@ -529,7 +529,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
-  /api/org/elections:
+  /org/elections:
     get:
       tags:
       - org.elections
@@ -627,7 +627,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
-  /api/org/elections/public/get/list:
+  /org/elections/public/get/list:
     get:
       tags:
       - elections.results.public
@@ -667,7 +667,7 @@ paths:
           description: Not found
       security: []
       x-openapi-router-controller: swagger_server.controllers.elections_results_public_controller
-  /api/org/elections/public/get:
+  /org/elections/public/get:
     get:
       tags:
       - elections.results.public
@@ -699,7 +699,7 @@ paths:
           description: Not found
       security: []
       x-openapi-router-controller: swagger_server.controllers.elections_results_public_controller
-  /api/org/elections/results:
+  /org/elections/results:
     get:
       tags:
       - org.election.results
@@ -732,7 +732,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_election_results_controller
-  /api/org/election/votes:
+  /org/election/votes:
     post:
       tags:
       - org.election.votes
@@ -753,7 +753,7 @@ paths:
         "404":
           description: Not found
       x-openapi-router-controller: swagger_server.controllers.org_election_votes_controller
-  /api/org/election/download:
+  /org/election/download:
     get:
       tags:
       - org.election.download
