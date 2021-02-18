@@ -7,7 +7,8 @@ from src.auth.jwt import *
 from swagger_server.models.body import Body  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
-from swagger_server.models.org import Org  # noqa: E501
+from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
+from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 from swagger_server import util
 
 
@@ -16,10 +17,10 @@ def create_org(body=None):  # noqa: E501
 
      # noqa: E501
 
-    :param body: 
+    :param body: Org id is optional
     :type body: dict | bytes
 
-    :rtype: InlineResponse2003
+    :rtype: InlineResponse2004
     """
     if connexion.request.is_json:
         body = connexion.request.get_json()  # noqa: E501
@@ -48,18 +49,16 @@ def disband_org():  # noqa: E501
     return 'do some magic!'
 
 
-def get_org(body=None):  # noqa: E501
+def get_org(org_id):  # noqa: E501
     """Get org info
 
      # noqa: E501
 
-    :param body: 
-    :type body: dict | bytes
+    :param org_id: The id of the org
+    :type org_id: int
 
-    :rtype: InlineResponse2002
+    :rtype: InlineResponse2003
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -74,16 +73,31 @@ def get_org_list():  # noqa: E501
     return 'do some magic!'
 
 
-def update_org(body=None):  # noqa: E501
-    """Update org info
+def get_verifier_password(body=None):  # noqa: E501
+    """Get password used by ID verifiers to login into voting machine
 
      # noqa: E501
 
     :param body: 
     :type body: dict | bytes
 
+    :rtype: VerifierPassword
+    """
+    if connexion.request.is_json:
+        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+    return 'do some magic!'
+
+
+def update_org(body=None):  # noqa: E501
+    """Update org info
+
+     # noqa: E501
+
+    :param body: Org id is optional
+    :type body: dict | bytes
+
     :rtype: None
     """
     if connexion.request.is_json:
-        body = Org.from_dict(connexion.request.get_json())  # noqa: E501
+        body = object.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'

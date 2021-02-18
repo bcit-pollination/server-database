@@ -15,20 +15,20 @@ class InlineResponse2002(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org: UserOrg=None):  # noqa: E501
+    def __init__(self, orgs: List[UserOrg]=None):  # noqa: E501
         """InlineResponse2002 - a model defined in Swagger
 
-        :param org: The org of this InlineResponse2002.  # noqa: E501
-        :type org: UserOrg
+        :param orgs: The orgs of this InlineResponse2002.  # noqa: E501
+        :type orgs: List[UserOrg]
         """
         self.swagger_types = {
-            'org': UserOrg
+            'orgs': List[UserOrg]
         }
 
         self.attribute_map = {
-            'org': 'org'
+            'orgs': 'orgs'
         }
-        self._org = org
+        self._orgs = orgs
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2002':
@@ -42,22 +42,24 @@ class InlineResponse2002(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org(self) -> UserOrg:
-        """Gets the org of this InlineResponse2002.
+    def orgs(self) -> List[UserOrg]:
+        """Gets the orgs of this InlineResponse2002.
 
+        A list of all the orgs the user belongs to  # noqa: E501
 
-        :return: The org of this InlineResponse2002.
-        :rtype: UserOrg
+        :return: The orgs of this InlineResponse2002.
+        :rtype: List[UserOrg]
         """
-        return self._org
+        return self._orgs
 
-    @org.setter
-    def org(self, org: UserOrg):
-        """Sets the org of this InlineResponse2002.
+    @orgs.setter
+    def orgs(self, orgs: List[UserOrg]):
+        """Sets the orgs of this InlineResponse2002.
 
+        A list of all the orgs the user belongs to  # noqa: E501
 
-        :param org: The org of this InlineResponse2002.
-        :type org: UserOrg
+        :param orgs: The orgs of this InlineResponse2002.
+        :type orgs: List[UserOrg]
         """
 
-        self._org = org
+        self._orgs = orgs

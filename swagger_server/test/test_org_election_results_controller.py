@@ -17,12 +17,11 @@ class TestOrgElectionResultsController(BaseTestCase):
 
         Get election voting results
         """
-        body = None
+        headers = [('election_id', 56)]
         response = self.client.open(
             '/api/org/elections/results',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            method='GET',
+            headers=headers)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

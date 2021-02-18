@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user import User  # noqa: F401,E501
+from swagger_server.models.election import Election  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +15,20 @@ class InlineResponse2008(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, verifiers: List[User]=None):  # noqa: E501
+    def __init__(self, election: Election=None):  # noqa: E501
         """InlineResponse2008 - a model defined in Swagger
 
-        :param verifiers: The verifiers of this InlineResponse2008.  # noqa: E501
-        :type verifiers: List[User]
+        :param election: The election of this InlineResponse2008.  # noqa: E501
+        :type election: Election
         """
         self.swagger_types = {
-            'verifiers': List[User]
+            'election': Election
         }
 
         self.attribute_map = {
-            'verifiers': 'verifiers'
+            'election': 'election'
         }
-        self._verifiers = verifiers
+        self._election = election
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2008':
@@ -42,22 +42,22 @@ class InlineResponse2008(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def verifiers(self) -> List[User]:
-        """Gets the verifiers of this InlineResponse2008.
+    def election(self) -> Election:
+        """Gets the election of this InlineResponse2008.
 
 
-        :return: The verifiers of this InlineResponse2008.
-        :rtype: List[User]
+        :return: The election of this InlineResponse2008.
+        :rtype: Election
         """
-        return self._verifiers
+        return self._election
 
-    @verifiers.setter
-    def verifiers(self, verifiers: List[User]):
-        """Sets the verifiers of this InlineResponse2008.
+    @election.setter
+    def election(self, election: Election):
+        """Sets the election of this InlineResponse2008.
 
 
-        :param verifiers: The verifiers of this InlineResponse2008.
-        :type verifiers: List[User]
+        :param election: The election of this InlineResponse2008.
+        :type election: Election
         """
 
-        self._verifiers = verifiers
+        self._election = election

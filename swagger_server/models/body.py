@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.location import Location  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,25 +15,25 @@ class Body(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, name: str=None, org_uid: str=None):  # noqa: E501
+    def __init__(self, org_id: int=None, location: Location=None):  # noqa: E501
         """Body - a model defined in Swagger
 
-        :param name: The name of this Body.  # noqa: E501
-        :type name: str
-        :param org_uid: The org_uid of this Body.  # noqa: E501
-        :type org_uid: str
+        :param org_id: The org_id of this Body.  # noqa: E501
+        :type org_id: int
+        :param location: The location of this Body.  # noqa: E501
+        :type location: Location
         """
         self.swagger_types = {
-            'name': str,
-            'org_uid': str
+            'org_id': int,
+            'location': Location
         }
 
         self.attribute_map = {
-            'name': 'name',
-            'org_uid': 'org_uid'
+            'org_id': 'org_id',
+            'location': 'location'
         }
-        self._name = name
-        self._org_uid = org_uid
+        self._org_id = org_id
+        self._location = location
 
     @classmethod
     def from_dict(cls, dikt) -> 'Body':
@@ -46,49 +47,45 @@ class Body(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def name(self) -> str:
-        """Gets the name of this Body.
+    def org_id(self) -> int:
+        """Gets the org_id of this Body.
 
-        The name of the org being created  # noqa: E501
+        The id of the org to add the location to  # noqa: E501
 
-        :return: The name of this Body.
-        :rtype: str
+        :return: The org_id of this Body.
+        :rtype: int
         """
-        return self._name
+        return self._org_id
 
-    @name.setter
-    def name(self, name: str):
-        """Sets the name of this Body.
+    @org_id.setter
+    def org_id(self, org_id: int):
+        """Sets the org_id of this Body.
 
-        The name of the org being created  # noqa: E501
+        The id of the org to add the location to  # noqa: E501
 
-        :param name: The name of this Body.
-        :type name: str
+        :param org_id: The org_id of this Body.
+        :type org_id: int
         """
-        if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
-        self._name = name
+        self._org_id = org_id
 
     @property
-    def org_uid(self) -> str:
-        """Gets the org_uid of this Body.
+    def location(self) -> Location:
+        """Gets the location of this Body.
 
-        The id of the user within  # noqa: E501
 
-        :return: The org_uid of this Body.
-        :rtype: str
+        :return: The location of this Body.
+        :rtype: Location
         """
-        return self._org_uid
+        return self._location
 
-    @org_uid.setter
-    def org_uid(self, org_uid: str):
-        """Sets the org_uid of this Body.
+    @location.setter
+    def location(self, location: Location):
+        """Sets the location of this Body.
 
-        The id of the user within  # noqa: E501
 
-        :param org_uid: The org_uid of this Body.
-        :type org_uid: str
+        :param location: The location of this Body.
+        :type location: Location
         """
 
-        self._org_uid = org_uid
+        self._location = location

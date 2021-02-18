@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user import User  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,30 +14,20 @@ class InlineResponse2004(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, users: List[User]=None, verifiers: List[int]=None, admins: List[int]=None):  # noqa: E501
+    def __init__(self, org_id: int=None):  # noqa: E501
         """InlineResponse2004 - a model defined in Swagger
 
-        :param users: The users of this InlineResponse2004.  # noqa: E501
-        :type users: List[User]
-        :param verifiers: The verifiers of this InlineResponse2004.  # noqa: E501
-        :type verifiers: List[int]
-        :param admins: The admins of this InlineResponse2004.  # noqa: E501
-        :type admins: List[int]
+        :param org_id: The org_id of this InlineResponse2004.  # noqa: E501
+        :type org_id: int
         """
         self.swagger_types = {
-            'users': List[User],
-            'verifiers': List[int],
-            'admins': List[int]
+            'org_id': int
         }
 
         self.attribute_map = {
-            'users': 'users',
-            'verifiers': 'verifiers',
-            'admins': 'admins'
+            'org_id': 'org_id'
         }
-        self._users = users
-        self._verifiers = verifiers
-        self._admins = admins
+        self._org_id = org_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2004':
@@ -52,70 +41,24 @@ class InlineResponse2004(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def users(self) -> List[User]:
-        """Gets the users of this InlineResponse2004.
+    def org_id(self) -> int:
+        """Gets the org_id of this InlineResponse2004.
 
-        An array of all users subscribed to vote  # noqa: E501
+        The id of the implied org  # noqa: E501
 
-        :return: The users of this InlineResponse2004.
-        :rtype: List[User]
+        :return: The org_id of this InlineResponse2004.
+        :rtype: int
         """
-        return self._users
+        return self._org_id
 
-    @users.setter
-    def users(self, users: List[User]):
-        """Sets the users of this InlineResponse2004.
+    @org_id.setter
+    def org_id(self, org_id: int):
+        """Sets the org_id of this InlineResponse2004.
 
-        An array of all users subscribed to vote  # noqa: E501
+        The id of the implied org  # noqa: E501
 
-        :param users: The users of this InlineResponse2004.
-        :type users: List[User]
-        """
-
-        self._users = users
-
-    @property
-    def verifiers(self) -> List[int]:
-        """Gets the verifiers of this InlineResponse2004.
-
-        An array of uids for org verifiers  # noqa: E501
-
-        :return: The verifiers of this InlineResponse2004.
-        :rtype: List[int]
-        """
-        return self._verifiers
-
-    @verifiers.setter
-    def verifiers(self, verifiers: List[int]):
-        """Sets the verifiers of this InlineResponse2004.
-
-        An array of uids for org verifiers  # noqa: E501
-
-        :param verifiers: The verifiers of this InlineResponse2004.
-        :type verifiers: List[int]
+        :param org_id: The org_id of this InlineResponse2004.
+        :type org_id: int
         """
 
-        self._verifiers = verifiers
-
-    @property
-    def admins(self) -> List[int]:
-        """Gets the admins of this InlineResponse2004.
-
-        An array of uids for org admins  # noqa: E501
-
-        :return: The admins of this InlineResponse2004.
-        :rtype: List[int]
-        """
-        return self._admins
-
-    @admins.setter
-    def admins(self, admins: List[int]):
-        """Sets the admins of this InlineResponse2004.
-
-        An array of uids for org admins  # noqa: E501
-
-        :param admins: The admins of this InlineResponse2004.
-        :type admins: List[int]
-        """
-
-        self._admins = admins
+        self._org_id = org_id

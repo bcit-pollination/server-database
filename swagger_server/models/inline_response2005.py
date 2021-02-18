@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.rpi import Rpi  # noqa: F401,E501
+from swagger_server.models.org_user import OrgUser  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +15,20 @@ class InlineResponse2005(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, rpis: List[Rpi]=None):  # noqa: E501
+    def __init__(self, users: List[OrgUser]=None):  # noqa: E501
         """InlineResponse2005 - a model defined in Swagger
 
-        :param rpis: The rpis of this InlineResponse2005.  # noqa: E501
-        :type rpis: List[Rpi]
+        :param users: The users of this InlineResponse2005.  # noqa: E501
+        :type users: List[OrgUser]
         """
         self.swagger_types = {
-            'rpis': List[Rpi]
+            'users': List[OrgUser]
         }
 
         self.attribute_map = {
-            'rpis': 'rpis'
+            'users': 'users'
         }
-        self._rpis = rpis
+        self._users = users
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2005':
@@ -42,22 +42,24 @@ class InlineResponse2005(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def rpis(self) -> List[Rpi]:
-        """Gets the rpis of this InlineResponse2005.
+    def users(self) -> List[OrgUser]:
+        """Gets the users of this InlineResponse2005.
 
+        An array of all users subscribed to vote  # noqa: E501
 
-        :return: The rpis of this InlineResponse2005.
-        :rtype: List[Rpi]
+        :return: The users of this InlineResponse2005.
+        :rtype: List[OrgUser]
         """
-        return self._rpis
+        return self._users
 
-    @rpis.setter
-    def rpis(self, rpis: List[Rpi]):
-        """Sets the rpis of this InlineResponse2005.
+    @users.setter
+    def users(self, users: List[OrgUser]):
+        """Sets the users of this InlineResponse2005.
 
+        An array of all users subscribed to vote  # noqa: E501
 
-        :param rpis: The rpis of this InlineResponse2005.
-        :type rpis: List[Rpi]
+        :param users: The users of this InlineResponse2005.
+        :type users: List[OrgUser]
         """
 
-        self._rpis = rpis
+        self._users = users

@@ -5,12 +5,9 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.body10 import Body10  # noqa: E501
-from swagger_server.models.body11 import Body11  # noqa: E501
-from swagger_server.models.body9 import Body9  # noqa: E501
 from swagger_server.models.election import Election  # noqa: E501
-from swagger_server.models.inline_response20010 import InlineResponse20010  # noqa: E501
-from swagger_server.models.inline_response20011 import InlineResponse20011  # noqa: E501
+from swagger_server.models.inline_response2007 import InlineResponse2007  # noqa: E501
+from swagger_server.models.inline_response2008 import InlineResponse2008  # noqa: E501
 from swagger_server.models.inline_response2009 import InlineResponse2009  # noqa: E501
 from swagger_server.test import BaseTestCase
 
@@ -37,12 +34,11 @@ class TestOrgElectionsController(BaseTestCase):
 
         Delete election
         """
-        body = Body11()
+        headers = [('election_id', 56)]
         response = self.client.open(
-            '/api/org/elections/delete',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/api/org/elections',
+            method='DELETE',
+            headers=headers)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -51,12 +47,11 @@ class TestOrgElectionsController(BaseTestCase):
 
         Get election info
         """
-        body = Body10()
+        headers = [('election_id', 56)]
         response = self.client.open(
-            '/api/org/elections/get',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/api/org/elections',
+            method='GET',
+            headers=headers)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -65,12 +60,11 @@ class TestOrgElectionsController(BaseTestCase):
 
         Get election info list
         """
-        body = Body9()
+        query_string = [('org_id', 56)]
         response = self.client.open(
-            '/api/org/elections/get/list',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/api/org/elections/list',
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

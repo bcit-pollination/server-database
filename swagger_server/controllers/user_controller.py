@@ -5,6 +5,8 @@ import src.db.mysql_interface as db
 from swagger_server.models import User
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from swagger_server.models.user import User  # noqa: E501
+from swagger_server.models.voting_token import VotingToken  # noqa: E501
 from swagger_server import util
 
 from src.auth.jwt import decode_token, generate_token
@@ -47,6 +49,17 @@ def get_user():  # noqa: E501
     return user if user else 'Not found', 404
 
 
+def get_voting_token():  # noqa: E501
+    """Get token used to vote
+
+     # noqa: E501
+
+
+    :rtype: VotingToken
+    """
+    return 'do some magic!'
+
+
 def remove_user():  # noqa: E501
     """Remove user from service. Only a user can remove himself, hence the user is infered from the JWT
 
@@ -73,7 +86,7 @@ def update_user(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = User.from_dict(connexion.request.get_json())  # noqa: E501
 
     # Requires a procedure
-
     return 'do some magic!'

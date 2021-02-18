@@ -5,10 +5,10 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.body import Body  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
-from swagger_server.models.org import Org  # noqa: E501
+from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
+from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
@@ -20,7 +20,7 @@ class TestOrgController(BaseTestCase):
 
         Create org
         """
-        body = Body()
+        body = None
         response = self.client.open(
             '/api/org',
             method='POST',
@@ -45,12 +45,11 @@ class TestOrgController(BaseTestCase):
 
         Get org info
         """
-        body = None
+        query_string = [('org_id', 56)]
         response = self.client.open(
-            '/api/org/get',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/api/org',
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -60,8 +59,22 @@ class TestOrgController(BaseTestCase):
         Get org info
         """
         response = self.client.open(
-            '/api/org/get/list',
-            method='POST')
+            '/api/org/list',
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_get_verifier_password(self):
+        """Test case for get_verifier_password
+
+        Get password used by ID verifiers to login into voting machine
+        """
+        body = None
+        response = self.client.open(
+            '/api/org/verifier_password',
+            method='POST',
+            data=json.dumps(body),
+            content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -70,7 +83,7 @@ class TestOrgController(BaseTestCase):
 
         Update org info
         """
-        body = Org()
+        body = None
         response = self.client.open(
             '/api/org',
             method='PUT',

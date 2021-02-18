@@ -15,24 +15,29 @@ class UserOrg(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, privilege: int=None, org: Org=None):  # noqa: E501
+    def __init__(self, privilege: int=None, user_org_id: str=None, org: Org=None):  # noqa: E501
         """UserOrg - a model defined in Swagger
 
         :param privilege: The privilege of this UserOrg.  # noqa: E501
         :type privilege: int
+        :param user_org_id: The user_org_id of this UserOrg.  # noqa: E501
+        :type user_org_id: str
         :param org: The org of this UserOrg.  # noqa: E501
         :type org: Org
         """
         self.swagger_types = {
             'privilege': int,
+            'user_org_id': str,
             'org': Org
         }
 
         self.attribute_map = {
             'privilege': 'privilege',
+            'user_org_id': 'user_org_id',
             'org': 'org'
         }
         self._privilege = privilege
+        self._user_org_id = user_org_id
         self._org = org
 
     @classmethod
@@ -68,6 +73,29 @@ class UserOrg(Model):
         """
 
         self._privilege = privilege
+
+    @property
+    def user_org_id(self) -> str:
+        """Gets the user_org_id of this UserOrg.
+
+        The ID used by the user to identify himself within the org(Driver License, Passport, etc...)  # noqa: E501
+
+        :return: The user_org_id of this UserOrg.
+        :rtype: str
+        """
+        return self._user_org_id
+
+    @user_org_id.setter
+    def user_org_id(self, user_org_id: str):
+        """Sets the user_org_id of this UserOrg.
+
+        The ID used by the user to identify himself within the org(Driver License, Passport, etc...)  # noqa: E501
+
+        :param user_org_id: The user_org_id of this UserOrg.
+        :type user_org_id: str
+        """
+
+        self._user_org_id = user_org_id
 
     @property
     def org(self) -> Org:

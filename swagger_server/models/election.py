@@ -15,7 +15,7 @@ class Election(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None, org_id: int=None, start_time: datetime=None, end_time: datetime=None, status: int=None, anonymous: bool=None, verified: bool=None, public_results: bool=None, ballot: Ballot=None):  # noqa: E501
+    def __init__(self, election_id: int=None, org_id: int=None, start_time: datetime=None, end_time: datetime=None, anonymous: bool=None, verified: bool=None, public_results: bool=None, ballot: Ballot=None):  # noqa: E501
         """Election - a model defined in Swagger
 
         :param election_id: The election_id of this Election.  # noqa: E501
@@ -26,8 +26,6 @@ class Election(Model):
         :type start_time: datetime
         :param end_time: The end_time of this Election.  # noqa: E501
         :type end_time: datetime
-        :param status: The status of this Election.  # noqa: E501
-        :type status: int
         :param anonymous: The anonymous of this Election.  # noqa: E501
         :type anonymous: bool
         :param verified: The verified of this Election.  # noqa: E501
@@ -42,7 +40,6 @@ class Election(Model):
             'org_id': int,
             'start_time': datetime,
             'end_time': datetime,
-            'status': int,
             'anonymous': bool,
             'verified': bool,
             'public_results': bool,
@@ -54,7 +51,6 @@ class Election(Model):
             'org_id': 'org_id',
             'start_time': 'start_time',
             'end_time': 'end_time',
-            'status': 'status',
             'anonymous': 'anonymous',
             'verified': 'verified',
             'public_results': 'public_results',
@@ -64,7 +60,6 @@ class Election(Model):
         self._org_id = org_id
         self._start_time = start_time
         self._end_time = end_time
-        self._status = status
         self._anonymous = anonymous
         self._verified = verified
         self._public_results = public_results
@@ -170,29 +165,6 @@ class Election(Model):
         """
 
         self._end_time = end_time
-
-    @property
-    def status(self) -> int:
-        """Gets the status of this Election.
-
-        The status of the election:<br> - 0 := Draft<br> - 1 := Called<br> - 2 := Active<br> - 3 := Closed<br> - 4 := Published   # noqa: E501
-
-        :return: The status of this Election.
-        :rtype: int
-        """
-        return self._status
-
-    @status.setter
-    def status(self, status: int):
-        """Sets the status of this Election.
-
-        The status of the election:<br> - 0 := Draft<br> - 1 := Called<br> - 2 := Active<br> - 3 := Closed<br> - 4 := Published   # noqa: E501
-
-        :param status: The status of this Election.
-        :type status: int
-        """
-
-        self._status = status
 
     @property
     def anonymous(self) -> bool:
