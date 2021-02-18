@@ -298,7 +298,7 @@ paths:
           in: query
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Invitation accepted
