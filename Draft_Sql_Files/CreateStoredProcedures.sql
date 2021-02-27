@@ -31,14 +31,14 @@ DROP PROCEDURE IF EXISTS DeleteElection; /** Tested*/
 DROP PROCEDURE IF EXISTS CreateElection; /** Tested */
 
 DROP PROCEDURE IF EXISTS CreateVote;
-DROP PROCEDURE IF EXISTS CreateSelection;
+DROP PROCEDURE IF EXISTS CreateChoice;
 DROP PROCEDURE IF EXISTS GetVoteResults;
 
 DROP PROCEDURE IF EXISTS GetPublicElectionList;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
-DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
+DROP PROCEDURE IF EXISTS GetQuestionOpt; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionQuestions; /** Tested */
 DROP PROCEDURE IF EXISTS GetElection; /** Tested */
 DROP PROCEDURE IF EXISTS GetPublicElections;
@@ -47,10 +47,10 @@ DROP PROCEDURE IF EXISTS AddQuestion; /** Tested */
 DROP PROCEDURE IF EXISTS DropQuestion; /** Tested */
 DROP PROCEDURE IF EXISTS UpdateQuestion; /** Tested*/
 
-DROP PROCEDURE IF EXISTS AddChoice; /** Tested */
-DROP PROCEDURE IF EXISTS DropChoice; /** Tested*/
-DROP PROCEDURE IF EXISTS UpdateChoice; /** Tested. */
-DROP PROCEDURE IF EXISTS GetQuestionSelection; /** Tested */
+DROP PROCEDURE IF EXISTS AddOpt; /** Tested */
+DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
+DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
+DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
 
 DELIMITER //
 
@@ -284,10 +284,10 @@ BEGIN
 		SELECT v.vote_id FROM Election el
 			INNER JOIN Question q
 				ON el.election_id = q.election_id
-			INNER JOIN Choice c
+			INNER JOIN Opt c
 				ON c.question_id = c.question_id
-			INNER JOIN Selection s
-				ON s.choice_id = c.choice_id
+			INNER JOIN Choice s
+				ON s.opt_id = c.opt_id
 			INNER JOIN Vote v
 				ON v.vote_id = s.vote_id
 	);
@@ -307,9 +307,9 @@ END; //
 
 
 /** Adds a selection. */
-CREATE PROCEDURE CreateSelection(
+CREATE PROCEDURE CreateChoice(
 	IN voting_token VARCHAR(36),
-    IN choice_id INT
+    IN opt_id INT
 )
 BEGIN
 	DECLARE var_user_id INT;
@@ -318,8 +318,8 @@ BEGIN
         FROM Users u
         WHERE u.voting_token = voting_token
 	);
-	INSERT INTO Selection(var_user_id, choice_id)
-	VALUES(var_user_id, choice_id);
+	INSERT INTO Choice(var_user_id, opt_id)
+	VALUES(var_user_id, opt_id);
 END; //
 
 
@@ -331,10 +331,10 @@ BEGIN
 	SELECT v.vote_id, s.*, c.*, q.question_id, q.description FROM Election el
 		INNER JOIN Question q
 			ON el.election_id = q.election_id
-		INNER JOIN Choice c
+		INNER JOIN Opt c
 			ON c.question_id = c.question_id
-		INNER JOIN Selection s
-			ON s.choice_id = c.choice_id
+		INNER JOIN Choice s
+			ON s.opt_id = c.opt_id
 		INNER JOIN Vote v
 			ON v.vote_id = s.vote_id;
 END; //
@@ -362,12 +362,10 @@ END; //
 	
 CREATE PROCEDURE GetQuestionChoice(
 	IN id INT
-	)
+)
 BEGIN
-	SELECT * FROM Choice c
-		INNER JOIN Question q
-		ON c.question_id = q.question_id
-	WHERE c.question_id = id;
+	SELECT * FROM Opt
+		WHERE question_id = id;
 END; //
 
 /** Gets all of the questions from a specific election.*/
@@ -376,7 +374,7 @@ CREATE PROCEDURE GetElectionQuestions(
 	IN id INT
 	)
 BEGIN
-	SELECT q.question_id, q.election_id, q.description, q.selection_limit, q.is_required FROM Question q
+	SELECT q.question_id, q.election_id, q.description, q.choice_limit, q.is_required FROM Question q
 		INNER JOIN Election el
 		ON el.election_id = q.election_id
 		WHERE q.election_id = id;
@@ -470,7 +468,7 @@ CREATE PROCEDURE AddQuestion(
 	IN req TINYINT(1)
 )
 BEGIN
-	INSERT INTO Question (election_id, description, selection_limit, is_required)
+	INSERT INTO Question (election_id, description, choice_limit, is_required)
 		VALUES (el_id, descr, sel, req);
 END; //
 
@@ -505,55 +503,47 @@ END; //
 
 /** Adds a choice to a question. */
 
-CREATE PROCEDURE AddChoice(
+CREATE PROCEDURE AddOpt(
 	IN id INT,
 	IN descr VARCHAR(40)
 )
 BEGIN
-	INSERT INTO Choice (question_id, description) 
+	INSERT INTO Opt (question_id, description) 
 	VALUES(id, descr);
 	
 	UPDATE Question
-		SET selection_limit = selection_limit + 1
+		SET choice_limit = choice_limit + 1
 		WHERE question_id = id;
 	
 END; //
 
 /** Drops a choice from a question. */
 
-CREATE PROCEDURE DropChoice(
+CREATE PROCEDURE DropOpt(
 	IN id INT
 )
 BEGIN
 
 	UPDATE Question q
-	INNER JOIN Choice c ON q.question_id = c.question_id
-	SET selection_limit = selection_limit - 1
-	WHERE c.choice_id = id;
+	INNER JOIN Opt c ON q.question_id = c.question_id
+	SET choice_limit = choice_limit - 1
+	WHERE c.opt_id = id;
 	
-	DELETE FROM Choice
-	WHERE choice_id = id; 
+	DELETE FROM Opt
+	WHERE opt_id = id; 
 	
 END; //
 
 /** Updates choice for question.*/
 
-CREATE PROCEDURE UpdateChoice(
+CREATE PROCEDURE UpdateOpt(
 	IN id INT,
 	IN descr VARCHAR(40)
 )
 BEGIN
-	UPDATE Choice
+	UPDATE Opt
 	SET description = descr
-	WHERE choice_id = id;
-END; //
-
-CREATE PROCEDURE GetQuestionSelection(
-	IN id INT
-)
-BEGIN
-	SELECT * FROM Choice
-		WHERE question_id = id;
+	WHERE opt_id = id;
 END; //
 
 	

@@ -79,7 +79,7 @@ CREATE TABLE Question (
     question_id 		INT 			NOT NULL 	AUTO_INCREMENT,
     election_id 		INT 			NOT NULL,
     description 		VARCHAR(40) 	NOT NULL,
-    selection_limit 	INT 			NOT NULL,
+    choice_limit 	    INT 			NOT NULL,
     is_required 		BOOLEAN 		NOT NULL 	DEFAULT TRUE,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
@@ -87,26 +87,26 @@ CREATE TABLE Question (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Choice (
-    choice_id 		INT 			NOT NULL 	AUTO_INCREMENT,
+CREATE TABLE Opt (
+    opt_id 		    INT 			NOT NULL 	AUTO_INCREMENT,
     question_id 	INT 			NOT NULL,
     description 	VARCHAR(40) 	NOT NULL,
-    PRIMARY KEY (choice_id),
+    PRIMARY KEY (opt_id),
     FOREIGN KEY (question_id)
         REFERENCES Question (question_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Selection (
-    selection_id 	INT 	NOT NULL 	AUTO_INCREMENT,
-    vote_id 		INT 	NOT NULL,
-    choice_id 		INT 	NOT NULL,
-    PRIMARY KEY (selection_id),
+CREATE TABLE Choice (
+    choice_id 	INT 	NOT NULL 	AUTO_INCREMENT,
+    vote_id     INT 	NOT NULL,
+    opt_id 		INT 	NOT NULL,
+    PRIMARY KEY (choice_id),
     FOREIGN KEY (vote_id)
         REFERENCES Vote (vote_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (choice_id)
-        REFERENCES Choice (choice_id)
+    FOREIGN KEY (opt_id)
+        REFERENCES Opt (opt_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
