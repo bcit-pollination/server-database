@@ -25,7 +25,7 @@ DROP PROCEDURE IF EXISTS GetQuestionChoice; /** GetQuestionSelection */
 /** Rename Tables */
 
 ALTER TABLE Question
-RENAME COLUMN selection_limit TO opt_limit;
+RENAME COLUMN selection_limit TO choice_limit;
 
 ALTER TABLE Choice
 RENAME TO Opt;
@@ -141,7 +141,7 @@ CREATE PROCEDURE AddQuestion(
 	IN req TINYINT(1)
 )
 BEGIN
-	INSERT INTO Question (election_id, description, opt_limit, is_required)
+	INSERT INTO Question (election_id, description, choice_limit, is_required)
 		VALUES (el_id, descr, sel, req);
 END; //
 
@@ -156,7 +156,7 @@ BEGIN
 	VALUES(id, descr);
 	
 	UPDATE Question
-		SET opt_limit = opt_limit + 1
+		SET choice_limit = choice_limit + 1
 		WHERE question_id = id;
 	
 END; //
@@ -170,7 +170,7 @@ BEGIN
 
 	UPDATE Question q
 	INNER JOIN Opt c ON q.question_id = c.question_id
-	SET opt_limit = opt_limit - 1
+	SET choice_limit = choice_limit - 1
 	WHERE c.opt_id = id;
 	
 	DELETE FROM Opt
@@ -204,7 +204,7 @@ CREATE PROCEDURE GetElectionQuestions(
 	IN id INT
 	)
 BEGIN
-	SELECT q.question_id, q.election_id, q.description, q.opt_limit, q.is_required FROM Question q
+	SELECT q.question_id, q.election_id, q.description, q.choice_limit, q.is_required FROM Question q
 		INNER JOIN Election el
 		ON el.election_id = q.election_id
 		WHERE q.election_id = id;
