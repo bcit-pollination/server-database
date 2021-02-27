@@ -265,61 +265,59 @@ BEGIN
 	WHERE e.user_id = id;
 END; //
 
-/** Adds a vote. */
+/** Adds a vote, getting the ID if successfully added or updated.
+    Previously selected choices are deleted if vote was updated. */
 CREATE PROCEDURE CreateVote(
 	IN voting_token VARCHAR(36),
     IN time_stamp TIMESTAMP,
     IN election_id INT
 )
 BEGIN
-	DECLARE var_user_id INT;
-    DECLARE previous_vote INT;
-
-    SET var_user_id = (
-		SELECT user_id 
-        FROM Users u
-        WHERE u.voting_token = voting_token
-	);
-    SET previous_vote = (
-		SELECT v.vote_id FROM Election el
-			INNER JOIN Question q
-				ON el.election_id = q.election_id
-			INNER JOIN Opt c
-				ON c.question_id = c.question_id
-			INNER JOIN Choice s
-				ON s.opt_id = c.opt_id
-			INNER JOIN Vote v
-				ON v.vote_id = s.vote_id
-	);
+	DECLARE user_id INT;
+    DECLARE prev_time_stamp TIMESTAMP;
+	DECLARE vote_id INT;
     
-    IF (COUNT(previous_vote) > 0) THEN
-		IF (time_stamp > previous_vote) THEN
-			INSERT INTO Vote(user_id, time_stamp)
-            VALUES(var_user_id, time_stamp);
-            SELECT LAST_INSERT_ID();
-        END IF;
-	ELSE
+    SELECT u.user_id
+    INTO user_id
+    FROM Users u
+    WHERE u.voting_token = voting_token;
+
+	SELECT v.time_stamp, v.vote_id
+    INTO prev_time_stamp, vote_id
+    FROM Election el
+		INNER JOIN Question q
+			ON el.election_id = q.election_id
+		INNER JOIN Opt o
+			ON q.question_id = o.question_id
+		INNER JOIN Choice c
+			ON o.opt_id = c.opt_id
+		INNER JOIN Vote v
+			ON c.vote_id = v.vote_id
+	WHERE v.user_id = user_id;
+
+	IF (prev_time_stamp IS NULL) THEN
 		INSERT INTO Vote(user_id, time_stamp)
-		VALUES(var_user_id, time_stamp);
+		VALUES(user_id, time_stamp);
 		SELECT LAST_INSERT_ID();
+    ELSEIF (time_stamp > prev_time_stamp) THEN
+		UPDATE Vote v
+			SET v.time_stamp = time_stamp
+			WHERE v.user_id = user_id;
+        DELETE FROM Choice c 
+			WHERE c.vote_id = vote_id;
+        SELECT vote_id;
     END IF;
 END; //
 
 
-/** Adds a selection. */
+/** Adds a choice. */
 CREATE PROCEDURE CreateChoice(
-	IN voting_token VARCHAR(36),
+	IN vote_id INT,
     IN opt_id INT
 )
 BEGIN
-	DECLARE var_user_id INT;
-    SET var_user_id = (
-		SELECT user_id 
-        FROM Users u
-        WHERE u.voting_token = voting_token
-	);
-	INSERT INTO Choice(var_user_id, opt_id)
-	VALUES(var_user_id, opt_id);
+	INSERT INTO Choice(vote_id, opt_id)
+	VALUES(vote_id, opt_id);
 END; //
 
 
