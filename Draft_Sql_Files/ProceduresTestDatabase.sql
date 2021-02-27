@@ -24,10 +24,10 @@ CALL CreateElection(1, "C Survey", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CU
 
 CALL AddQuestion(1, 'What language are you good at?', 0, 0); /** Adds new question to our first election. */
 
-CALL AddChoice(1, 'Javascript'); /** First choice is added. */
-CALL AddChoice(1, 'CSS'); /** Second choice is added. */
-CALL AddChoice(1, 'HTML'); /** Third choice is added. */
-CALL UpdateChoice(2, 'PHP'); /** Changes Choice 'CSS' to 'PHP'*/
+CALL AddOpt(1, 'Javascript'); /** First choice is added. */
+CALL AddOpt(1, 'CSS'); /** Second choice is added. */
+CALL AddOpt(1, 'HTML'); /** Third choice is added. */
+CALL UpdateOpt(2, 'PHP'); /** Changes Choice 'CSS' to 'PHP'*/
 CALL UpdateQuestion(1, 'What language is the best?', 1); /** Changes the question. */
 CALL UpdateElection(1, 'Web Dev Survey', FALSE, '2021-10-05', '2021-11-09', TRUE, FALSE); /** Updates election name to web dev survey. */
 
