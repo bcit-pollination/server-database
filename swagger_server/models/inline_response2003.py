@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.user_org import UserOrg  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,20 @@ class InlineResponse2003(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, org: UserOrg=None):  # noqa: E501
         """InlineResponse2003 - a model defined in Swagger
 
-        :param org_id: The org_id of this InlineResponse2003.  # noqa: E501
-        :type org_id: int
+        :param org: The org of this InlineResponse2003.  # noqa: E501
+        :type org: UserOrg
         """
         self.swagger_types = {
-            'org_id': int
+            'org': UserOrg
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'org': 'org'
         }
-        self._org_id = org_id
+        self._org = org
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2003':
@@ -41,24 +42,22 @@ class InlineResponse2003(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org_id(self) -> int:
-        """Gets the org_id of this InlineResponse2003.
+    def org(self) -> UserOrg:
+        """Gets the org of this InlineResponse2003.
 
-        The id of the implied org  # noqa: E501
 
-        :return: The org_id of this InlineResponse2003.
-        :rtype: int
+        :return: The org of this InlineResponse2003.
+        :rtype: UserOrg
         """
-        return self._org_id
+        return self._org
 
-    @org_id.setter
-    def org_id(self, org_id: int):
-        """Sets the org_id of this InlineResponse2003.
+    @org.setter
+    def org(self, org: UserOrg):
+        """Sets the org of this InlineResponse2003.
 
-        The id of the implied org  # noqa: E501
 
-        :param org_id: The org_id of this InlineResponse2003.
-        :type org_id: int
+        :param org: The org of this InlineResponse2003.
+        :type org: UserOrg
         """
 
-        self._org_id = org_id
+        self._org = org

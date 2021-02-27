@@ -7,6 +7,8 @@ from six import BytesIO
 
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from swagger_server.models.user import User  # noqa: E501
+from swagger_server.models.voting_token import VotingToken  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
@@ -38,6 +40,17 @@ class TestUserController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+    def test_get_voting_token(self):
+        """Test case for get_voting_token
+
+        Get token used to vote
+        """
+        response = self.client.open(
+            '/api/user/voting_token',
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
     def test_remove_user(self):
         """Test case for remove_user
 
@@ -54,7 +67,7 @@ class TestUserController(BaseTestCase):
 
         Update user info
         """
-        body = None
+        body = User()
         response = self.client.open(
             '/api/user',
             method='PUT',

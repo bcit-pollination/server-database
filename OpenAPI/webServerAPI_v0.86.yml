@@ -1,17 +1,8 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "0.9"
-  description: >
-    All values in this API are required and not nullable unless specifically stated.
-
-
-    Org user privileges are:<br>
-     0 := invited<br>
-     1 := member<br>
-     2 := admin<br>
-     3 := owner
-
+  version: "0.86"
+  description: All values in this API are required and not nullable unless specifically stated
 servers:
   - url: https://pollination.live
 tags:
@@ -24,8 +15,12 @@ tags:
     description: An org aggregates users who can vote, administrate, or verify elections
   - name: org.users
     description: Related to the users of an org
+  - name: org.rpis
+    description: Related to the RPIs of an org. RPI stands for Raspberry Pi
   - name: org.locations
     description: Related to the management of election locations
+#  - name: org.verifiers
+#    description: Related to the management of id verifiers
   - name: org.elections
     description: Related to the management of org elections
   - name: org.election.results
@@ -36,7 +31,7 @@ tags:
     description: Download voting machine election package
   - name: elections.results.public
     description: Provide API for the general public to access election results
-
+  
 
 paths:
   /api/user/login:
@@ -93,7 +88,7 @@ paths:
         - user
       summary: Create user
       operationId: app.createUser
-      security: []
+      security: []     
       requestBody:
         $ref: "#/components/requestBodies/new_user"
       responses:
@@ -101,7 +96,7 @@ paths:
           $ref: "#/components/responses/jwt"
         "400":
           description: Invalid syntax
-        "409":
+        "409": 
           description: Account already exists
 
 # CURRENTLY NOT PROVIDED
@@ -119,7 +114,7 @@ paths:
           description: Not found
       requestBody:
         $ref: "#/components/requestBodies/user"
-
+      
     delete:
       tags:
         - user
@@ -202,7 +197,7 @@ paths:
                 properties:
                   org_id:
                     description: The id of the implied org
-                    type: integer
+                    type: integer 
         "400":
           description: Invalid syntax
         "401":
@@ -230,7 +225,7 @@ paths:
         - org
       summary: Disband org
       operationId: disband_org
-      description:
+      description: 
         An org can only be disbanded by it's owner, hence the org is infered from the JWT
       responses:
         '200':
@@ -248,7 +243,7 @@ paths:
       tags:
         - org.users
       description: Get all users
-      operationId:
+      operationId: 
         get_org_users
       summary: Fetch org users
       parameters:
@@ -262,13 +257,13 @@ paths:
           description: Unauthorized
         "404":
           description: Not found
-
+  
   /api/org/users/invite:
     post:
       tags:
         - org.users
       summary: Add user to org
-      description:
+      description: 
         Use this to invite user to org
       operationId:
         org_invite_user
@@ -276,20 +271,20 @@ paths:
         $ref: "#/components/requestBodies/org_user_invite"
       responses:
         '200':
-          description: Users invited
+          description: User added
         '400':
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
         '404':
-          $ref: '#/components/responses/bad_users'
+          $ref: '#/components/responses/404'
 
   /api/org/users/invite/accept:
     get:
       tags:
         - org.users
       summary: Accept invitation user to org
-      description:
+      description: 
         Use this to invite user to org
       operationId:
         accept_org_invite
@@ -298,10 +293,10 @@ paths:
           in: query
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
-          description: Invitation accepted
+          description: User added
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -327,18 +322,19 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
-
+    
   /api/org/users/privileges:
     put:
       tags:
         - org.users
       summary: Change user privileges
       description: >
-        user privileges are:<br>
+        'user privileges are:<br>
         - 0 := invited<br>
         - 1 := member<br>
-        - 2 := admin<br>
-        - 3 := owner
+        - 2 := verifier<br>
+        - 3 := admin<br>
+        - 4 := owner'
       operationId:
         change_user_privilege
       requestBody:
@@ -371,18 +367,134 @@ paths:
         "404":
           description: Not found
 
-
-  /api/org/locations/list:
+  /api/org/rpis/get/list:
     get:
+      tags:
+        - org.rpis
+      summary: >
+        Get the voting machines belonging to this organization.
+      operationId:
+        get_rpis
+      parameters:
+        - name: org_id
+          in: query
+          description: The id of the org the rpis belong to
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          $ref: '#/components/responses/org_rpis'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /api/org/rpis:
+    post:
+      tags:
+        - org.rpis
+      summary: Add voting machine
+      description: >
+        New RPIs are assigned location 0. 
+         location of 0 can be interpreted as no location assigned
+      operationId: 
+        add_rpi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              additionalProperties: false
+              required: 
+                - org_id
+              properties:
+                org_id:
+                  description: The id of the org to add the rpi to 
+                  type: integer
+      responses:
+        '200':
+          description: RPI added
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  rpi_id:
+                    description: The id of the RPI just added
+                    type: integer
+
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+    put:
+      tags:
+        - org.rpis
+      summary: Assign voting machine
+      operationId: 
+        assign_rpi
+      requestBody:
+        $ref: '#/components/requestBodies/assign_rpi'
+      responses:
+        '200':
+          description: RPI assigned
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+    
+  /api/org/rpis/delete:
+    post:
+      tags:
+        - org.rpis
+      summary: Discard RPI
+      operationId:
+        discard_rpi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                rpi_id:
+                  description: The id of the org the RPI belongs to
+                  type: integer
+      responses:
+        '200':
+          description: rpi deleted
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /api/org/locations/get/list:
+    post:
       tags:
         - org.locations
       summary: Get all the org voting locations
-      description:
+      description: 
         In principle this information should be available to the public
       operationId:
         get_locations_list
-      parameters:
-        - $ref: "#/components/parameters/location_p"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                org_id:
+                  description: The id of the org the RPI belongs to
+                  type: integer
       responses:
         '200':
           $ref: '#/components/responses/org_locations'
@@ -398,7 +510,7 @@ paths:
       tags:
         - org.locations
       summary: Add location
-      operationId:
+      operationId: 
         add_location
       requestBody:
         content:
@@ -409,7 +521,7 @@ paths:
                   type: integer
                   description: The id of the org to add the location to
                 location:
-                  $ref: "#/components/schemas/location"
+                  $ref: "#/components/schemas/location"                
       responses:
         '200':
           description: Location added
@@ -419,19 +531,24 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
-
-
+    
+    
     put:
       tags:
         - org.locations
       summary: Update location
-      operationId:
+      operationId: 
         update_location
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/location"
+              properties:
+                org_id:
+                  type: integer
+                  description: The id of the org to add the location to
+                location:
+                  $ref: "#/components/schemas/location"                
       responses:
         '200':
           description: Location added
@@ -441,15 +558,23 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
+        
 
-    delete:
+  /api/org/locations/delete:
+    post:
       tags:
         - org.locations
       summary: Delete location
       operationId:
         delete_location
-      parameters:
-        - $ref: "#/components/parameters/location_p"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                location_id:
+                  type: integer
+                  description: The id of the location to delete
       responses:
         '200':
           description: Location deleted
@@ -460,19 +585,69 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-
-  /api/org/elections/list:
-    get:
+#  /api/org/verifiers/list:
+#
+#    post:
+#      tags:
+#        - org.verifiers
+#      operationId:
+#        get_org_verifiers
+#      summary: Get all the verifiers for a given election
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              properties:
+#                org_id:
+#                  type: integer
+#                  description: The id of the org to get verifiers for
+#      responses:
+#        "200":
+#          $ref:  "#/components/responses/verifiers"
+#        '400':
+#          $ref: '#/components/responses/400'
+#        '401':
+#          $ref: '#/components/responses/401'
+#        '404':
+#          $ref: '#/components/responses/404'
+#
+#  /api/org/verifiers:
+#    put:
+#      tags:
+#        - org.verifiers
+#      summary: Assign verifier to location
+#      operationId:
+#        assign_verifier
+#      requestBody:
+#        $ref: '#/components/requestBodies/assign_verifier'
+#      responses:
+#        '200':
+#          description: Assigned
+#        '400':
+#          $ref: '#/components/responses/400'
+#        '401':
+#          $ref: '#/components/responses/401'
+#        '404':
+#          $ref: '#/components/responses/404'
+  
+  /api/org/elections/get/list:
+    post:
       description: Get list of elections for a given org
       tags:
         - org.elections
       summary: Get election info list
       operationId:
         get_election_list
-      parameters:
-        - $ref: "#/components/parameters/org_p"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                org_id:
+                  type: integer
+                  description: The id of the org to get the election for
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election_list"
         '400':
           $ref: '#/components/responses/400'
@@ -480,19 +655,28 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
-
-  /api/org/elections:
-    get:
+  
+  /api/org/elections/get:
+    post:
       description: Get one election
       tags:
         - org.elections
       summary: Get election info
       operationId:
         get_election
-      parameters:
-        - $ref: "#/components/parameters/election_p"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                org_id:
+                  type: integer
+                  description: The id of the org to get the election for
+                election_id:
+                  type: integer
+                  description: The id of the election to get
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election"
         '400':
           $ref: '#/components/responses/400'
@@ -500,13 +684,14 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
-
+  
+  /api/org/elections:
     post:
       description: Create election
       tags:
       - org.elections
       summary: Create election
-      operationId:
+      operationId: 
         create_election
       requestBody:
         $ref: "#/components/requestBodies/election"
@@ -527,22 +712,22 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
-
+    
     put:
       description: >
-        Update election.
+        Update election. 
 
         Elections can only be updated before they have commenced.
       tags:
       - org.elections
       summary: update election
-      operationId:
+      operationId: 
         update_election
       requestBody:
         $ref: "#/components/requestBodies/election"
       responses:
         '200':
-          description: Election updated
+          description: Election created
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -550,7 +735,8 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-    delete:
+  /api/org/elections/delete:
+    post:
       description: >
         Elections can only be deleted before they have commenced.
       summary: Delete election
@@ -558,8 +744,15 @@ paths:
       - org.elections
       operationId:
         delete_election
-      parameters:
-        - $ref: "#/components/parameters/election_p"
+      requestBody:
+        content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  election_id:
+                    description: The id of the election to delete
+                    type: integer
       responses:
         '200':
           description: Election deleted
@@ -573,14 +766,14 @@ paths:
 
   /api/org/elections/public/get/list:
     get:
-      description: >
+      description: > 
         Get a list of elections with results open to the public
       tags:
         - elections.results.public
       summary: Get public elections
-      operationId:
+      operationId: 
         get_public_election_result_list
-      security: []
+      security: []    
       parameters:
         - name: page
           description: The page to get
@@ -594,8 +787,13 @@ paths:
           in: query
           schema:
             type: integer
+        - name: version
+          description: Optional, the voting result version. Leave empty for latest
+          in: query
+          schema:
+            type: integer 
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election_result_list"
         '400':
           $ref: '#/components/responses/400'
@@ -606,12 +804,12 @@ paths:
 
   /api/org/elections/public/get:
     get:
-      description: >
+      description: > 
         Get a list of elections with results open to the public
       tags:
         - elections.results.public
       summary: Get public elections
-      operationId:
+      operationId: 
         get_public_election_result
       parameters:
         - name: election_id
@@ -620,9 +818,14 @@ paths:
           required: true
           schema:
             type: integer
-      security: []
+        - name: version
+          description: Optional, the voting result version. Leave empty for latest
+          in: query
+          schema:
+            type: integer 
+      security: []      
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election_results"
         '400':
           $ref: '#/components/responses/400'
@@ -632,23 +835,23 @@ paths:
           $ref: '#/components/responses/404'
 
   /api/org/elections/results:
-    get:
+    post:
       description: >
         Get the voting results for an election.
 
-        If the election is private, and the user is not a member
+        If the election is private, and the user is not a member 
         of the org, then will respond 401: Unauthorized
 
-        If there are several results for the same election, the latest version will be
+        If there are several results for the same election, the latest version will be 
       tags:
         - org.election.results
       summary: Get election voting results
       operationId:
         get_election_results
-      parameters:
-        - $ref: "#/components/parameters/election_p"
+      requestBody:
+        $ref: "#/components/requestBodies/get_election_results"
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election_results"
         '400':
           $ref: '#/components/responses/400'
@@ -666,7 +869,7 @@ paths:
       tags:
         - org.election.votes
       summary: Create/Update election results
-      operationId:
+      operationId: 
         upload_election_votes
       requestBody:
         $ref: "#/components/requestBodies/post_votes"
@@ -682,7 +885,7 @@ paths:
 
 
   /api/org/election/download:
-    get:
+    post:
       tags:
         - org.election.download
       summary: Download main RPI election package
@@ -693,12 +896,14 @@ paths:
           - Complete voter list, including their respective identification within the org and voting token
           - Ballot, including the election details and questions
           - List of locations
-          - Verifier password
+          - List of voting machines, each associated to a location
+          - OPTIONAL. Approved verifier list, each associated to a location.
+            This property will only be present if the election is verified
       operationId: download_voting_package
-      parameters:
-        - $ref: "#/components/parameters/election_p"
+      requestBody:
+        $ref: "#/components/requestBodies/get_election_voting_package"
       responses:
-        "200":
+        "200": 
           $ref: "#/components/responses/election_package"
         '400':
           $ref: '#/components/responses/400'
@@ -708,7 +913,7 @@ paths:
           $ref: '#/components/responses/404'
 
 components:
-  schemas:
+  schemas:      
     location:
       type: object
       description: A voting location. Multiple stations can be assigned to one location
@@ -727,7 +932,20 @@ components:
           type: string
         country:
           type: string
-
+  
+    rpi:
+      type: object
+      additionalProperties: false
+      description: A voting machine
+      properties:
+        rpi_id:
+          type: integer
+        org_id:
+          type: integer
+          description: Id of the owner org
+        location: 
+          $ref: '#/components/schemas/location'
+    
     user:
       type: object
       description: A user. user can be voters, and admins or verifiers
@@ -747,25 +965,25 @@ components:
           format: date
           example: "yyyy-mm-dd"
 
+    password:
+      type: string
+      description: NULLABLE
+
     voting_token:
-      type: object
+      type: string
       description: Token to be passed to the RPI at the time of voting
-      properties:
-        voting_token:
-          type: string
 
-
-    voting_user:
+    # Considering deprecation
+    verifier:
       type: object
-      description: Describes the information needed for a user to vote
-      allOf:
-        - $ref: "#/components/schemas/user"
-        - $ref: "#/components/schemas/voting_token"
-        - type: object
-          properties:
-            user_org_id:
-              type: string
-              description: The ID of the user within the organization (School id, Driver License, etc...)
+      description: An ID verifier
+      additionalProperties: false
+      properties:
+        user_info:
+          $ref: "#/components/schemas/user"
+        location_id:
+          description: The id of the location this verifier is assigned to
+          type: integer
 
     org:
       type: object
@@ -781,12 +999,10 @@ components:
           description: The name of the org
 
     verifier_password:
-      type: object
+      type: string
       description: The password used by verifiers to login into voting machines
-      properties:
-        verifier_password:
-          type: string
 
+ 
     org_user_invite:
       type: object
       description: The info needed to invite a user
@@ -806,8 +1022,8 @@ components:
 
         Elections can be anonymous or non-anonymous
 
-        The election has a predetermined window of time during which it is active.
-        Before the active window begins, the election can be edited.
+        The election has a predetermined window of time during which it is active. 
+        Before the active window begins, the election can be edited. 
         However, it cannot be edited once it has begun.
 
 
@@ -830,6 +1046,15 @@ components:
           format: date-time
           example: YYYY-MM-DDTHH-mm-ss
           description: The time and date that an election will be closed for polling
+        status:
+          type: integer
+          description: >
+            The status of the election:<br>
+            - 0 := Draft<br>
+            - 1 := Called<br>
+            - 2 := Active<br>
+            - 3 := Closed<br>
+            - 4 := Published
         anonymous:
           type: boolean
           description: Whether this election is anonymous. True for anonymous, else non-anonymous
@@ -847,7 +1072,7 @@ components:
       type: object
       description: An org the user belongs to, toghether with pertinent user info
       properties:
-        privilege:
+        privilege: 
           type: integer
           description: The privilege level within the org
         user_org_id:
@@ -855,7 +1080,7 @@ components:
           description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
         org:
           $ref: "#/components/schemas/org"
-
+       
 
     org_user:
       type: object
@@ -881,7 +1106,7 @@ components:
         option_id:
           type: integer
         option_text:
-          description:
+          description: 
             The text describing a posible selection to be made
           type: string
 
@@ -892,8 +1117,12 @@ components:
         election_id:
           description: The id of the parent election
           type: integer
-        max_selection_count:
-          description: How many of the given question options can the user select. Must be >= 1
+        question_type:
+          description: >
+            Whether the question is:
+            - 0 := multiple choice
+            - 1 := single answer
+            - 2 := yes or no
           type: integer
         options:
           description: The options given
@@ -923,7 +1152,7 @@ components:
 
     vote:
       type: object
-      description: >
+      description: > 
         A vote cast.
 
         If the election is anonymous, first_name and last_name will be null.
@@ -937,11 +1166,11 @@ components:
           type: string
         voting_token:
           description: The token used by a user to cast the vote
-          type: string
+          type: string 
         choices:
           description: The choices made by the voter
           type: array
-          items:
+          items: 
             $ref: "#/components/schemas/choice"
         time_stamp:
           description: The time at which the vote was cast
@@ -960,12 +1189,12 @@ components:
         option:
           $ref: "#/components/schemas/option"
         total_votes_for:
-          description: The total number of votes cast for this option. A float
-          type: number
+          description: The total number of votes cast for this option
+          type: integer
         vote_proportion_percent:
-          description: The voting proportion for this option, in percents. A float
-          type: number
-
+          description: The voting proportion for this option, in percents
+          type: integer
+      
     question_results:
       type: object
       description: The voting results for this question
@@ -976,17 +1205,23 @@ components:
           items:
             $ref: "#/components/schemas/option_results"
 
-
-    private_election_results:
+    election_results:
       type: object
       description: >
-        The results of an election.
-
+        The results of an election. 
+        
         Organization property is optional is provided for public requests purposes
       properties:
+        organization:
+            $ref: "#/components/schemas/org"
+        election_info:
+          $ref:  "#/components/schemas/election"
+        election_description:
+          description: A brief description of the election
+          type: string
         question_results:
           description: The results for each question posed
-          type: array
+          type: array 
           items:
             $ref: "#/components/schemas/question_results"
         user_votes:
@@ -994,22 +1229,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/vote"
-
-
-    election_results:
-      type: object
-      description: >
-        The results of an election.
-
-        Organization property is optional is provided for public requests purposes
-      allOf:
-        -   $ref: "#/components/schemas/private_election_results"
-        - type: object
-          properties:
-              org_info:
-                $ref: "#/components/schemas/org"
-              election_info:
-                $ref: "#/components/schemas/election"
 
 
   responses:
@@ -1020,11 +1239,11 @@ components:
       description: Invalid syntax
     '401':
       description: Not Authorized
-    '404':
+    '404': 
       description: Not found
 
 
-    jwt:
+    jwt: 
       description: A token used to authenticate requests
       content:
         application/json:
@@ -1046,18 +1265,6 @@ components:
               user_info:
                 $ref: "#/components/schemas/user"
 
-    bad_users:
-      description: Users that could not get invited to org
-      content:
-        application/json:
-          schema:
-            additionalProperties: false
-            properties:
-              users:
-                type: array
-                items:
-                  $ref: "#/components/schemas/org_user_invite"
-
     voting_token:
       description: Contains the token used by the user to make a vote
       content:
@@ -1071,12 +1278,12 @@ components:
           schema:
             additionalProperties: false
             properties:
-              orgs:
+              orgs: 
                 description: A list of all the orgs the user belongs to
                 type: array
                 items:
                   $ref: "#/components/schemas/user_org"
-
+                    
 
 
 
@@ -1090,7 +1297,7 @@ components:
             properties:
               org:
                 $ref: '#/components/schemas/user_org'
-
+              
 
     org_users:
       description: A list of all users in the org, together with lists of admin, verifier id's
@@ -1104,6 +1311,19 @@ components:
                 items:
                   $ref: "#/components/schemas/org_user"
                 description: An array of all users subscribed to vote
+
+
+    org_rpis:
+      description: A list of all the rpis belonging to this org
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              rpis:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rpi'
 
     org_locations:
       description: A list of all the locations for a given election
@@ -1166,7 +1386,7 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/election_results"
-
+              
 
     election_result_list:
       description: A list of election results
@@ -1187,15 +1407,21 @@ components:
           schema:
             additionalProperties: false
             properties:
-              verifier_password:
+              rpis:
+                description: The list of voting machines
+                type: array
+                items:
+                  $ref: "#/components/schemas/rpi"
+              verifiers:
                 description: >
-                  OPTIONAL. The password used by id verifiers to access the voting machine.
-
+                  OPTIONAL. The list of approved id verifiers.
 
                   This will be present if the election is verified
-                type: string
+                type: array
+                items:
+                  $ref: "#/components/schemas/verifier"
               voter_list:
-                description: >
+                description: > 
                   The complete voter list. includes::
 
                   - First name
@@ -1204,11 +1430,11 @@ components:
                   - voting_token
                 type: array
                 items:
-                  $ref: "#/components/schemas/voting_user"
+                  $ref: "#/components/schemas/user"
               locations:
                 description: The complete list of voting locations
                 type: array
-                items:
+                items: 
                   $ref: "#/components/schemas/location"
               election_info:
                 $ref: "#/components/schemas/election"
@@ -1227,7 +1453,7 @@ components:
                 type: string
 
     new_user:
-      description: New user info to be added.
+      description: New user info to be added.  
       content:
         application/json:
           schema:
@@ -1251,7 +1477,7 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/user"
-
+    
     org_user:
       content:
         application/json:
@@ -1273,17 +1499,14 @@ components:
           schema:
             additionalProperties: false
             properties:
-              org_id:
-                description: The id of the org to get
-                type: integer
               invites:
                 type: array
                 items:
                   $ref: "#/components/schemas/org_user_invite"
 
     get_org:
-      content:
-        application/json:
+      content: 
+        application/json:          
           schema:
             additionalProperties: false
             properties:
@@ -1325,29 +1548,53 @@ components:
                 type: integer
                 description: user id of user to be kicked
               orgId:
-                type:
+                type: 
                   integer
                 description: The id of the org in which to change the privileges
-
+            
     change_user_privileges:
       description: Information about the user to have the privileges changed
       content:
         application/json:
           schema:
             additionalProperties: false
-            properties:
+            properties:    
               uid:
                 type: integer
                 description: user id of the user to changed
               newPrivileges:
-                type:
+                type: 
                   integer
-                description:
+                description: 
                   the new privileges for the user
               orgId:
-                type:
+                type: 
                   integer
                 description: The id of the org in which to change the privileges
+            
+
+    assign_rpi:
+      description: data needed to associate rpi with a certain location
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              rpiId:
+                type: integer
+              locationId:
+                type: 
+                  integer
+                description: The id of the location to assign the rpi to
+
+    discard_rpi:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              rpiId:
+                type: integer
 
     discard_location:
       content:
@@ -1372,7 +1619,6 @@ components:
                 description: user id of the verifier to be assigned
 
     election:
-      description: Election ID is not required to POST
       content:
         application/json:
           schema:
@@ -1420,29 +1666,12 @@ components:
 
   parameters:
     org_p:
-      description: The id of the org
+      description: Used to
       name: org_id
       in: query
       required: true
       schema:
         type: integer
-
-    election_p:
-      name: election_id
-      in: header
-      description: The id of the election
-      required: true
-      schema:
-        type: integer
-
-    location_p:
-      name: election_id
-      in: header
-      description: The id of the location
-      required: true
-      schema:
-        type: integer
-
 
   securitySchemes:
     jwt:
@@ -1454,3 +1683,4 @@ components:
 security:
   - jwt: []
 
+    

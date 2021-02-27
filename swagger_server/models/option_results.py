@@ -15,20 +15,20 @@ class OptionResults(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, option: Option=None, total_votes_for: int=None, vote_proportion_percent: int=None):  # noqa: E501
+    def __init__(self, option: Option=None, total_votes_for: float=None, vote_proportion_percent: float=None):  # noqa: E501
         """OptionResults - a model defined in Swagger
 
         :param option: The option of this OptionResults.  # noqa: E501
         :type option: Option
         :param total_votes_for: The total_votes_for of this OptionResults.  # noqa: E501
-        :type total_votes_for: int
+        :type total_votes_for: float
         :param vote_proportion_percent: The vote_proportion_percent of this OptionResults.  # noqa: E501
-        :type vote_proportion_percent: int
+        :type vote_proportion_percent: float
         """
         self.swagger_types = {
             'option': Option,
-            'total_votes_for': int,
-            'vote_proportion_percent': int
+            'total_votes_for': float,
+            'vote_proportion_percent': float
         }
 
         self.attribute_map = {
@@ -73,47 +73,47 @@ class OptionResults(Model):
         self._option = option
 
     @property
-    def total_votes_for(self) -> int:
+    def total_votes_for(self) -> float:
         """Gets the total_votes_for of this OptionResults.
 
-        The total number of votes cast for this option  # noqa: E501
+        The total number of votes cast for this option. A float  # noqa: E501
 
         :return: The total_votes_for of this OptionResults.
-        :rtype: int
+        :rtype: float
         """
         return self._total_votes_for
 
     @total_votes_for.setter
-    def total_votes_for(self, total_votes_for: int):
+    def total_votes_for(self, total_votes_for: float):
         """Sets the total_votes_for of this OptionResults.
 
-        The total number of votes cast for this option  # noqa: E501
+        The total number of votes cast for this option. A float  # noqa: E501
 
         :param total_votes_for: The total_votes_for of this OptionResults.
-        :type total_votes_for: int
+        :type total_votes_for: float
         """
 
         self._total_votes_for = total_votes_for
 
     @property
-    def vote_proportion_percent(self) -> int:
+    def vote_proportion_percent(self) -> float:
         """Gets the vote_proportion_percent of this OptionResults.
 
-        The voting proportion for this option, in percents  # noqa: E501
+        The voting proportion for this option, in percents. A float  # noqa: E501
 
         :return: The vote_proportion_percent of this OptionResults.
-        :rtype: int
+        :rtype: float
         """
         return self._vote_proportion_percent
 
     @vote_proportion_percent.setter
-    def vote_proportion_percent(self, vote_proportion_percent: int):
+    def vote_proportion_percent(self, vote_proportion_percent: float):
         """Sets the vote_proportion_percent of this OptionResults.
 
-        The voting proportion for this option, in percents  # noqa: E501
+        The voting proportion for this option, in percents. A float  # noqa: E501
 
         :param vote_proportion_percent: The vote_proportion_percent of this OptionResults.
-        :type vote_proportion_percent: int
+        :type vote_proportion_percent: float
         """
 
         self._vote_proportion_percent = vote_proportion_percent

@@ -6,7 +6,7 @@ from flask import json
 from six import BytesIO
 
 from swagger_server.models.election_results import ElectionResults  # noqa: E501
-from swagger_server.models.inline_response20012 import InlineResponse20012  # noqa: E501
+from swagger_server.models.inline_response20010 import InlineResponse20010  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
@@ -18,8 +18,7 @@ class TestElectionsResultsPublicController(BaseTestCase):
 
         Get public elections
         """
-        query_string = [('election_id', 56),
-                        ('version', 56)]
+        query_string = [('election_id', 56)]
         response = self.client.open(
             '/api/org/elections/public/get',
             method='GET',
@@ -33,8 +32,7 @@ class TestElectionsResultsPublicController(BaseTestCase):
         Get public elections
         """
         query_string = [('page', 56),
-                        ('elections_per_page', 56),
-                        ('version', 56)]
+                        ('elections_per_page', 56)]
         response = self.client.open(
             '/api/org/elections/public/get/list',
             method='GET',

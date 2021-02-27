@@ -1,8 +1,8 @@
 import connexion
 import six
 
-from swagger_server.models.body1 import Body1  # noqa: E501
-from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
+from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
+from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server import util
 
 
@@ -22,7 +22,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 def change_user_privilege(body=None):  # noqa: E501
     """Change user privileges
 
-    &#x27;user privileges are:&lt;br&gt; - 0 :&#x3D; invited&lt;br&gt; - 1 :&#x3D; member&lt;br&gt; - 2 :&#x3D; verifier&lt;br&gt; - 3 :&#x3D; admin&lt;br&gt; - 4 :&#x3D; owner&#x27;  # noqa: E501
+    user privileges are:&lt;br&gt; - 0 :&#x3D; invited&lt;br&gt; - 1 :&#x3D; member&lt;br&gt; - 2 :&#x3D; admin&lt;br&gt; - 3 :&#x3D; owner  # noqa: E501
 
     :param body: Information about the user to have the privileges changed
     :type body: dict | bytes
@@ -34,18 +34,16 @@ def change_user_privilege(body=None):  # noqa: E501
     return 'do some magic!'
 
 
-def get_org_users(body=None):  # noqa: E501
+def get_org_users(org_id):  # noqa: E501
     """Fetch org users
 
     Get all users # noqa: E501
 
-    :param body: 
-    :type body: dict | bytes
+    :param org_id: The id of the org
+    :type org_id: int
 
-    :rtype: InlineResponse2004
+    :rtype: InlineResponse2005
     """
-    if connexion.request.is_json:
-        body = Body1.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 

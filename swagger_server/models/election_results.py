@@ -8,6 +8,7 @@ from typing import List, Dict  # noqa: F401
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.election import Election  # noqa: F401,E501
 from swagger_server.models.org import Org  # noqa: F401,E501
+from swagger_server.models.private_election_results import PrivateElectionResults  # noqa: F401,E501
 from swagger_server.models.question_results import QuestionResults  # noqa: F401,E501
 from swagger_server.models.vote import Vote  # noqa: F401,E501
 from swagger_server import util
@@ -18,40 +19,35 @@ class ElectionResults(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, organization: Org=None, election_info: Election=None, election_description: str=None, question_results: List[QuestionResults]=None, user_votes: List[Vote]=None):  # noqa: E501
+    def __init__(self, question_results: List[QuestionResults]=None, user_votes: List[Vote]=None, org_info: Org=None, election_info: Election=None):  # noqa: E501
         """ElectionResults - a model defined in Swagger
 
-        :param organization: The organization of this ElectionResults.  # noqa: E501
-        :type organization: Org
-        :param election_info: The election_info of this ElectionResults.  # noqa: E501
-        :type election_info: Election
-        :param election_description: The election_description of this ElectionResults.  # noqa: E501
-        :type election_description: str
         :param question_results: The question_results of this ElectionResults.  # noqa: E501
         :type question_results: List[QuestionResults]
         :param user_votes: The user_votes of this ElectionResults.  # noqa: E501
         :type user_votes: List[Vote]
+        :param org_info: The org_info of this ElectionResults.  # noqa: E501
+        :type org_info: Org
+        :param election_info: The election_info of this ElectionResults.  # noqa: E501
+        :type election_info: Election
         """
         self.swagger_types = {
-            'organization': Org,
-            'election_info': Election,
-            'election_description': str,
             'question_results': List[QuestionResults],
-            'user_votes': List[Vote]
+            'user_votes': List[Vote],
+            'org_info': Org,
+            'election_info': Election
         }
 
         self.attribute_map = {
-            'organization': 'organization',
-            'election_info': 'election_info',
-            'election_description': 'election_description',
             'question_results': 'question_results',
-            'user_votes': 'user_votes'
+            'user_votes': 'user_votes',
+            'org_info': 'org_info',
+            'election_info': 'election_info'
         }
-        self._organization = organization
-        self._election_info = election_info
-        self._election_description = election_description
         self._question_results = question_results
         self._user_votes = user_votes
+        self._org_info = org_info
+        self._election_info = election_info
 
     @classmethod
     def from_dict(cls, dikt) -> 'ElectionResults':
@@ -63,71 +59,6 @@ class ElectionResults(Model):
         :rtype: ElectionResults
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def organization(self) -> Org:
-        """Gets the organization of this ElectionResults.
-
-
-        :return: The organization of this ElectionResults.
-        :rtype: Org
-        """
-        return self._organization
-
-    @organization.setter
-    def organization(self, organization: Org):
-        """Sets the organization of this ElectionResults.
-
-
-        :param organization: The organization of this ElectionResults.
-        :type organization: Org
-        """
-
-        self._organization = organization
-
-    @property
-    def election_info(self) -> Election:
-        """Gets the election_info of this ElectionResults.
-
-
-        :return: The election_info of this ElectionResults.
-        :rtype: Election
-        """
-        return self._election_info
-
-    @election_info.setter
-    def election_info(self, election_info: Election):
-        """Sets the election_info of this ElectionResults.
-
-
-        :param election_info: The election_info of this ElectionResults.
-        :type election_info: Election
-        """
-
-        self._election_info = election_info
-
-    @property
-    def election_description(self) -> str:
-        """Gets the election_description of this ElectionResults.
-
-        A brief description of the election  # noqa: E501
-
-        :return: The election_description of this ElectionResults.
-        :rtype: str
-        """
-        return self._election_description
-
-    @election_description.setter
-    def election_description(self, election_description: str):
-        """Sets the election_description of this ElectionResults.
-
-        A brief description of the election  # noqa: E501
-
-        :param election_description: The election_description of this ElectionResults.
-        :type election_description: str
-        """
-
-        self._election_description = election_description
 
     @property
     def question_results(self) -> List[QuestionResults]:
@@ -174,3 +105,45 @@ class ElectionResults(Model):
         """
 
         self._user_votes = user_votes
+
+    @property
+    def org_info(self) -> Org:
+        """Gets the org_info of this ElectionResults.
+
+
+        :return: The org_info of this ElectionResults.
+        :rtype: Org
+        """
+        return self._org_info
+
+    @org_info.setter
+    def org_info(self, org_info: Org):
+        """Sets the org_info of this ElectionResults.
+
+
+        :param org_info: The org_info of this ElectionResults.
+        :type org_info: Org
+        """
+
+        self._org_info = org_info
+
+    @property
+    def election_info(self) -> Election:
+        """Gets the election_info of this ElectionResults.
+
+
+        :return: The election_info of this ElectionResults.
+        :rtype: Election
+        """
+        return self._election_info
+
+    @election_info.setter
+    def election_info(self, election_info: Election):
+        """Sets the election_info of this ElectionResults.
+
+
+        :param election_info: The election_info of this ElectionResults.
+        :type election_info: Election
+        """
+
+        self._election_info = election_info

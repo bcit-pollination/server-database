@@ -14,7 +14,7 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, password: str=None, voting_token: str=None):  # noqa: E501
+    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None):  # noqa: E501
         """User - a model defined in Swagger
 
         :param id: The id of this User.  # noqa: E501
@@ -25,18 +25,15 @@ class User(Model):
         :type last_name: str
         :param email: The email of this User.  # noqa: E501
         :type email: str
-        :param password: The password of this User.  # noqa: E501
-        :type password: str
-        :param voting_token: The voting_token of this User.  # noqa: E501
-        :type voting_token: str
+        :param dob: The dob of this User.  # noqa: E501
+        :type dob: date
         """
         self.swagger_types = {
             'id': int,
             'first_name': str,
             'last_name': str,
             'email': str,
-            'password': str,
-            'voting_token': str
+            'dob': date
         }
 
         self.attribute_map = {
@@ -44,15 +41,13 @@ class User(Model):
             'first_name': 'first_name',
             'last_name': 'last_name',
             'email': 'email',
-            'password': 'password',
-            'voting_token': 'voting_token'
+            'dob': 'dob'
         }
         self._id = id
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
-        self._password = password
-        self._voting_token = voting_token
+        self._dob = dob
 
     @classmethod
     def from_dict(cls, dikt) -> 'User':
@@ -150,45 +145,22 @@ class User(Model):
         self._email = email
 
     @property
-    def password(self) -> str:
-        """Gets the password of this User.
+    def dob(self) -> date:
+        """Gets the dob of this User.
 
 
-        :return: The password of this User.
-        :rtype: str
+        :return: The dob of this User.
+        :rtype: date
         """
-        return self._password
+        return self._dob
 
-    @password.setter
-    def password(self, password: str):
-        """Sets the password of this User.
+    @dob.setter
+    def dob(self, dob: date):
+        """Sets the dob of this User.
 
 
-        :param password: The password of this User.
-        :type password: str
-        """
-
-        self._password = password
-
-    @property
-    def voting_token(self) -> str:
-        """Gets the voting_token of this User.
-
-        Token to be passed to the RPI at the time of voting  # noqa: E501
-
-        :return: The voting_token of this User.
-        :rtype: str
-        """
-        return self._voting_token
-
-    @voting_token.setter
-    def voting_token(self, voting_token: str):
-        """Sets the voting_token of this User.
-
-        Token to be passed to the RPI at the time of voting  # noqa: E501
-
-        :param voting_token: The voting_token of this User.
-        :type voting_token: str
+        :param dob: The dob of this User.
+        :type dob: date
         """
 
-        self._voting_token = voting_token
+        self._dob = dob

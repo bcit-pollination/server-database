@@ -6,6 +6,9 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.election import Election  # noqa: F401,E501
+from swagger_server.models.location import Location  # noqa: F401,E501
+from swagger_server.models.voting_user import VotingUser  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +17,35 @@ class InlineResponse20011(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None):  # noqa: E501
+    def __init__(self, verifier_password: str=None, voter_list: List[VotingUser]=None, locations: List[Location]=None, election_info: Election=None):  # noqa: E501
         """InlineResponse20011 - a model defined in Swagger
 
-        :param election_id: The election_id of this InlineResponse20011.  # noqa: E501
-        :type election_id: int
+        :param verifier_password: The verifier_password of this InlineResponse20011.  # noqa: E501
+        :type verifier_password: str
+        :param voter_list: The voter_list of this InlineResponse20011.  # noqa: E501
+        :type voter_list: List[VotingUser]
+        :param locations: The locations of this InlineResponse20011.  # noqa: E501
+        :type locations: List[Location]
+        :param election_info: The election_info of this InlineResponse20011.  # noqa: E501
+        :type election_info: Election
         """
         self.swagger_types = {
-            'election_id': int
+            'verifier_password': str,
+            'voter_list': List[VotingUser],
+            'locations': List[Location],
+            'election_info': Election
         }
 
         self.attribute_map = {
-            'election_id': 'election_id'
+            'verifier_password': 'verifier_password',
+            'voter_list': 'voter_list',
+            'locations': 'locations',
+            'election_info': 'election_info'
         }
-        self._election_id = election_id
+        self._verifier_password = verifier_password
+        self._voter_list = voter_list
+        self._locations = locations
+        self._election_info = election_info
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse20011':
@@ -41,24 +59,91 @@ class InlineResponse20011(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def election_id(self) -> int:
-        """Gets the election_id of this InlineResponse20011.
+    def verifier_password(self) -> str:
+        """Gets the verifier_password of this InlineResponse20011.
 
-        The id of the election just created  # noqa: E501
+        OPTIONAL. The password used by id verifiers to access the voting machine.  This will be present if the election is verified   # noqa: E501
 
-        :return: The election_id of this InlineResponse20011.
-        :rtype: int
+        :return: The verifier_password of this InlineResponse20011.
+        :rtype: str
         """
-        return self._election_id
+        return self._verifier_password
 
-    @election_id.setter
-    def election_id(self, election_id: int):
-        """Sets the election_id of this InlineResponse20011.
+    @verifier_password.setter
+    def verifier_password(self, verifier_password: str):
+        """Sets the verifier_password of this InlineResponse20011.
 
-        The id of the election just created  # noqa: E501
+        OPTIONAL. The password used by id verifiers to access the voting machine.  This will be present if the election is verified   # noqa: E501
 
-        :param election_id: The election_id of this InlineResponse20011.
-        :type election_id: int
+        :param verifier_password: The verifier_password of this InlineResponse20011.
+        :type verifier_password: str
         """
 
-        self._election_id = election_id
+        self._verifier_password = verifier_password
+
+    @property
+    def voter_list(self) -> List[VotingUser]:
+        """Gets the voter_list of this InlineResponse20011.
+
+        The complete voter list. includes:: - First name - Last name - Organization id(if verified election) - voting_token   # noqa: E501
+
+        :return: The voter_list of this InlineResponse20011.
+        :rtype: List[VotingUser]
+        """
+        return self._voter_list
+
+    @voter_list.setter
+    def voter_list(self, voter_list: List[VotingUser]):
+        """Sets the voter_list of this InlineResponse20011.
+
+        The complete voter list. includes:: - First name - Last name - Organization id(if verified election) - voting_token   # noqa: E501
+
+        :param voter_list: The voter_list of this InlineResponse20011.
+        :type voter_list: List[VotingUser]
+        """
+
+        self._voter_list = voter_list
+
+    @property
+    def locations(self) -> List[Location]:
+        """Gets the locations of this InlineResponse20011.
+
+        The complete list of voting locations  # noqa: E501
+
+        :return: The locations of this InlineResponse20011.
+        :rtype: List[Location]
+        """
+        return self._locations
+
+    @locations.setter
+    def locations(self, locations: List[Location]):
+        """Sets the locations of this InlineResponse20011.
+
+        The complete list of voting locations  # noqa: E501
+
+        :param locations: The locations of this InlineResponse20011.
+        :type locations: List[Location]
+        """
+
+        self._locations = locations
+
+    @property
+    def election_info(self) -> Election:
+        """Gets the election_info of this InlineResponse20011.
+
+
+        :return: The election_info of this InlineResponse20011.
+        :rtype: Election
+        """
+        return self._election_info
+
+    @election_info.setter
+    def election_info(self, election_info: Election):
+        """Sets the election_info of this InlineResponse20011.
+
+
+        :param election_info: The election_info of this InlineResponse20011.
+        :type election_info: Election
+        """
+
+        self._election_info = election_info

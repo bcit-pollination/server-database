@@ -15,29 +15,29 @@ class Question(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None, question_type: int=None, options: List[Option]=None):  # noqa: E501
+    def __init__(self, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
         """Question - a model defined in Swagger
 
         :param election_id: The election_id of this Question.  # noqa: E501
         :type election_id: int
-        :param question_type: The question_type of this Question.  # noqa: E501
-        :type question_type: int
+        :param max_selection_count: The max_selection_count of this Question.  # noqa: E501
+        :type max_selection_count: int
         :param options: The options of this Question.  # noqa: E501
         :type options: List[Option]
         """
         self.swagger_types = {
             'election_id': int,
-            'question_type': int,
+            'max_selection_count': int,
             'options': List[Option]
         }
 
         self.attribute_map = {
             'election_id': 'election_id',
-            'question_type': 'question_type',
+            'max_selection_count': 'max_selection_count',
             'options': 'options'
         }
         self._election_id = election_id
-        self._question_type = question_type
+        self._max_selection_count = max_selection_count
         self._options = options
 
     @classmethod
@@ -75,27 +75,27 @@ class Question(Model):
         self._election_id = election_id
 
     @property
-    def question_type(self) -> int:
-        """Gets the question_type of this Question.
+    def max_selection_count(self) -> int:
+        """Gets the max_selection_count of this Question.
 
-        Whether the question is: - 0 := multiple choice - 1 := single answer - 2 := yes or no   # noqa: E501
+        How many of the given question options can the user select. Must be >= 1  # noqa: E501
 
-        :return: The question_type of this Question.
+        :return: The max_selection_count of this Question.
         :rtype: int
         """
-        return self._question_type
+        return self._max_selection_count
 
-    @question_type.setter
-    def question_type(self, question_type: int):
-        """Sets the question_type of this Question.
+    @max_selection_count.setter
+    def max_selection_count(self, max_selection_count: int):
+        """Sets the max_selection_count of this Question.
 
-        Whether the question is: - 0 := multiple choice - 1 := single answer - 2 := yes or no   # noqa: E501
+        How many of the given question options can the user select. Must be >= 1  # noqa: E501
 
-        :param question_type: The question_type of this Question.
-        :type question_type: int
+        :param max_selection_count: The max_selection_count of this Question.
+        :type max_selection_count: int
         """
 
-        self._question_type = question_type
+        self._max_selection_count = max_selection_count
 
     @property
     def options(self) -> List[Option]:

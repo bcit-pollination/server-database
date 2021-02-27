@@ -9,6 +9,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="fbe00abf-e5b8-4c15-8117-f53fe32718d0" name="ubuntu_pollination_server" url="http://pollination.live">
+        <fileTransfer accessType="SFTP" host="pollination.live" port="22" sshConfigId="0ac19d2a-b457-49eb-a7b1-83ad5e8f7cde" sshConfig="ubuntu@pollination.live:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.body1 import Body1  # noqa: E501
-from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
+from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
+from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server.test import BaseTestCase
 
 
@@ -45,12 +45,11 @@ class TestOrgUsersController(BaseTestCase):
 
         Fetch org users
         """
-        body = Body1()
+        query_string = [('org_id', 56)]
         response = self.client.open(
-            '/api/org/users/get/list',
-            method='POST',
-            data=json.dumps(body),
-            content_type='application/json')
+            '/api/org/users',
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
