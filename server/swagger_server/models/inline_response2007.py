@@ -15,20 +15,20 @@ class InlineResponse2007(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, elections: List[Election]=None):  # noqa: E501
+    def __init__(self, election: Election=None):  # noqa: E501
         """InlineResponse2007 - a model defined in Swagger
 
-        :param elections: The elections of this InlineResponse2007.  # noqa: E501
-        :type elections: List[Election]
+        :param election: The election of this InlineResponse2007.  # noqa: E501
+        :type election: Election
         """
         self.swagger_types = {
-            'elections': List[Election]
+            'election': Election
         }
 
         self.attribute_map = {
-            'elections': 'elections'
+            'election': 'election'
         }
-        self._elections = elections
+        self._election = election
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2007':
@@ -42,22 +42,22 @@ class InlineResponse2007(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def elections(self) -> List[Election]:
-        """Gets the elections of this InlineResponse2007.
+    def election(self) -> Election:
+        """Gets the election of this InlineResponse2007.
 
 
-        :return: The elections of this InlineResponse2007.
-        :rtype: List[Election]
+        :return: The election of this InlineResponse2007.
+        :rtype: Election
         """
-        return self._elections
+        return self._election
 
-    @elections.setter
-    def elections(self, elections: List[Election]):
-        """Sets the elections of this InlineResponse2007.
+    @election.setter
+    def election(self, election: Election):
+        """Sets the election of this InlineResponse2007.
 
 
-        :param elections: The elections of this InlineResponse2007.
-        :type elections: List[Election]
+        :param election: The election of this InlineResponse2007.
+        :type election: Election
         """
 
-        self._elections = elections
+        self._election = election

@@ -15,7 +15,7 @@ class Vote(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: datetime=None, location_id: int=None):  # noqa: E501
+    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: datetime=None, location: str=None):  # noqa: E501
         """Vote - a model defined in Swagger
 
         :param voter_first_name: The voter_first_name of this Vote.  # noqa: E501
@@ -28,8 +28,8 @@ class Vote(Model):
         :type choices: List[Choice]
         :param time_stamp: The time_stamp of this Vote.  # noqa: E501
         :type time_stamp: datetime
-        :param location_id: The location_id of this Vote.  # noqa: E501
-        :type location_id: int
+        :param location: The location of this Vote.  # noqa: E501
+        :type location: str
         """
         self.swagger_types = {
             'voter_first_name': str,
@@ -37,7 +37,7 @@ class Vote(Model):
             'voting_token': str,
             'choices': List[Choice],
             'time_stamp': datetime,
-            'location_id': int
+            'location': str
         }
 
         self.attribute_map = {
@@ -46,14 +46,14 @@ class Vote(Model):
             'voting_token': 'voting_token',
             'choices': 'choices',
             'time_stamp': 'time_stamp',
-            'location_id': 'location_id'
+            'location': 'location'
         }
         self._voter_first_name = voter_first_name
         self._voter_last_name = voter_last_name
         self._voting_token = voting_token
         self._choices = choices
         self._time_stamp = time_stamp
-        self._location_id = location_id
+        self._location = location
 
     @classmethod
     def from_dict(cls, dikt) -> 'Vote':
@@ -182,24 +182,24 @@ class Vote(Model):
         self._time_stamp = time_stamp
 
     @property
-    def location_id(self) -> int:
-        """Gets the location_id of this Vote.
+    def location(self) -> str:
+        """Gets the location of this Vote.
 
         The id of the location where the vote was cast  # noqa: E501
 
-        :return: The location_id of this Vote.
-        :rtype: int
+        :return: The location of this Vote.
+        :rtype: str
         """
-        return self._location_id
+        return self._location
 
-    @location_id.setter
-    def location_id(self, location_id: int):
-        """Sets the location_id of this Vote.
+    @location.setter
+    def location(self, location: str):
+        """Sets the location of this Vote.
 
         The id of the location where the vote was cast  # noqa: E501
 
-        :param location_id: The location_id of this Vote.
-        :type location_id: int
+        :param location: The location of this Vote.
+        :type location: str
         """
 
-        self._location_id = location_id
+        self._location = location

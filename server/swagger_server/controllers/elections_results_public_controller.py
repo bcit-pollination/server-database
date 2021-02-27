@@ -2,7 +2,7 @@ import connexion
 import six
 
 from swagger_server.models.election_results import ElectionResults  # noqa: E501
-from swagger_server.models.inline_response20010 import InlineResponse20010  # noqa: E501
+from swagger_server.models.inline_response2009 import InlineResponse2009  # noqa: E501
 from swagger_server import util
 
 
@@ -29,6 +29,6 @@ def get_public_election_result_list(page, elections_per_page):  # noqa: E501
     :param elections_per_page: The page to get
     :type elections_per_page: int
 
-    :rtype: InlineResponse20010
+    :rtype: InlineResponse2009
     """
     return 'do some magic!'

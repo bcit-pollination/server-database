@@ -18,7 +18,7 @@ class TestOrgUsersController(BaseTestCase):
 
         Accept invitation user to org
         """
-        query_string = [('encrypted_data', 56)]
+        query_string = [('encrypted_data', 'encrypted_data_example')]
         response = self.client.open(
             '/api/org/users/invite/accept',
             method='GET',

@@ -12,7 +12,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
     Use this to invite user to org # noqa: E501
 
     :param encrypted_data: 
-    :type encrypted_data: int
+    :type encrypted_data: str
 
     :rtype: None
     """

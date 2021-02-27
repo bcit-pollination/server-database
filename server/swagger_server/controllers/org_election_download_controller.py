@@ -1,7 +1,7 @@
 import connexion
 import six
 
-from swagger_server.models.inline_response20011 import InlineResponse20011  # noqa: E501
+from swagger_server.models.inline_response20010 import InlineResponse20010  # noqa: E501
 from swagger_server import util
 
 
@@ -13,6 +13,6 @@ def download_voting_package(election_id):  # noqa: E501
     :param election_id: The id of the election
     :type election_id: int
 
-    :rtype: InlineResponse20011
+    :rtype: InlineResponse20010
     """
     return 'do some magic!'

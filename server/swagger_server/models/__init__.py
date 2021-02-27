@@ -4,14 +4,12 @@
 from __future__ import absolute_import
 # import models into model package
 from swagger_server.models.ballot import Ballot
-from swagger_server.models.body import Body
 from swagger_server.models.choice import Choice
 from swagger_server.models.election import Election
 from swagger_server.models.election_results import ElectionResults
 from swagger_server.models.inline_response200 import InlineResponse200
 from swagger_server.models.inline_response2001 import InlineResponse2001
 from swagger_server.models.inline_response20010 import InlineResponse20010
-from swagger_server.models.inline_response20011 import InlineResponse20011
 from swagger_server.models.inline_response2002 import InlineResponse2002
 from swagger_server.models.inline_response2003 import InlineResponse2003
 from swagger_server.models.inline_response2004 import InlineResponse2004

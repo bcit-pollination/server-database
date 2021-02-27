@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.election import Election  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +14,20 @@ class InlineResponse2008(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election: Election=None):  # noqa: E501
+    def __init__(self, election_id: int=None):  # noqa: E501
         """InlineResponse2008 - a model defined in Swagger
 
-        :param election: The election of this InlineResponse2008.  # noqa: E501
-        :type election: Election
+        :param election_id: The election_id of this InlineResponse2008.  # noqa: E501
+        :type election_id: int
         """
         self.swagger_types = {
-            'election': Election
+            'election_id': int
         }
 
         self.attribute_map = {
-            'election': 'election'
+            'election_id': 'election_id'
         }
-        self._election = election
+        self._election_id = election_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2008':
@@ -42,22 +41,24 @@ class InlineResponse2008(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def election(self) -> Election:
-        """Gets the election of this InlineResponse2008.
+    def election_id(self) -> int:
+        """Gets the election_id of this InlineResponse2008.
 
+        The id of the election just created  # noqa: E501
 
-        :return: The election of this InlineResponse2008.
-        :rtype: Election
+        :return: The election_id of this InlineResponse2008.
+        :rtype: int
         """
-        return self._election
+        return self._election_id
 
-    @election.setter
-    def election(self, election: Election):
-        """Sets the election of this InlineResponse2008.
+    @election_id.setter
+    def election_id(self, election_id: int):
+        """Sets the election_id of this InlineResponse2008.
 
+        The id of the election just created  # noqa: E501
 
-        :param election: The election of this InlineResponse2008.
-        :type election: Election
+        :param election_id: The election_id of this InlineResponse2008.
+        :type election_id: int
         """
 
-        self._election = election
+        self._election_id = election_id

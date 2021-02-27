@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.election_results import ElectionResults  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,20 @@ class InlineResponse2009(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None):  # noqa: E501
+    def __init__(self, elections: List[ElectionResults]=None):  # noqa: E501
         """InlineResponse2009 - a model defined in Swagger
 
-        :param election_id: The election_id of this InlineResponse2009.  # noqa: E501
-        :type election_id: int
+        :param elections: The elections of this InlineResponse2009.  # noqa: E501
+        :type elections: List[ElectionResults]
         """
         self.swagger_types = {
-            'election_id': int
+            'elections': List[ElectionResults]
         }
 
         self.attribute_map = {
-            'election_id': 'election_id'
+            'elections': 'elections'
         }
-        self._election_id = election_id
+        self._elections = elections
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2009':
@@ -41,24 +42,22 @@ class InlineResponse2009(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def election_id(self) -> int:
-        """Gets the election_id of this InlineResponse2009.
+    def elections(self) -> List[ElectionResults]:
+        """Gets the elections of this InlineResponse2009.
 
-        The id of the election just created  # noqa: E501
 
-        :return: The election_id of this InlineResponse2009.
-        :rtype: int
+        :return: The elections of this InlineResponse2009.
+        :rtype: List[ElectionResults]
         """
-        return self._election_id
+        return self._elections
 
-    @election_id.setter
-    def election_id(self, election_id: int):
-        """Sets the election_id of this InlineResponse2009.
+    @elections.setter
+    def elections(self, elections: List[ElectionResults]):
+        """Sets the elections of this InlineResponse2009.
 
-        The id of the election just created  # noqa: E501
 
-        :param election_id: The election_id of this InlineResponse2009.
-        :type election_id: int
+        :param elections: The elections of this InlineResponse2009.
+        :type elections: List[ElectionResults]
         """
 
-        self._election_id = election_id
+        self._elections = elections

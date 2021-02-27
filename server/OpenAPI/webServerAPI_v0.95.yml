@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.00"
+  version: "0.95"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -56,6 +56,25 @@ paths:
           $ref:  "#/components/responses/401"
 
 
+  /user/logout:
+    post:
+      tags:
+        - user.auth
+      summary: Login user
+      operationId: logout
+      security:
+        - user: []
+#      parameters:
+#        - uid:
+
+      responses:
+        "200":
+          description: User loged out
+        "400":
+          description: Invalid syntax
+        "401":
+          $ref:  "#/components/responses/401"
+
   /user:
     get:
       tags:
@@ -63,7 +82,7 @@ paths:
       summary: Get user info
       operationId: get_user
       security:
-        - user: []
+        - user: [ ]
       responses:
         "200":
           $ref: "#/components/responses/user"
@@ -80,6 +99,7 @@ paths:
         - user
       summary: Create user
       operationId: app.createUser
+      security: []
       requestBody:
         $ref: "#/components/requestBodies/new_user"
       responses:
@@ -89,6 +109,22 @@ paths:
           description: Invalid syntax
         "409":
           description: Account already exists
+
+# CURRENTLY NOT PROVIDED
+    put:
+      tags:
+        - user
+      summary: Update user info
+      operationId: update_user
+      responses:
+        "200":
+          description: user updated
+        "400":
+          description: Invalid syntax
+        "404":
+          description: Not found
+      requestBody:
+        $ref: "#/components/requestBodies/user"
 
     delete:
       tags:
@@ -194,7 +230,7 @@ paths:
       summary: Update org info
       operationId: update_org
       security:
-        - owner: [ ]
+        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/post_org"
       responses:
@@ -214,8 +250,6 @@ paths:
       operationId: disband_org
       description:
         An org can only be disbanded by it's owner, hence the org is infered from the JWT
-      security:
-        - owner: [ ]
       responses:
         '200':
           description: OK
@@ -235,8 +269,6 @@ paths:
       operationId:
         get_org_users
       summary: Fetch org users
-      security:
-        - admin: [ ]
       parameters:
         - $ref: "#/components/parameters/org_p"
       responses:
@@ -258,8 +290,6 @@ paths:
         Use this to invite user to org
       operationId:
         org_invite_user
-      security:
-        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/org_user_invite"
       responses:
@@ -304,8 +334,6 @@ paths:
       summary: Kick user from org
       operationId:
         kick_org_user
-      security:
-        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/org_user"
       responses:
@@ -331,8 +359,6 @@ paths:
         - 3 := owner
       operationId:
         change_user_privilege
-      security:
-        - owner: [ ]
       requestBody:
         $ref: '#/components/requestBodies/change_user_privileges'
       responses:
@@ -351,8 +377,6 @@ paths:
         - org
       summary: Get password used by ID verifiers to login into voting machine
       operationId: get_verifier_password
-      security:
-        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/get_org"
       responses:
@@ -366,6 +390,95 @@ paths:
           description: Not found
 
 
+  /org/locations/list:
+    get:
+      tags:
+        - org.locations
+      summary: Get all the org voting locations
+      description:
+        In principle this information should be available to the public
+      operationId:
+        get_locations_list
+      parameters:
+        - $ref: "#/components/parameters/location_p"
+      responses:
+        '200':
+          $ref: '#/components/responses/org_locations'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+  /org/locations:
+    post:
+      tags:
+        - org.locations
+      summary: Add location
+      operationId:
+        add_location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                org_id:
+                  type: integer
+                  description: The id of the org to add the location to
+                location:
+                  $ref: "#/components/schemas/location"
+      responses:
+        '200':
+          description: Location added
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+
+    put:
+      tags:
+        - org.locations
+      summary: Update location
+      operationId:
+        update_location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/location"
+      responses:
+        '200':
+          description: Location added
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+    delete:
+      tags:
+        - org.locations
+      summary: Delete location
+      operationId:
+        delete_location
+      parameters:
+        - $ref: "#/components/parameters/location_p"
+      responses:
+        '200':
+          description: Location deleted
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+
+
   /org/elections/list:
     get:
       description: Get list of elections for a given org
@@ -374,8 +487,6 @@ paths:
       summary: Get election info list
       operationId:
         get_election_list
-      security:
-        - member: [ ]
       parameters:
         - $ref: "#/components/parameters/org_p"
       responses:
@@ -396,8 +507,6 @@ paths:
       summary: Get election info
       operationId:
         get_election
-      security:
-        - member: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -417,8 +526,6 @@ paths:
       summary: Create election
       operationId:
         create_election
-      security:
-        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/election"
       responses:
@@ -449,8 +556,6 @@ paths:
       summary: update election
       operationId:
         update_election
-      security:
-        - admin: [ ]
       requestBody:
         $ref: "#/components/requestBodies/election"
       responses:
@@ -471,8 +576,6 @@ paths:
       - org.elections
       operationId:
         delete_election
-      security:
-        - admin: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -560,8 +663,6 @@ paths:
       summary: Get election voting results
       operationId:
         get_election_results
-      security:
-        - member: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -583,8 +684,6 @@ paths:
       tags:
         - org.election.votes
       summary: Create/Update election results
-      security:
-        - admin: [ ]
       operationId:
         upload_election_votes
       requestBody:
@@ -614,8 +713,6 @@ paths:
           - List of locations
           - Verifier password
       operationId: download_voting_package
-      security:
-        - admin: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -869,9 +966,9 @@ components:
           type: string
           format: date-time
           example: YYYY-MM-DDTHH-mm-ss
-        location:
+        location_id:
           description: The id of the location where the vote was cast
-          type: string
+          type: integer
 
 
     option_results:
@@ -985,7 +1082,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/voting_token"
-
     org_list:
       description: Contains all the information relating to the user of the org
       content:
@@ -998,6 +1094,9 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/user_org"
+
+
+
 
 
     org:
@@ -1024,6 +1123,17 @@ components:
                   $ref: "#/components/schemas/org_user"
                 description: An array of all users subscribed to vote
 
+    org_locations:
+      description: A list of all the locations for a given election
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              locations:
+                type: array
+                items:
+                  $ref: '#/components/schemas/location'
 
     election:
       description: Info about election
@@ -1113,6 +1223,11 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/voting_user"
+              locations:
+                description: The complete list of voting locations
+                type: array
+                items:
+                  $ref: "#/components/schemas/location"
               election_info:
                 $ref: "#/components/schemas/election"
 
@@ -1252,6 +1367,14 @@ components:
                   integer
                 description: The id of the org in which to change the privileges
 
+    discard_location:
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            properties:
+              locationId:
+                type: integer
 
     assign_verifier:
       content:
@@ -1347,6 +1470,13 @@ components:
       x-bearerInfoFunc: decode_token_user
       description: Enforces access to endpoints available to all users
 
+    invited:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: decode_token_invited
+      description: Enforces access to endpoints available to invited members
+
     member:
       type: http
       scheme: bearer
@@ -1369,4 +1499,7 @@ components:
       description: Enforces access to endpoints available to org owners
 
 
+
+#security:
+#  - jwt: []
 
