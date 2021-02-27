@@ -13,7 +13,7 @@ info:
      3 := owner
 
 servers:
-  - url: https://api.pollination.live/
+  - url: https://pollination.live/api
 tags:
 
   - name: user.authks
