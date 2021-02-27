@@ -321,21 +321,25 @@ BEGIN
 END; //
 
 
-/** Gets votes with selected choices for questions for a particular election. */
+/** Gets votes of each user for a particular election. */
 CREATE PROCEDURE GetVoteResults(
 	IN election_id INT
 )
-BEGIN
-	SELECT v.vote_id, s.*, c.*, q.question_id, q.description FROM Election el
+BEGIN   
+	SELECT u.first_name, u.last_name, q.description AS `Question Description`, o.description AS `Option Description` FROM Election el
 		INNER JOIN Question q
 			ON el.election_id = q.election_id
-		INNER JOIN Opt c
-			ON c.question_id = c.question_id
-		INNER JOIN Choice s
-			ON s.opt_id = c.opt_id
+		INNER JOIN Opt o
+			ON q.question_id = o.question_id
+		INNER JOIN Choice c
+			ON o.opt_id = c.opt_id
 		INNER JOIN Vote v
-			ON v.vote_id = s.vote_id;
+			ON c.vote_id = v.vote_id
+		INNER JOIN Users u
+			ON v.user_id = u.user_id;
 END; //
+
+
 
 
 /** A combined version of the first three functions,
