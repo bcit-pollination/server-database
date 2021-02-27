@@ -33,6 +33,7 @@ DROP PROCEDURE IF EXISTS CreateElection; /** Tested */
 DROP PROCEDURE IF EXISTS CreateVote;
 DROP PROCEDURE IF EXISTS CreateChoice;
 DROP PROCEDURE IF EXISTS GetVoteResults;
+DROP PROCEDURE IF EXISTS GetIndividualVotes;
 
 DROP PROCEDURE IF EXISTS GetPublicElectionList;
 
@@ -322,11 +323,11 @@ END; //
 
 
 /** Gets votes of each user for a particular election. */
-CREATE PROCEDURE GetVoteResults(
+CREATE PROCEDURE GetIndividualVotes(
 	IN election_id INT
 )
 BEGIN   
-	SELECT u.first_name, u.last_name, q.description AS `Question Description`, o.description AS `Option Description` FROM Election el
+	SELECT u.first_name, u.last_name, q.question_id, q.description AS `Question Description`, o.opt_id, o.description AS `Option Description` FROM Election el
 		INNER JOIN Question q
 			ON el.election_id = q.election_id
 		INNER JOIN Opt o
