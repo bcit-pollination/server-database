@@ -51,6 +51,8 @@ DROP PROCEDURE IF EXISTS AddOpt; /** Tested */
 DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
 DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
 DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
+DROP PROCEDURE IF EXISTS GetPrivilege;
+
 
 DELIMITER //
 
@@ -545,5 +547,19 @@ BEGIN
 	SET description = descr
 	WHERE opt_id = id;
 END; //
+
+/** Gets the privilege_level of a particular user
+ from a particular organization*/
+
+CREATE PROCEDURE GetPrivilege(
+	IN org_id INT,
+	IN user_id INT
+)
+BEGIN
+	SELECT privilege_level FROM Enrollment
+	WHERE org_id = org_id
+	AND user_id = user_id;
+END; //
+
 
 	
