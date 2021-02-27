@@ -41,6 +41,7 @@ DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionQuestions; /** Tested */
 DROP PROCEDURE IF EXISTS GetElection; /** Tested */
+DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS AddQuestion; /** Tested */
 DROP PROCEDURE IF EXISTS DropQuestion; /** Tested */
@@ -399,6 +400,14 @@ CREATE PROCEDURE GetElection(
 BEGIN
 	SELECT * FROM Election
 		WHERE election_id = id;
+END; //
+
+/** Gets all elections if they are open to public. */
+
+CREATE PROCEDURE GetPublicElections()
+BEGIN
+	SELECT * FROM Election
+    WHERE is_public = TRUE;
 END; //
 
 
