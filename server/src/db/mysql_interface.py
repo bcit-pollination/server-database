@@ -138,3 +138,6 @@ def get_election(election_id):
 def get_org_elections(org_id):
     return call_proc(PROCEDURE.GETELECTIONLISTORG, (org_id,), resp_many=True)
 
+
+def get_privilege(org_id, user_id):
+    return call_proc(PROCEDURE.GETPRIVILEGE, (org_id, user_id))
