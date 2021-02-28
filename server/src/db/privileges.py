@@ -3,7 +3,7 @@ class PRIVILEGE:
     """
     Privilege levels for a user
     """
-    INVITEE = 'INVITEE'
-    USER = 'USER'
-    ADMIN = 'ADMIN'
-    OWNER = 'OWNER'
+    INVITEE = 0
+    USER    = 1
+    ADMIN   = 2
+    OWNER   = 3

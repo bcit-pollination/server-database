@@ -24,8 +24,8 @@ class PROCEDURE:
     UPDATEPRIVILEGE           = 'UpdatePrivilege'           # user_id, org_id, privilege_level
     INVITEUSER                = 'InviteUser'                # user_id, org_id
     CREATEELECTION            = 'CreateElection'            # org_id, description, start_time, end_time, status, is_public, is_anonymous
-    UpdateElection            = 'UpdateElection'            # election_id, description, start_time, end_time, status, is_public, is_anonymous, questions
-    DeleteElection            = 'DeleteElection'            # election_id
+    UPDATEELECTION            = 'UpdateElection'            # election_id, description, start_time, end_time, status, is_public, is_anonymous, questions
+    DELETEELECTION            = 'DeleteElection'            # election_id
     GETELECTION               = 'GetElection'               # election_id
     GETELECTIONLISTORG        = 'GetElectionListOrg'        # org_id
     GETELECTIONLISTUSER       = 'GetElectionListUser'       # user_id
