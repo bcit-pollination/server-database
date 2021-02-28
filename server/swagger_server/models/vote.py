@@ -132,6 +132,8 @@ class Vote(Model):
         :param voting_token: The voting_token of this Vote.
         :type voting_token: str
         """
+        if voting_token is None:
+            raise ValueError("Invalid value for `voting_token`, must not be `None`")  # noqa: E501
 
         self._voting_token = voting_token
 
@@ -155,6 +157,8 @@ class Vote(Model):
         :param choices: The choices of this Vote.
         :type choices: List[Choice]
         """
+        if choices is None:
+            raise ValueError("Invalid value for `choices`, must not be `None`")  # noqa: E501
 
         self._choices = choices
 
@@ -178,6 +182,8 @@ class Vote(Model):
         :param time_stamp: The time_stamp of this Vote.
         :type time_stamp: datetime
         """
+        if time_stamp is None:
+            raise ValueError("Invalid value for `time_stamp`, must not be `None`")  # noqa: E501
 
         self._time_stamp = time_stamp
 

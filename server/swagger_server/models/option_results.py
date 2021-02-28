@@ -69,6 +69,8 @@ class OptionResults(Model):
         :param option: The option of this OptionResults.
         :type option: Option
         """
+        if option is None:
+            raise ValueError("Invalid value for `option`, must not be `None`")  # noqa: E501
 
         self._option = option
 
@@ -92,6 +94,8 @@ class OptionResults(Model):
         :param total_votes_for: The total_votes_for of this OptionResults.
         :type total_votes_for: float
         """
+        if total_votes_for is None:
+            raise ValueError("Invalid value for `total_votes_for`, must not be `None`")  # noqa: E501
 
         self._total_votes_for = total_votes_for
 
@@ -115,5 +119,7 @@ class OptionResults(Model):
         :param vote_proportion_percent: The vote_proportion_percent of this OptionResults.
         :type vote_proportion_percent: float
         """
+        if vote_proportion_percent is None:
+            raise ValueError("Invalid value for `vote_proportion_percent`, must not be `None`")  # noqa: E501
 
         self._vote_proportion_percent = vote_proportion_percent

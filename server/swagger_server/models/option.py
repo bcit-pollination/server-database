@@ -14,25 +14,25 @@ class Option(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, option_id: int=None, option_text: str=None):  # noqa: E501
+    def __init__(self, option_id: int=None, option_description: str=None):  # noqa: E501
         """Option - a model defined in Swagger
 
         :param option_id: The option_id of this Option.  # noqa: E501
         :type option_id: int
-        :param option_text: The option_text of this Option.  # noqa: E501
-        :type option_text: str
+        :param option_description: The option_description of this Option.  # noqa: E501
+        :type option_description: str
         """
         self.swagger_types = {
             'option_id': int,
-            'option_text': str
+            'option_description': str
         }
 
         self.attribute_map = {
             'option_id': 'option_id',
-            'option_text': 'option_text'
+            'option_description': 'option_description'
         }
         self._option_id = option_id
-        self._option_text = option_text
+        self._option_description = option_description
 
     @classmethod
     def from_dict(cls, dikt) -> 'Option':
@@ -67,24 +67,26 @@ class Option(Model):
         self._option_id = option_id
 
     @property
-    def option_text(self) -> str:
-        """Gets the option_text of this Option.
+    def option_description(self) -> str:
+        """Gets the option_description of this Option.
 
         The text describing a posible selection to be made  # noqa: E501
 
-        :return: The option_text of this Option.
+        :return: The option_description of this Option.
         :rtype: str
         """
-        return self._option_text
+        return self._option_description
 
-    @option_text.setter
-    def option_text(self, option_text: str):
-        """Sets the option_text of this Option.
+    @option_description.setter
+    def option_description(self, option_description: str):
+        """Sets the option_description of this Option.
 
         The text describing a posible selection to be made  # noqa: E501
 
-        :param option_text: The option_text of this Option.
-        :type option_text: str
+        :param option_description: The option_description of this Option.
+        :type option_description: str
         """
+        if option_description is None:
+            raise ValueError("Invalid value for `option_description`, must not be `None`")  # noqa: E501
 
-        self._option_text = option_text
+        self._option_description = option_description

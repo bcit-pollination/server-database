@@ -7,7 +7,7 @@ from swagger_server.models.voting_token import VotingToken  # noqa: E501
 from swagger_server import util
 
 
-def app_create_user(body=None):  # noqa: E501
+def app_create_user(body):  # noqa: E501
     """Create user
 
      # noqa: E501

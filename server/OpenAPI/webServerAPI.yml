@@ -667,11 +667,11 @@ components:
     voting_user:
       type: object
       description: Describes the information needed for a user to vote
-      required:
-        - user_org_id
       allOf:
         - $ref: "#/components/schemas/voting_token"
         - type: object
+          required:
+            - user_org_id
           properties:
             user_org_id:
               type: string
@@ -795,12 +795,13 @@ components:
     org_user:
       type: object
       description: A user that belongs to an org
-      required:
-        - privilege
-        - user_org_id
+
       allOf:
         - $ref: "#/components/schemas/user"
         - type: object
+          required:
+            - privilege
+            - user_org_id
           properties:
             privilege:
               type: integer
@@ -955,12 +956,12 @@ components:
         The results of an election.
 
         Organization property is optional is provided for public requests purposes
-      required:
-        - org_info
-        - election_info
       allOf:
         - $ref: "#/components/schemas/private_election_results"
         - type: object
+          required:
+            - org_info
+            - election_info
           properties:
               org_info:
                 $ref: "#/components/schemas/org"

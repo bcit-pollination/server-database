@@ -15,9 +15,11 @@ class Question(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
+    def __init__(self, question_description: str=None, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
         """Question - a model defined in Swagger
 
+        :param question_description: The question_description of this Question.  # noqa: E501
+        :type question_description: str
         :param election_id: The election_id of this Question.  # noqa: E501
         :type election_id: int
         :param max_selection_count: The max_selection_count of this Question.  # noqa: E501
@@ -26,16 +28,19 @@ class Question(Model):
         :type options: List[Option]
         """
         self.swagger_types = {
+            'question_description': str,
             'election_id': int,
             'max_selection_count': int,
             'options': List[Option]
         }
 
         self.attribute_map = {
+            'question_description': 'question_description',
             'election_id': 'election_id',
             'max_selection_count': 'max_selection_count',
             'options': 'options'
         }
+        self._question_description = question_description
         self._election_id = election_id
         self._max_selection_count = max_selection_count
         self._options = options
@@ -50,6 +55,31 @@ class Question(Model):
         :rtype: Question
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def question_description(self) -> str:
+        """Gets the question_description of this Question.
+
+        The text of the question posed  # noqa: E501
+
+        :return: The question_description of this Question.
+        :rtype: str
+        """
+        return self._question_description
+
+    @question_description.setter
+    def question_description(self, question_description: str):
+        """Sets the question_description of this Question.
+
+        The text of the question posed  # noqa: E501
+
+        :param question_description: The question_description of this Question.
+        :type question_description: str
+        """
+        if question_description is None:
+            raise ValueError("Invalid value for `question_description`, must not be `None`")  # noqa: E501
+
+        self._question_description = question_description
 
     @property
     def election_id(self) -> int:
@@ -94,6 +124,8 @@ class Question(Model):
         :param max_selection_count: The max_selection_count of this Question.
         :type max_selection_count: int
         """
+        if max_selection_count is None:
+            raise ValueError("Invalid value for `max_selection_count`, must not be `None`")  # noqa: E501
 
         self._max_selection_count = max_selection_count
 

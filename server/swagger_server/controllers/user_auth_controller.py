@@ -5,7 +5,7 @@ from swagger_server.models.inline_response200 import InlineResponse200  # noqa: 
 from swagger_server import util
 
 
-def login(body=None):  # noqa: E501
+def login(body):  # noqa: E501
     """Login user
 
      # noqa: E501

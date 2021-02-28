@@ -8,7 +8,7 @@ from swagger_server.models.verifier_password import VerifierPassword  # noqa: E5
 from swagger_server import util
 
 
-def create_org(body=None):  # noqa: E501
+def create_org(body):  # noqa: E501
     """Create org
 
      # noqa: E501
@@ -58,7 +58,7 @@ def get_org_list():  # noqa: E501
     return 'do some magic!'
 
 
-def get_verifier_password(body=None):  # noqa: E501
+def get_verifier_password(body):  # noqa: E501
     """Get password used by ID verifiers to login into voting machine
 
      # noqa: E501
@@ -73,7 +73,7 @@ def get_verifier_password(body=None):  # noqa: E501
     return 'do some magic!'
 
 
-def update_org(body=None):  # noqa: E501
+def update_org(body):  # noqa: E501
     """Update org info
 
      # noqa: E501
