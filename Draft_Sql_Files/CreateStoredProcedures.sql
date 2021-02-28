@@ -25,7 +25,7 @@ DROP PROCEDURE IF EXISTS DeleteLocation;
 
 DROP PROCEDURE IF EXISTS GetElectionListOrg; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionListUser;
-DROP PROCEDURE IF EXISTS GetElection;
+DROP PROCEDURE IF EXISTS GetElection; /** Tested */
 DROP PROCEDURE IF EXISTS UpdateElection; /** Tested*/
 DROP PROCEDURE IF EXISTS DeleteElection; /** Tested*/
 DROP PROCEDURE IF EXISTS CreateElection; /** Tested */
@@ -41,7 +41,6 @@ DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DROP PROCEDURE IF EXISTS GetQuestionOpt; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionQuestions; /** Tested */
-DROP PROCEDURE IF EXISTS GetElection; /** Tested */
 DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS AddQuestion; /** Tested */
@@ -51,7 +50,6 @@ DROP PROCEDURE IF EXISTS UpdateQuestion; /** Tested*/
 DROP PROCEDURE IF EXISTS AddOpt; /** Tested */
 DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
 DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
-DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
 
 DELIMITER //
 
@@ -363,7 +361,7 @@ END; //
 /** Gets all the potential answers to questions specified in
 	param.*/
 	
-CREATE PROCEDURE GetQuestionChoice(
+CREATE PROCEDURE GetQuestionOpt(
 	IN id INT
 )
 BEGIN
@@ -377,7 +375,7 @@ CREATE PROCEDURE GetElectionQuestions(
 	IN id INT
 	)
 BEGIN
-	SELECT q.question_id, q.election_id, q.description, q.choice_limit, q.is_required FROM Question q
+	SELECT q.* FROM Question q
 		INNER JOIN Election el
 		ON el.election_id = q.election_id
 		WHERE q.election_id = id;
@@ -465,14 +463,13 @@ END; //
 /** Adds question to election. */
 
 CREATE PROCEDURE AddQuestion(
-	IN el_id INT,
-	IN descr VARCHAR(40),
-	IN sel INT,
-	IN req TINYINT(1)
+	IN election_id INT,
+	IN description VARCHAR(40),
+	IN choice_limit INT,
 )
 BEGIN
-	INSERT INTO Question (election_id, description, choice_limit, is_required)
-		VALUES (el_id, descr, sel, req);
+	INSERT INTO Question (election_id, description, choice_limit)
+		VALUES (election_id, description, choice_limit);
 END; //
 
 /** Drops Question from an election. */
@@ -489,19 +486,13 @@ END; //
 
 CREATE PROCEDURE UpdateQuestion(
 	IN id INT,
-	IN description VARCHAR(40),
-	IN is_required TINYINT(1)
+	IN description VARCHAR(40)
 )
 BEGIN
 
 	UPDATE Question
 		SET description = description
 		WHERE question_id = id;
-		
-	UPDATE Question
-		SET is_required = is_required
-		WHERE question_id = id;
-	
 END; //
 
 /** Adds a choice to a question. */
