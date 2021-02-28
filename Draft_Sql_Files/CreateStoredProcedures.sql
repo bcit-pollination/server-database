@@ -244,8 +244,9 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN,
-	IN is_public BOOLEAN)
+	IN is_anonymous BOOLEAN,
+	IN is_public BOOLEAN,
+    IN verified BOOLEAN)
 BEGIN
 	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous, is_public)
     VALUES(org_id, description, start_time, end_time, is_anonymous, is_public);
@@ -429,11 +430,11 @@ END; //
 CREATE PROCEDURE UpdateElection(
 	IN id INT,
 	IN description VARCHAR(40),
-	IN verified BOOLEAN,
 	IN start_time TIMESTAMP,
 	IN end_time TIMESTAMP,
 	IN is_anonymous BOOLEAN,
-	IN is_public BOOLEAN
+	IN is_public BOOLEAN,
+    IN verified BOOLEAN
 	)
 BEGIN
 	UPDATE Election
