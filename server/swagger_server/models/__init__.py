@@ -18,7 +18,6 @@ from swagger_server.models.inline_response2007 import InlineResponse2007
 from swagger_server.models.inline_response2008 import InlineResponse2008
 from swagger_server.models.inline_response2009 import InlineResponse2009
 from swagger_server.models.inline_response404 import InlineResponse404
-from swagger_server.models.location import Location
 from swagger_server.models.option import Option
 from swagger_server.models.option_results import OptionResults
 from swagger_server.models.org import Org

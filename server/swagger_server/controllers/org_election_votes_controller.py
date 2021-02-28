@@ -4,7 +4,7 @@ import six
 from swagger_server import util
 
 
-def upload_election_votes(body=None):  # noqa: E501
+def upload_election_votes(body):  # noqa: E501
     """Create/Update election results
 
     Create/Update election results. Each call will add a new versioned entry for security purposes.  # noqa: E501

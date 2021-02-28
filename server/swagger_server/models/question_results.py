@@ -61,5 +61,7 @@ class QuestionResults(Model):
         :param options_posed: The options_posed of this QuestionResults.
         :type options_posed: List[OptionResults]
         """
+        if options_posed is None:
+            raise ValueError("Invalid value for `options_posed`, must not be `None`")  # noqa: E501
 
         self._options_posed = options_posed

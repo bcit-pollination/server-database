@@ -8,7 +8,7 @@ from swagger_server.models.inline_response2008 import InlineResponse2008  # noqa
 from swagger_server import util
 
 
-def create_election(body=None):  # noqa: E501
+def create_election(body):  # noqa: E501
     """Create election
 
     Create election # noqa: E501
@@ -62,7 +62,7 @@ def get_election_list(org_id):  # noqa: E501
     return 'do some magic!'
 
 
-def update_election(body=None):  # noqa: E501
+def update_election(body):  # noqa: E501
     """update election
 
     Update election. Elections can only be updated before they have commenced.  # noqa: E501

@@ -64,6 +64,8 @@ class VotingUser(Model):
         :param voting_token: The voting_token of this VotingUser.
         :type voting_token: str
         """
+        if voting_token is None:
+            raise ValueError("Invalid value for `voting_token`, must not be `None`")  # noqa: E501
 
         self._voting_token = voting_token
 
@@ -87,5 +89,7 @@ class VotingUser(Model):
         :param user_org_id: The user_org_id of this VotingUser.
         :type user_org_id: str
         """
+        if user_org_id is None:
+            raise ValueError("Invalid value for `user_org_id`, must not be `None`")  # noqa: E501
 
         self._user_org_id = user_org_id
