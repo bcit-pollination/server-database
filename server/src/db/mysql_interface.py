@@ -74,3 +74,43 @@ def get_organization_users(org_id):
 
 def get_user_elections_alternate(user_id):
     return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user_id,), resp_many=True)
+
+
+def update_user(user: User):
+    return call_proc(PROCEDURE.UPDATEUSER, (user.id, user.first_name, user.last_name, user.email, user.password))
+
+
+def deactivate_user(user: User):
+    return call_proc(PROCEDURE.DEACTIVATEUSER, (user.id,))
+
+
+def get_user_token(user: User):
+    return call_proc(PROCEDURE.GETUSERTOKEN, (user.id,))
+
+
+def get_organizations(user: User):
+    return call_proc(PROCEDURE.GETORGANIZATIONS, (user.id,), resp_many=True)
+
+
+def get_arganization(org: Org):
+    return call_proc(PROCEDURE.GETORGANIZATION, (org.id,))
+
+
+def get_user_elections_alternate(user: User):
+    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+
+
+def get_user_elections_alternate(user: User):
+    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+
+
+def get_user_elections_alternate(user: User):
+    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+
+
+def get_user_elections_alternate(user: User):
+    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+
+
+def get_user_elections_alternate(user: User):
+    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)

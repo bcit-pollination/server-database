@@ -11,7 +11,7 @@ class PROCEDURE:
     GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
     GETUSERELECTIONS          = 'GetUserElections'          # user_id
     GETORGANIZATIONUSERS      = 'GetOrganizationUsers'      # org_id
-    GETUSERELECTIONSALTERNATE = 'GeUserElectionsAlternate'  # user_id
+    GETUSERELECTIONSALTERNATE = 'GetUserElectionsAlternate' # user_id
     UPDATEUSER                = 'UpdateUser'                # user_id, first_name, last_name, email, password
     DEACTIVATEUSER            = 'DeactivateUser'            # user_id
     GETUSERTOKEN              = 'GetUserToken'              # user_id
