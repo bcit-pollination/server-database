@@ -468,7 +468,7 @@ END; //
 CREATE PROCEDURE AddQuestion(
 	IN election_id INT,
 	IN description VARCHAR(40),
-	IN choice_limit INT,
+	IN choice_limit INT
 )
 BEGIN
 	INSERT INTO Question (election_id, description, choice_limit)
