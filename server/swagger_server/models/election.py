@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.ballot import Ballot  # noqa: F401,E501
+from swagger_server.models.question import Question  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,9 +15,11 @@ class Election(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_id: int=None, org_id: int=None, start_time: datetime=None, end_time: datetime=None, anonymous: bool=None, verified: bool=None, public_results: bool=None, ballot: Ballot=None):  # noqa: E501
+    def __init__(self, election_description: str=None, election_id: int=None, org_id: int=None, start_time: datetime=None, end_time: datetime=None, anonymous: bool=None, verified: bool=None, public_results: bool=None, questions: List[Question]=None):  # noqa: E501
         """Election - a model defined in Swagger
 
+        :param election_description: The election_description of this Election.  # noqa: E501
+        :type election_description: str
         :param election_id: The election_id of this Election.  # noqa: E501
         :type election_id: int
         :param org_id: The org_id of this Election.  # noqa: E501
@@ -32,10 +34,11 @@ class Election(Model):
         :type verified: bool
         :param public_results: The public_results of this Election.  # noqa: E501
         :type public_results: bool
-        :param ballot: The ballot of this Election.  # noqa: E501
-        :type ballot: Ballot
+        :param questions: The questions of this Election.  # noqa: E501
+        :type questions: List[Question]
         """
         self.swagger_types = {
+            'election_description': str,
             'election_id': int,
             'org_id': int,
             'start_time': datetime,
@@ -43,10 +46,11 @@ class Election(Model):
             'anonymous': bool,
             'verified': bool,
             'public_results': bool,
-            'ballot': Ballot
+            'questions': List[Question]
         }
 
         self.attribute_map = {
+            'election_description': 'election_description',
             'election_id': 'election_id',
             'org_id': 'org_id',
             'start_time': 'start_time',
@@ -54,8 +58,9 @@ class Election(Model):
             'anonymous': 'anonymous',
             'verified': 'verified',
             'public_results': 'public_results',
-            'ballot': 'ballot'
+            'questions': 'questions'
         }
+        self._election_description = election_description
         self._election_id = election_id
         self._org_id = org_id
         self._start_time = start_time
@@ -63,7 +68,7 @@ class Election(Model):
         self._anonymous = anonymous
         self._verified = verified
         self._public_results = public_results
-        self._ballot = ballot
+        self._questions = questions
 
     @classmethod
     def from_dict(cls, dikt) -> 'Election':
@@ -75,6 +80,31 @@ class Election(Model):
         :rtype: Election
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def election_description(self) -> str:
+        """Gets the election_description of this Election.
+
+        A text describing the purpose of the election  # noqa: E501
+
+        :return: The election_description of this Election.
+        :rtype: str
+        """
+        return self._election_description
+
+    @election_description.setter
+    def election_description(self, election_description: str):
+        """Sets the election_description of this Election.
+
+        A text describing the purpose of the election  # noqa: E501
+
+        :param election_description: The election_description of this Election.
+        :type election_description: str
+        """
+        if election_description is None:
+            raise ValueError("Invalid value for `election_description`, must not be `None`")  # noqa: E501
+
+        self._election_description = election_description
 
     @property
     def election_id(self) -> int:
@@ -117,6 +147,8 @@ class Election(Model):
         :param org_id: The org_id of this Election.
         :type org_id: int
         """
+        if org_id is None:
+            raise ValueError("Invalid value for `org_id`, must not be `None`")  # noqa: E501
 
         self._org_id = org_id
 
@@ -140,6 +172,8 @@ class Election(Model):
         :param start_time: The start_time of this Election.
         :type start_time: datetime
         """
+        if start_time is None:
+            raise ValueError("Invalid value for `start_time`, must not be `None`")  # noqa: E501
 
         self._start_time = start_time
 
@@ -163,6 +197,8 @@ class Election(Model):
         :param end_time: The end_time of this Election.
         :type end_time: datetime
         """
+        if end_time is None:
+            raise ValueError("Invalid value for `end_time`, must not be `None`")  # noqa: E501
 
         self._end_time = end_time
 
@@ -186,6 +222,8 @@ class Election(Model):
         :param anonymous: The anonymous of this Election.
         :type anonymous: bool
         """
+        if anonymous is None:
+            raise ValueError("Invalid value for `anonymous`, must not be `None`")  # noqa: E501
 
         self._anonymous = anonymous
 
@@ -209,6 +247,8 @@ class Election(Model):
         :param verified: The verified of this Election.
         :type verified: bool
         """
+        if verified is None:
+            raise ValueError("Invalid value for `verified`, must not be `None`")  # noqa: E501
 
         self._verified = verified
 
@@ -232,26 +272,30 @@ class Election(Model):
         :param public_results: The public_results of this Election.
         :type public_results: bool
         """
+        if public_results is None:
+            raise ValueError("Invalid value for `public_results`, must not be `None`")  # noqa: E501
 
         self._public_results = public_results
 
     @property
-    def ballot(self) -> Ballot:
-        """Gets the ballot of this Election.
+    def questions(self) -> List[Question]:
+        """Gets the questions of this Election.
 
 
-        :return: The ballot of this Election.
-        :rtype: Ballot
+        :return: The questions of this Election.
+        :rtype: List[Question]
         """
-        return self._ballot
+        return self._questions
 
-    @ballot.setter
-    def ballot(self, ballot: Ballot):
-        """Sets the ballot of this Election.
+    @questions.setter
+    def questions(self, questions: List[Question]):
+        """Sets the questions of this Election.
 
 
-        :param ballot: The ballot of this Election.
-        :type ballot: Ballot
+        :param questions: The questions of this Election.
+        :type questions: List[Question]
         """
+        if questions is None:
+            raise ValueError("Invalid value for `questions`, must not be `None`")  # noqa: E501
 
-        self._ballot = ballot
+        self._questions = questions

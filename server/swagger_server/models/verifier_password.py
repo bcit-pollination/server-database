@@ -58,5 +58,7 @@ class VerifierPassword(Model):
         :param verifier_password: The verifier_password of this VerifierPassword.
         :type verifier_password: str
         """
+        if verifier_password is None:
+            raise ValueError("Invalid value for `verifier_password`, must not be `None`")  # noqa: E501
 
         self._verifier_password = verifier_password

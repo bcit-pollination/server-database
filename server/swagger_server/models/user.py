@@ -99,6 +99,8 @@ class User(Model):
         :param first_name: The first_name of this User.
         :type first_name: str
         """
+        if first_name is None:
+            raise ValueError("Invalid value for `first_name`, must not be `None`")  # noqa: E501
 
         self._first_name = first_name
 
@@ -120,6 +122,8 @@ class User(Model):
         :param last_name: The last_name of this User.
         :type last_name: str
         """
+        if last_name is None:
+            raise ValueError("Invalid value for `last_name`, must not be `None`")  # noqa: E501
 
         self._last_name = last_name
 
@@ -141,6 +145,8 @@ class User(Model):
         :param email: The email of this User.
         :type email: str
         """
+        if email is None:
+            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
 
@@ -162,5 +168,7 @@ class User(Model):
         :param dob: The dob of this User.
         :type dob: date
         """
+        if dob is None:
+            raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501
 
         self._dob = dob

@@ -3,7 +3,6 @@
 # flake8: noqa
 from __future__ import absolute_import
 # import models into model package
-from swagger_server.models.ballot import Ballot
 from swagger_server.models.choice import Choice
 from swagger_server.models.election import Election
 from swagger_server.models.election_results import ElectionResults
@@ -19,7 +18,6 @@ from swagger_server.models.inline_response2007 import InlineResponse2007
 from swagger_server.models.inline_response2008 import InlineResponse2008
 from swagger_server.models.inline_response2009 import InlineResponse2009
 from swagger_server.models.inline_response404 import InlineResponse404
-from swagger_server.models.location import Location
 from swagger_server.models.option import Option
 from swagger_server.models.option_results import OptionResults
 from swagger_server.models.org import Org

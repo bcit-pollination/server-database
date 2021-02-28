@@ -58,5 +58,7 @@ class VotingToken(Model):
         :param voting_token: The voting_token of this VotingToken.
         :type voting_token: str
         """
+        if voting_token is None:
+            raise ValueError("Invalid value for `voting_token`, must not be `None`")  # noqa: E501
 
         self._voting_token = voting_token

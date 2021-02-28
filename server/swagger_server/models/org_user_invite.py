@@ -63,6 +63,8 @@ class OrgUserInvite(Model):
         :param email: The email of this OrgUserInvite.
         :type email: str
         """
+        if email is None:
+            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
 
@@ -86,5 +88,7 @@ class OrgUserInvite(Model):
         :param user_org_id: The user_org_id of this OrgUserInvite.
         :type user_org_id: str
         """
+        if user_org_id is None:
+            raise ValueError("Invalid value for `user_org_id`, must not be `None`")  # noqa: E501
 
         self._user_org_id = user_org_id

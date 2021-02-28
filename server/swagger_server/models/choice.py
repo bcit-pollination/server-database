@@ -65,6 +65,8 @@ class Choice(Model):
         :param question_id: The question_id of this Choice.
         :type question_id: int
         """
+        if question_id is None:
+            raise ValueError("Invalid value for `question_id`, must not be `None`")  # noqa: E501
 
         self._question_id = question_id
 
@@ -88,5 +90,7 @@ class Choice(Model):
         :param option_id: The option_id of this Choice.
         :type option_id: int
         """
+        if option_id is None:
+            raise ValueError("Invalid value for `option_id`, must not be `None`")  # noqa: E501
 
         self._option_id = option_id

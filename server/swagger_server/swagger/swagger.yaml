@@ -9,7 +9,7 @@ info:
      1 := member<br>
      2 := admin<br>
      3 := owner
-  version: "1.00"
+  version: "1.10"
 servers:
 - url: https://pollination.live/api
 tags:
@@ -706,25 +706,12 @@ paths:
       x-openapi-router-controller: swagger_server.controllers.org_election_download_controller
 components:
   schemas:
-    location:
-      type: object
-      properties:
-        id:
-          type: integer
-        streetAddress:
-          type: string
-          description: building number followed by street name
-        city:
-          type: string
-        postal_code:
-          type: string
-        province:
-          type: string
-        country:
-          type: string
-      additionalProperties: false
-      description: A voting location. Multiple stations can be assigned to one location
     user:
+      required:
+      - dob
+      - email
+      - first_name
+      - last_name
       type: object
       properties:
         id:
@@ -748,6 +735,8 @@ components:
         first_name: first_name
         email: email
     voting_token:
+      required:
+      - voting_token
       type: object
       properties:
         voting_token:
@@ -759,15 +748,18 @@ components:
       type: object
       description: Describes the information needed for a user to vote
       allOf:
-      - $ref: '#/components/schemas/user'
       - $ref: '#/components/schemas/voting_token'
-      - type: object
+      - required:
+        - user_org_id
+        type: object
         properties:
           user_org_id:
             type: string
             description: The ID of the user within the organization (School id, Driver
               License, etc...)
     org:
+      required:
+      - name
       type: object
       properties:
         id:
@@ -783,6 +775,8 @@ components:
         name: name
         id: 6
     verifier_password:
+      required:
+      - verifier_password
       type: object
       properties:
         verifier_password:
@@ -791,6 +785,9 @@ components:
       example:
         verifier_password: verifier_password
     org_user_invite:
+      required:
+      - email
+      - user_org_id
       type: object
       properties:
         email:
@@ -801,8 +798,20 @@ components:
           description: The id of the user within the organization
       description: The info needed to invite a user
     election:
+      required:
+      - anonymous
+      - election_description
+      - end_time
+      - org_id
+      - public_results
+      - questions
+      - start_time
+      - verified
       type: object
       properties:
+        election_description:
+          type: string
+          description: A text describing the purpose of the election
         election_id:
           type: integer
         org_id:
@@ -828,8 +837,10 @@ components:
           type: boolean
           description: Whether the results of the election are open to the general
             public, or just within the org
-        ballot:
-          $ref: '#/components/schemas/ballot'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/question'
       additionalProperties: false
       description: |
         Models an election.
@@ -839,30 +850,36 @@ components:
 
         Times must be provided in UTC.
       example:
-        ballot:
-          questions:
-          - election_id: 1
-            options:
-            - option_text: option_text
-              option_id: 5
-            - option_text: option_text
-              option_id: 5
-            max_selection_count: 5
-          - election_id: 1
-            options:
-            - option_text: option_text
-              option_id: 5
-            - option_text: option_text
-              option_id: 5
-            max_selection_count: 5
         start_time: 2000-01-23T04:56:07.000+00:00
         org_id: 6
         election_id: 0
         end_time: 2000-01-23T04:56:07.000+00:00
         verified: true
         public_results: true
+        questions:
+        - question_description: question_description
+          election_id: 1
+          options:
+          - option_description: option_description
+            option_id: 5
+          - option_description: option_description
+            option_id: 5
+          max_selection_count: 5
+        - question_description: question_description
+          election_id: 1
+          options:
+          - option_description: option_description
+            option_id: 5
+          - option_description: option_description
+            option_id: 5
+          max_selection_count: 5
         anonymous: true
+        election_description: election_description
     user_org:
+      required:
+      - org
+      - privilege
+      - user_org_id
       type: object
       properties:
         privilege:
@@ -886,7 +903,10 @@ components:
       description: A user that belongs to an org
       allOf:
       - $ref: '#/components/schemas/user'
-      - type: object
+      - required:
+        - privilege
+        - user_org_id
+        type: object
         properties:
           privilege:
             type: integer
@@ -896,20 +916,28 @@ components:
             description: The ID used by the user to identify himself within the org(Driver
               License, Passport, etc...)
     option:
+      required:
+      - option_description
       type: object
       properties:
         option_id:
           type: integer
-        option_text:
+        option_description:
           type: string
           description: The text describing a posible selection to be made
       description: An option given for a question
       example:
-        option_text: option_text
+        option_description: option_description
         option_id: 5
     question:
+      required:
+      - max_selection_count
+      - question_description
       type: object
       properties:
+        question_description:
+          type: string
+          description: The text of the question posed
         election_id:
           type: integer
           description: The id of the parent election
@@ -924,38 +952,18 @@ components:
             $ref: '#/components/schemas/option'
       description: An election question
       example:
+        question_description: question_description
         election_id: 1
         options:
-        - option_text: option_text
+        - option_description: option_description
           option_id: 5
-        - option_text: option_text
+        - option_description: option_description
           option_id: 5
         max_selection_count: 5
-    ballot:
-      type: object
-      properties:
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/question'
-      description: The compilation of question presented in an election
-      example:
-        questions:
-        - election_id: 1
-          options:
-          - option_text: option_text
-            option_id: 5
-          - option_text: option_text
-            option_id: 5
-          max_selection_count: 5
-        - election_id: 1
-          options:
-          - option_text: option_text
-            option_id: 5
-          - option_text: option_text
-            option_id: 5
-          max_selection_count: 5
     choice:
+      required:
+      - option_id
+      - question_id
       type: object
       properties:
         question_id:
@@ -966,6 +974,10 @@ components:
           description: The id of the option chosen by the user
       description: A vote choice
     vote:
+      required:
+      - choices
+      - time_stamp
+      - voting_token
       type: object
       properties:
         voter_first_name:
@@ -993,6 +1005,10 @@ components:
         A vote cast.
         If the election is anonymous, first_name and last_name will be null. Else, they are required.
     option_results:
+      required:
+      - option
+      - total_votes_for
+      - vote_proportion_percent
       type: object
       properties:
         option:
@@ -1005,6 +1021,8 @@ components:
           description: The voting proportion for this option, in percents. A float
       description: The voting result for this option
     question_results:
+      required:
+      - options_posed
       type: object
       properties:
         options_posed:
@@ -1014,6 +1032,8 @@ components:
             $ref: '#/components/schemas/option_results'
       description: The voting results for this question
     private_election_results:
+      required:
+      - question_results
       type: object
       properties:
         question_results:
@@ -1037,7 +1057,10 @@ components:
         Organization property is optional is provided for public requests purposes
       allOf:
       - $ref: '#/components/schemas/private_election_results'
-      - type: object
+      - required:
+        - election_info
+        - org_info
+        type: object
         properties:
           org_info:
             $ref: '#/components/schemas/org'
@@ -1139,52 +1162,56 @@ components:
       additionalProperties: false
       example:
         elections:
-        - ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-          start_time: 2000-01-23T04:56:07.000+00:00
+        - start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
-        - ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-          start_time: 2000-01-23T04:56:07.000+00:00
+          election_description: election_description
+        - start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
+          election_description: election_description
     inline_response_200_7:
       type: object
       properties:
@@ -1193,29 +1220,31 @@ components:
       additionalProperties: false
       example:
         election:
-          ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
           start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
+          election_description: election_description
     inline_response_200_8:
       type: object
       properties:
@@ -1259,29 +1288,31 @@ components:
       example:
         verifier_password: verifier_password
         election_info:
-          ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
           start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
+          - question_description: question_description
+            election_id: 1
+            options:
+            - option_description: option_description
+              option_id: 5
+            - option_description: option_description
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
+          election_description: election_description
         voter_list:
         - ""
         - ""
@@ -1356,18 +1387,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/verifier_password'
-    verifiers:
-      description: All the id verifiers for a given org
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              verifiers:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user'
-            additionalProperties: false
     election_results:
       description: The result of an election
       content:
@@ -1420,6 +1439,9 @@ components:
       content:
         application/json:
           schema:
+            required:
+            - email
+            - password
             type: object
             properties:
               email:
@@ -1427,11 +1449,18 @@ components:
               password:
                 type: string
             additionalProperties: false
+      required: true
     new_user:
       description: New user info to be added.
       content:
         application/json:
           schema:
+            required:
+            - dob
+            - email
+            - first_name
+            - last_name
+            - password
             type: object
             properties:
               first_name:
@@ -1446,15 +1475,20 @@ components:
               password:
                 type: string
             additionalProperties: false
+      required: true
     user:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/user'
+      required: true
     org_user:
       content:
         application/json:
           schema:
+            required:
+            - org_id
+            - uid
             type: object
             properties:
               org_id:
@@ -1464,11 +1498,15 @@ components:
                 type: integer
                 description: The id of the user to add
             additionalProperties: false
+      required: true
     org_user_invite:
       description: A list of info for users to be invited
       content:
         application/json:
           schema:
+            required:
+            - invites
+            - org_id
             type: object
             properties:
               org_id:
@@ -1479,21 +1517,29 @@ components:
                 items:
                   $ref: '#/components/schemas/org_user_invite'
             additionalProperties: false
+      required: true
     get_org:
       content:
         application/json:
           schema:
+            required:
+            - org_id
             type: object
             properties:
               org_id:
                 type: integer
                 description: The id of the org to get
             additionalProperties: false
+      required: true
     post_org:
       description: Org id is optional
       content:
         application/json:
           schema:
+            required:
+            - org_info
+            - user_org_id
+            - verifier_password
             type: object
             properties:
               org_info:
@@ -1506,16 +1552,21 @@ components:
                 type: string
                 description: The Password used by id verifiers to log in to RPI
             additionalProperties: false
+      required: true
     org:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/org'
+      required: true
     kick_user:
       description: Information about user to be kicked
       content:
         application/json:
           schema:
+            required:
+            - orgId
+            - uid
             type: object
             properties:
               uid:
@@ -1525,11 +1576,16 @@ components:
                 type: integer
                 description: The id of the org in which to change the privileges
             additionalProperties: false
+      required: true
     change_user_privileges:
       description: Information about the user to have the privileges changed
       content:
         application/json:
           schema:
+            required:
+            - newPrivileges
+            - orgId
+            - uid
             type: object
             properties:
               uid:
@@ -1542,29 +1598,20 @@ components:
                 type: integer
                 description: The id of the org in which to change the privileges
             additionalProperties: false
-    assign_verifier:
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              locationId:
-                type: integer
-                description: The id of the location to assign the verifier
-              uid:
-                type: integer
-                description: user id of the verifier to be assigned
-            additionalProperties: false
+      required: true
     election:
       description: Election ID is not required to POST
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/election'
+      required: true
     post_votes:
       content:
         application/json:
           schema:
+            required:
+            - votes_cast
             type: object
             properties:
               votes_cast:
@@ -1572,31 +1619,33 @@ components:
                 items:
                   $ref: '#/components/schemas/vote'
             additionalProperties: false
+      required: true
     get_election_results:
       content:
         application/json:
           schema:
+            required:
+            - election_id
             type: object
             properties:
               election_id:
                 type: integer
                 description: The id of the election of interest
-              election_version:
-                type: integer
-                description: |
-                  The point in the timeline of the voting compilation that is of interest.
-                  Leave 0 for latest
             additionalProperties: false
+      required: true
     get_election_voting_package:
       content:
         application/json:
           schema:
+            required:
+            - election_id
             type: object
             properties:
               election_id:
                 type: integer
                 description: The ID of the election for which to get the voting package
             additionalProperties: false
+      required: true
   securitySchemes:
     user:
       type: http

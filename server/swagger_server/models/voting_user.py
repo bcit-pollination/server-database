@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user import User  # noqa: F401,E501
 from swagger_server.models.voting_token import VotingToken  # noqa: F401,E501
 from swagger_server import util
 
@@ -16,49 +15,24 @@ class VotingUser(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, voting_token: str=None, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, user_org_id: str=None):  # noqa: E501
+    def __init__(self, voting_token: str=None, user_org_id: str=None):  # noqa: E501
         """VotingUser - a model defined in Swagger
 
         :param voting_token: The voting_token of this VotingUser.  # noqa: E501
         :type voting_token: str
-        :param id: The id of this VotingUser.  # noqa: E501
-        :type id: int
-        :param first_name: The first_name of this VotingUser.  # noqa: E501
-        :type first_name: str
-        :param last_name: The last_name of this VotingUser.  # noqa: E501
-        :type last_name: str
-        :param email: The email of this VotingUser.  # noqa: E501
-        :type email: str
-        :param dob: The dob of this VotingUser.  # noqa: E501
-        :type dob: date
         :param user_org_id: The user_org_id of this VotingUser.  # noqa: E501
         :type user_org_id: str
         """
         self.swagger_types = {
             'voting_token': str,
-            'id': int,
-            'first_name': str,
-            'last_name': str,
-            'email': str,
-            'dob': date,
             'user_org_id': str
         }
 
         self.attribute_map = {
             'voting_token': 'voting_token',
-            'id': 'id',
-            'first_name': 'first_name',
-            'last_name': 'last_name',
-            'email': 'email',
-            'dob': 'dob',
             'user_org_id': 'user_org_id'
         }
         self._voting_token = voting_token
-        self._id = id
-        self._first_name = first_name
-        self._last_name = last_name
-        self._email = email
-        self._dob = dob
         self._user_org_id = user_org_id
 
     @classmethod
@@ -90,113 +64,10 @@ class VotingUser(Model):
         :param voting_token: The voting_token of this VotingUser.
         :type voting_token: str
         """
+        if voting_token is None:
+            raise ValueError("Invalid value for `voting_token`, must not be `None`")  # noqa: E501
 
         self._voting_token = voting_token
-
-    @property
-    def id(self) -> int:
-        """Gets the id of this VotingUser.
-
-
-        :return: The id of this VotingUser.
-        :rtype: int
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this VotingUser.
-
-
-        :param id: The id of this VotingUser.
-        :type id: int
-        """
-
-        self._id = id
-
-    @property
-    def first_name(self) -> str:
-        """Gets the first_name of this VotingUser.
-
-
-        :return: The first_name of this VotingUser.
-        :rtype: str
-        """
-        return self._first_name
-
-    @first_name.setter
-    def first_name(self, first_name: str):
-        """Sets the first_name of this VotingUser.
-
-
-        :param first_name: The first_name of this VotingUser.
-        :type first_name: str
-        """
-
-        self._first_name = first_name
-
-    @property
-    def last_name(self) -> str:
-        """Gets the last_name of this VotingUser.
-
-
-        :return: The last_name of this VotingUser.
-        :rtype: str
-        """
-        return self._last_name
-
-    @last_name.setter
-    def last_name(self, last_name: str):
-        """Sets the last_name of this VotingUser.
-
-
-        :param last_name: The last_name of this VotingUser.
-        :type last_name: str
-        """
-
-        self._last_name = last_name
-
-    @property
-    def email(self) -> str:
-        """Gets the email of this VotingUser.
-
-
-        :return: The email of this VotingUser.
-        :rtype: str
-        """
-        return self._email
-
-    @email.setter
-    def email(self, email: str):
-        """Sets the email of this VotingUser.
-
-
-        :param email: The email of this VotingUser.
-        :type email: str
-        """
-
-        self._email = email
-
-    @property
-    def dob(self) -> date:
-        """Gets the dob of this VotingUser.
-
-
-        :return: The dob of this VotingUser.
-        :rtype: date
-        """
-        return self._dob
-
-    @dob.setter
-    def dob(self, dob: date):
-        """Sets the dob of this VotingUser.
-
-
-        :param dob: The dob of this VotingUser.
-        :type dob: date
-        """
-
-        self._dob = dob
 
     @property
     def user_org_id(self) -> str:
@@ -218,5 +89,7 @@ class VotingUser(Model):
         :param user_org_id: The user_org_id of this VotingUser.
         :type user_org_id: str
         """
+        if user_org_id is None:
+            raise ValueError("Invalid value for `user_org_id`, must not be `None`")  # noqa: E501
 
         self._user_org_id = user_org_id
