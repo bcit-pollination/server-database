@@ -25,7 +25,7 @@ DROP PROCEDURE IF EXISTS DeleteLocation;
 
 DROP PROCEDURE IF EXISTS GetElectionListOrg; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionListUser;
-DROP PROCEDURE IF EXISTS GetElection;
+DROP PROCEDURE IF EXISTS GetElection; /** Tested */
 DROP PROCEDURE IF EXISTS UpdateElection; /** Tested*/
 DROP PROCEDURE IF EXISTS DeleteElection; /** Tested*/
 DROP PROCEDURE IF EXISTS CreateElection; /** Tested */
@@ -41,7 +41,6 @@ DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DROP PROCEDURE IF EXISTS GetQuestionOpt; /** Tested */
 DROP PROCEDURE IF EXISTS GetElectionQuestions; /** Tested */
-DROP PROCEDURE IF EXISTS GetElection; /** Tested */
 DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS AddQuestion; /** Tested */
@@ -51,10 +50,9 @@ DROP PROCEDURE IF EXISTS UpdateQuestion; /** Tested*/
 DROP PROCEDURE IF EXISTS AddOpt; /** Tested */
 DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
 DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
-DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
+
 DROP PROCEDURE IF EXISTS GetPrivilege;
 DROP PROCEDURE IF EXISTS GetIdVt; /** Tested */
-
 
 DELIMITER //
 
@@ -246,8 +244,9 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN,
-	IN is_public BOOLEAN)
+	IN is_anonymous BOOLEAN,
+	IN is_public BOOLEAN,
+    IN verified BOOLEAN)
 BEGIN
 	INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous, is_public)
     VALUES(org_id, description, start_time, end_time, is_anonymous, is_public);
@@ -288,25 +287,31 @@ BEGIN
 
 	SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
-    FROM Election el
-		INNER JOIN Question q
-			ON el.election_id = q.election_id
-		INNER JOIN Opt o
-			ON q.question_id = o.question_id
-		INNER JOIN Choice c
-			ON o.opt_id = c.opt_id
+    FROM Users u
 		INNER JOIN Vote v
-			ON c.vote_id = v.vote_id
-	WHERE v.user_id = user_id;
+			ON v.user_id = u.user_id
+		INNER JOIN Enrollment e
+			ON e.user_id = u.user_id
+		INNER JOIN Organization o
+			ON o.org_id = e.org_id
+		INNER JOIN Election el
+			ON el.org_id = o.org_id
+	WHERE el.election_id = election_id;
 
 	IF (prev_time_stamp IS NULL) THEN
 		INSERT INTO Vote(user_id, time_stamp)
 		VALUES(user_id, time_stamp);
 		SELECT LAST_INSERT_ID();
-    ELSEIF (time_stamp > prev_time_stamp) THEN
+    ELSEIF (time_stamp < prev_time_stamp) THEN
 		UPDATE Vote v
 			SET v.time_stamp = time_stamp
 			WHERE v.user_id = user_id;
+		SET SQL_SAFE_UPDATES = 0;
+		UPDATE Opt op
+			INNER JOIN Choice c ON op.opt_id = c.opt_id
+			SET op.total_choices = op.total_choices - 1
+            WHERE c.vote_id = vote_id;
+		SET SQL_SAFE_UPDATES = 1;
         DELETE FROM Choice c 
 			WHERE c.vote_id = vote_id;
         SELECT vote_id;
@@ -322,6 +327,9 @@ CREATE PROCEDURE CreateChoice(
 BEGIN
 	INSERT INTO Choice(vote_id, opt_id)
 	VALUES(vote_id, opt_id);
+    UPDATE Opt o
+		SET o.total_choices = o.total_choices + 1
+        WHERE o.opt_id = opt_id;
 END; //
 
 
@@ -366,7 +374,7 @@ END; //
 /** Gets all the potential answers to questions specified in
 	param.*/
 	
-CREATE PROCEDURE GetQuestionChoice(
+CREATE PROCEDURE GetQuestionOpt(
 	IN id INT
 )
 BEGIN
@@ -380,7 +388,7 @@ CREATE PROCEDURE GetElectionQuestions(
 	IN id INT
 	)
 BEGIN
-	SELECT q.question_id, q.election_id, q.description, q.choice_limit, q.is_required FROM Question q
+	SELECT q.* FROM Question q
 		INNER JOIN Election el
 		ON el.election_id = q.election_id
 		WHERE q.election_id = id;
@@ -422,11 +430,11 @@ END; //
 CREATE PROCEDURE UpdateElection(
 	IN id INT,
 	IN description VARCHAR(40),
-	IN verified BOOLEAN,
 	IN start_time TIMESTAMP,
 	IN end_time TIMESTAMP,
 	IN is_anonymous BOOLEAN,
-	IN is_public BOOLEAN
+	IN is_public BOOLEAN,
+    IN verified BOOLEAN
 	)
 BEGIN
 	UPDATE Election
@@ -468,14 +476,13 @@ END; //
 /** Adds question to election. */
 
 CREATE PROCEDURE AddQuestion(
-	IN el_id INT,
-	IN descr VARCHAR(40),
-	IN sel INT,
-	IN req TINYINT(1)
+	IN election_id INT,
+	IN description VARCHAR(40),
+	IN choice_limit INT
 )
 BEGIN
-	INSERT INTO Question (election_id, description, choice_limit, is_required)
-		VALUES (el_id, descr, sel, req);
+	INSERT INTO Question (election_id, description, choice_limit)
+		VALUES (election_id, description, choice_limit);
 END; //
 
 /** Drops Question from an election. */
@@ -492,19 +499,13 @@ END; //
 
 CREATE PROCEDURE UpdateQuestion(
 	IN id INT,
-	IN description VARCHAR(40),
-	IN is_required TINYINT(1)
+	IN description VARCHAR(40)
 )
 BEGIN
 
 	UPDATE Question
 		SET description = description
 		WHERE question_id = id;
-		
-	UPDATE Question
-		SET is_required = is_required
-		WHERE question_id = id;
-	
 END; //
 
 /** Adds a choice to a question. */

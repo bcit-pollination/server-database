@@ -19,17 +19,17 @@ CALL InviteUser(2, 2); /* Bruce is invited to COMP1537 Discord */
 CALL UpdatePrivilege(1, 2, 2); /* Albert is promoted to admin */
 CALL UpdatePrivilege(2, 2, 1); /* Bruce is promoted to member */
 
-CALL CreateElection(2, "Web Dev", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, FALSE); /** Creates an Election for COMP1537 Discord*/
-CALL CreateElection(1, "C Survey", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, FALSE); /** Creates an Election for COMP2510 Study Group*/
+CALL CreateElection(2, "Web Dev", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, FALSE, FALSE); /** Creates an Election for COMP1537 Discord*/
+CALL CreateElection(1, "C Survey", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, FALSE, FALSE); /** Creates an Election for COMP2510 Study Group*/
 
-CALL AddQuestion(1, 'What language are you good at?', 0, 0); /** Adds new question to our first election. */
+CALL AddQuestion(1, 'What language are you good at?', 0); /** Adds new question to our first election. */
 
 CALL AddOpt(1, 'Javascript'); /** First choice is added. */
 CALL AddOpt(1, 'CSS'); /** Second choice is added. */
 CALL AddOpt(1, 'HTML'); /** Third choice is added. */
 CALL UpdateOpt(2, 'PHP'); /** Changes Choice 'CSS' to 'PHP'*/
-CALL UpdateQuestion(1, 'What language is the best?', 1); /** Changes the question. */
-CALL UpdateElection(1, 'Web Dev Survey', FALSE, '2021-10-05', '2021-11-09', TRUE, FALSE); /** Updates election name to web dev survey. */
+CALL UpdateQuestion(1, 'What language is the best?'); /** Changes the question. */
+CALL UpdateElection(1, 'Web Dev Survey', '2021-10-05', '2021-11-09', TRUE, FALSE, FALSE); /** Updates election name to web dev survey. */
 
 CALL UpdateUser(1, "password");
 CALL DeactivateUser(1);
@@ -37,4 +37,9 @@ CALL UpdatePrivilege(2, 2, 0);
 CALL UpdateOrg(1, "This is an org name", "verifierpassword");
 CALL DisbandOrg(2);
 
+CALL CreateVote('A01287456', '2028-01-04 07:09:07', 1);
+CALL CreateChoice(1, 1);
+CALL CreateChoice(1, 2);
 
+CALL CreateVote('A01287456', '2028-01-04 05:09:07', 1);
+CALL CreateChoice(1, 1);

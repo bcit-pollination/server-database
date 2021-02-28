@@ -80,7 +80,6 @@ CREATE TABLE Question (
     election_id 		INT 			NOT NULL,
     description 		VARCHAR(40) 	NOT NULL,
     choice_limit 	    INT 			NOT NULL,
-    is_required 		BOOLEAN 		NOT NULL 	DEFAULT TRUE,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
@@ -91,6 +90,7 @@ CREATE TABLE Opt (
     opt_id 		    INT 			NOT NULL 	AUTO_INCREMENT,
     question_id 	INT 			NOT NULL,
     description 	VARCHAR(40) 	NOT NULL,
+    total_choices   INT				NOT NULL	DEFAULT 0,
     PRIMARY KEY (opt_id),
     FOREIGN KEY (question_id)
         REFERENCES Question (question_id)
