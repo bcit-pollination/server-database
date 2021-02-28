@@ -9,7 +9,7 @@ info:
      1 := member<br>
      2 := admin<br>
      3 := owner
-  version: "1.00"
+  version: "1.05"
 servers:
 - url: https://pollination.live/api
 tags:
@@ -759,7 +759,6 @@ components:
       type: object
       description: Describes the information needed for a user to vote
       allOf:
-      - $ref: '#/components/schemas/user'
       - $ref: '#/components/schemas/voting_token'
       - type: object
         properties:
@@ -828,8 +827,10 @@ components:
           type: boolean
           description: Whether the results of the election are open to the general
             public, or just within the org
-        ballot:
-          $ref: '#/components/schemas/ballot'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/question'
       additionalProperties: false
       description: |
         Models an election.
@@ -839,28 +840,27 @@ components:
 
         Times must be provided in UTC.
       example:
-        ballot:
-          questions:
-          - election_id: 1
-            options:
-            - option_text: option_text
-              option_id: 5
-            - option_text: option_text
-              option_id: 5
-            max_selection_count: 5
-          - election_id: 1
-            options:
-            - option_text: option_text
-              option_id: 5
-            - option_text: option_text
-              option_id: 5
-            max_selection_count: 5
         start_time: 2000-01-23T04:56:07.000+00:00
         org_id: 6
         election_id: 0
         end_time: 2000-01-23T04:56:07.000+00:00
         verified: true
         public_results: true
+        questions:
+        - election_id: 1
+          options:
+          - option_text: option_text
+            option_id: 5
+          - option_text: option_text
+            option_id: 5
+          max_selection_count: 5
+        - election_id: 1
+          options:
+          - option_text: option_text
+            option_id: 5
+          - option_text: option_text
+            option_id: 5
+          max_selection_count: 5
         anonymous: true
     user_org:
       type: object
@@ -931,30 +931,6 @@ components:
         - option_text: option_text
           option_id: 5
         max_selection_count: 5
-    ballot:
-      type: object
-      properties:
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/question'
-      description: The compilation of question presented in an election
-      example:
-        questions:
-        - election_id: 1
-          options:
-          - option_text: option_text
-            option_id: 5
-          - option_text: option_text
-            option_id: 5
-          max_selection_count: 5
-        - election_id: 1
-          options:
-          - option_text: option_text
-            option_id: 5
-          - option_text: option_text
-            option_id: 5
-          max_selection_count: 5
     choice:
       type: object
       properties:
@@ -1139,51 +1115,49 @@ components:
       additionalProperties: false
       example:
         elections:
-        - ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-          start_time: 2000-01-23T04:56:07.000+00:00
+        - start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
-        - ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-          start_time: 2000-01-23T04:56:07.000+00:00
+        - start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
     inline_response_200_7:
       type: object
@@ -1193,28 +1167,27 @@ components:
       additionalProperties: false
       example:
         election:
-          ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
           start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
     inline_response_200_8:
       type: object
@@ -1259,28 +1232,27 @@ components:
       example:
         verifier_password: verifier_password
         election_info:
-          ballot:
-            questions:
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
-            - election_id: 1
-              options:
-              - option_text: option_text
-                option_id: 5
-              - option_text: option_text
-                option_id: 5
-              max_selection_count: 5
           start_time: 2000-01-23T04:56:07.000+00:00
           org_id: 6
           election_id: 0
           end_time: 2000-01-23T04:56:07.000+00:00
           verified: true
           public_results: true
+          questions:
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
+          - election_id: 1
+            options:
+            - option_text: option_text
+              option_id: 5
+            - option_text: option_text
+              option_id: 5
+            max_selection_count: 5
           anonymous: true
         voter_list:
         - ""

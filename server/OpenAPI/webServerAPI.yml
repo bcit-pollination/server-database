@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.00"
+  version: "1.05"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -680,7 +680,6 @@ components:
       type: object
       description: Describes the information needed for a user to vote
       allOf:
-        - $ref: "#/components/schemas/user"
         - $ref: "#/components/schemas/voting_token"
         - type: object
           properties:
@@ -760,8 +759,10 @@ components:
         public_results:
           description: Whether the results of the election are open to the general public, or just within the org
           type: boolean
-        ballot:
-          $ref: "#/components/schemas/ballot"
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/question"
 
 
     user_org:
@@ -822,14 +823,6 @@ components:
           items:
             $ref: "#/components/schemas/option"
 
-    ballot:
-      type: object
-      description: The compilation of question presented in an election
-      properties:
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/question"
 
     choice:
       type: object
@@ -924,7 +917,7 @@ components:
 
         Organization property is optional is provided for public requests purposes
       allOf:
-        -   $ref: "#/components/schemas/private_election_results"
+        - $ref: "#/components/schemas/private_election_results"
         - type: object
           properties:
               org_info:
