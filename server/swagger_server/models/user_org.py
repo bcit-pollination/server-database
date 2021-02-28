@@ -71,6 +71,8 @@ class UserOrg(Model):
         :param privilege: The privilege of this UserOrg.
         :type privilege: int
         """
+        if privilege is None:
+            raise ValueError("Invalid value for `privilege`, must not be `None`")  # noqa: E501
 
         self._privilege = privilege
 
@@ -94,6 +96,8 @@ class UserOrg(Model):
         :param user_org_id: The user_org_id of this UserOrg.
         :type user_org_id: str
         """
+        if user_org_id is None:
+            raise ValueError("Invalid value for `user_org_id`, must not be `None`")  # noqa: E501
 
         self._user_org_id = user_org_id
 
@@ -115,5 +119,7 @@ class UserOrg(Model):
         :param org: The org of this UserOrg.
         :type org: Org
         """
+        if org is None:
+            raise ValueError("Invalid value for `org`, must not be `None`")  # noqa: E501
 
         self._org = org

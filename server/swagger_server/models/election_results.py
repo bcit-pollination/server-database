@@ -80,6 +80,8 @@ class ElectionResults(Model):
         :param question_results: The question_results of this ElectionResults.
         :type question_results: List[QuestionResults]
         """
+        if question_results is None:
+            raise ValueError("Invalid value for `question_results`, must not be `None`")  # noqa: E501
 
         self._question_results = question_results
 
@@ -124,6 +126,8 @@ class ElectionResults(Model):
         :param org_info: The org_info of this ElectionResults.
         :type org_info: Org
         """
+        if org_info is None:
+            raise ValueError("Invalid value for `org_info`, must not be `None`")  # noqa: E501
 
         self._org_info = org_info
 
@@ -145,5 +149,7 @@ class ElectionResults(Model):
         :param election_info: The election_info of this ElectionResults.
         :type election_info: Election
         """
+        if election_info is None:
+            raise ValueError("Invalid value for `election_info`, must not be `None`")  # noqa: E501
 
         self._election_info = election_info

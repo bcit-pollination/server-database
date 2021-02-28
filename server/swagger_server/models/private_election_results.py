@@ -67,6 +67,8 @@ class PrivateElectionResults(Model):
         :param question_results: The question_results of this PrivateElectionResults.
         :type question_results: List[QuestionResults]
         """
+        if question_results is None:
+            raise ValueError("Invalid value for `question_results`, must not be `None`")  # noqa: E501
 
         self._question_results = question_results
 

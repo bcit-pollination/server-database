@@ -110,6 +110,8 @@ class OrgUser(Model):
         :param first_name: The first_name of this OrgUser.
         :type first_name: str
         """
+        if first_name is None:
+            raise ValueError("Invalid value for `first_name`, must not be `None`")  # noqa: E501
 
         self._first_name = first_name
 
@@ -131,6 +133,8 @@ class OrgUser(Model):
         :param last_name: The last_name of this OrgUser.
         :type last_name: str
         """
+        if last_name is None:
+            raise ValueError("Invalid value for `last_name`, must not be `None`")  # noqa: E501
 
         self._last_name = last_name
 
@@ -152,6 +156,8 @@ class OrgUser(Model):
         :param email: The email of this OrgUser.
         :type email: str
         """
+        if email is None:
+            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
 
@@ -173,6 +179,8 @@ class OrgUser(Model):
         :param dob: The dob of this OrgUser.
         :type dob: date
         """
+        if dob is None:
+            raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501
 
         self._dob = dob
 
@@ -196,6 +204,8 @@ class OrgUser(Model):
         :param privilege: The privilege of this OrgUser.
         :type privilege: int
         """
+        if privilege is None:
+            raise ValueError("Invalid value for `privilege`, must not be `None`")  # noqa: E501
 
         self._privilege = privilege
 
@@ -219,5 +229,7 @@ class OrgUser(Model):
         :param user_org_id: The user_org_id of this OrgUser.
         :type user_org_id: str
         """
+        if user_org_id is None:
+            raise ValueError("Invalid value for `user_org_id`, must not be `None`")  # noqa: E501
 
         self._user_org_id = user_org_id
