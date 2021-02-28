@@ -51,6 +51,9 @@ DROP PROCEDURE IF EXISTS AddOpt; /** Tested */
 DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
 DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
 
+DROP PROCEDURE IF EXISTS GetPrivilege;
+DROP PROCEDURE IF EXISTS GetIdVt; /** Tested */
+
 DELIMITER //
 
 /** Takes in a user's login credentials,
@@ -538,6 +541,32 @@ BEGIN
 	UPDATE Opt
 	SET description = descr
 	WHERE opt_id = id;
+END; //
+
+/** Gets the privilege_level of a particular user
+ from a particular organization*/
+
+CREATE PROCEDURE GetPrivilege(
+	IN org_id INT,
+	IN user_id INT
+)
+BEGIN
+	SELECT privilege_level FROM Enrollment
+	WHERE org_id = org_id
+	AND user_id = user_id;
+END; //
+
+CREATE PROCEDURE GetIdVt(
+	IN election_id INT
+)
+BEGIN
+	SELECT u.user_id, u.voting_token, en.identification FROM Election el
+    INNER JOIN Enrollment en 
+		ON el.org_id = en.org_id
+    INNER JOIN Users u
+		ON en.user_id = u.user_id
+	WHERE el.election_id = election_id;
+        
 END; //
 
 	
