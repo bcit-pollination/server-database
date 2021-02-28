@@ -1,7 +1,7 @@
 import MySQLdb
 
 from swagger_server.models.user import User
-from .privileges import PRIVILEGE
+from server.src.constants_enums.privileges import PRIVILEGE
 from .procedures import PROCEDURE
 
 
