@@ -7,6 +7,9 @@ from server.swagger_server.models.voting_token import VotingToken  # noqa: E501
 from server.swagger_server import util
 from werkzeug.exceptions import BadRequest
 import server.src.obj_keys as obj_keys
+import server.src.db.mysql_interface as db
+from server.swagger_server.models.user import User
+
 
 def app_create_user(body=None):  # noqa: E501
     """Create user
@@ -20,8 +23,14 @@ def app_create_user(body=None):  # noqa: E501
     """
 
     body = object.from_dict(connexion.request.get_json())
-
-        # noqa: E501
+    db.create_user(
+            dob=body[obj_keys.DOB],
+            first_name=body[obj_keys.FIRST_NAME],
+            last_name=body[obj_keys.LAST_NAME],
+            email=body[obj_keys.EMAIL],
+            password=body[obj_keys.PASSWORD]
+            )
+    # noqa: E501
     return 'do some magic!'
 
 
