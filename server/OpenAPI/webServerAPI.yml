@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.05"
+  version: "1.06"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -735,6 +735,9 @@ components:
       type: object
       additionalProperties: false
       properties:
+        election_description:
+          type: string
+          description: A text describing the purpose of the election
         election_id:
           type: integer
         org_id:
@@ -802,7 +805,7 @@ components:
       properties:
         option_id:
           type: integer
-        option_text:
+        option_description:
           description:
             The text describing a posible selection to be made
           type: string
@@ -811,6 +814,9 @@ components:
       type: object
       description: An election question
       properties:
+        question_description:
+          type: string
+          description: The text of the question posed
         election_id:
           description: The id of the parent election
           type: integer
