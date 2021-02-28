@@ -37,4 +37,9 @@ CALL UpdatePrivilege(2, 2, 0);
 CALL UpdateOrg(1, "This is an org name", "verifierpassword");
 CALL DisbandOrg(2);
 
+CALL CreateVote('A01287456', '2028-01-04 07:09:07', 1);
+CALL CreateChoice(1, 1);
+CALL CreateChoice(1, 2);
 
+CALL CreateVote('A01287456', '2028-01-04 05:09:07', 1);
+CALL CreateChoice(1, 1);
