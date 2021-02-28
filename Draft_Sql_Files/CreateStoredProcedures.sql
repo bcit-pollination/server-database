@@ -53,6 +53,7 @@ DROP PROCEDURE IF EXISTS DropOpt; /** Tested*/
 DROP PROCEDURE IF EXISTS UpdateOpt; /** Tested. */
 DROP PROCEDURE IF EXISTS GetQuestionChoice; /** Tested */
 DROP PROCEDURE IF EXISTS GetPrivilege;
+DROP PROCEDURE IF EXISTS GetIdVt; /** Tested */
 
 
 DELIMITER //
@@ -564,5 +565,17 @@ BEGIN
 	AND user_id = user_id;
 END; //
 
+CREATE PROCEDURE GetIdVt(
+	IN election_id INT
+)
+BEGIN
+	SELECT u.user_id, u.voting_token, en.identification FROM Election el
+    INNER JOIN Enrollment en 
+		ON el.org_id = en.org_id
+    INNER JOIN Users u
+		ON en.user_id = u.user_id
+	WHERE election_id = election_id;
+        
+END; //
 
 	
