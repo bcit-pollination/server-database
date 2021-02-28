@@ -1,7 +1,8 @@
 import MySQLdb
-from contextlib import closing
-from server.swagger_server.models.user import User
-from server.swagger_server.models.org import Org
+
+from swagger_server.models.user import User
+from server.src.constants_enums.privileges import PRIVILEGE
+from .procedures import PROCEDURE
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -74,14 +75,66 @@ def get_user_elections_alternate(user_id):
     return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user_id,), resp_many=True)
 
 
-class PROCEDURE:
-    # name                    = proc_name                   # procedure parameters
-    LOGINUSER                 = 'LoginUser'                 # email, password
-    CREATEUSER                = 'CreateUser'                # first_name, last_name, email, dob, password, voting_token
-    CREATEORG                 = 'CreateOrg'                 # user_id, org_name
-    ENROLLUSER                = 'EnrollUser'                # user_id, org_id
-    GETUSER                   = 'GetUser'                   # user_id
-    GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
-    GETUSERELECTIONS          = 'GetUserElections'          # user_id
-    GETORGANIZATIONUSERS      = 'GetOrganizationUsers'      # org_id
-    GETUSERELECTIONSALTERNATE = 'GeUserElectionsAlternate'  # user_id
+def update_user(user_id, first_name, last_name, email, password):
+    return call_proc(PROCEDURE.UPDATEUSER, (user_id, first_name, last_name, email, password))
+
+
+def deactivate_user(user_id):
+    return call_proc(PROCEDURE.DEACTIVATEUSER, (user_id,))
+
+
+def get_user_token(user_id):
+    return call_proc(PROCEDURE.GETUSERTOKEN, (user_id,))
+
+
+def get_organizations(user_id):
+    return call_proc(PROCEDURE.GETORGANIZATIONS, (user_id,), resp_many=True)
+
+
+def get_organization(org_id):
+    return call_proc(PROCEDURE.GETORGANIZATION, (org_id,))
+
+
+def update_organization(org_id, org_name):
+    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name))
+
+
+def disband_org(org_id):
+    return call_proc(PROCEDURE.DISBANDORG, (org_id,))
+
+
+def get_verifier_password(user_id):
+    return call_proc(PROCEDURE.GETVERIFIERPASSWORD, (user_id,))
+
+
+def get_users_from_org(org_id):
+    return call_proc(PROCEDURE.GETUSERSFROMORG, (org_id,), resp_many=True)
+
+
+def update_privilege(user_id, privilege_level: PRIVILEGE):
+    return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, privilege_level))
+
+
+def invite_user(user_id, org_id):
+    return call_proc(PROCEDURE.INVITEUSER, (user_id, org_id))
+
+
+def create_election(org_id, description, start_time, end_time, is_public, anonymous):
+    return call_proc(PROCEDURE.CREATEELECTION, (org_id, description, start_time, end_time, is_public, anonymous))
+
+
+def update_election(election_id, description, start_time, end_time, is_public, anonymous):
+    return call_proc(PROCEDURE.UPDATEELECTION, (election_id, description, start_time, end_time, is_public, anonymous))
+
+
+def delete_election(election_id):
+    return call_proc(PROCEDURE.DELETEELECTION, (election_id,))
+
+
+def get_election(election_id):
+    return call_proc(PROCEDURE.GETELECTION, (election_id,))
+
+
+def get_org_elections(org_id):
+    return call_proc(PROCEDURE.GETELECTIONLISTORG, (org_id,), resp_many=True)
+
