@@ -3,6 +3,7 @@ import MySQLdb
 from contextlib import closing
 from swagger_server.models.user import User
 from swagger_server.models.org import Org
+from .procedures import PROCEDURE
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -73,16 +74,3 @@ def get_organization_users(org_id):
 
 def get_user_elections_alternate(user_id):
     return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user_id,), resp_many=True)
-
-
-class PROCEDURE:
-    # name                    = proc_name                   # procedure parameters
-    LOGINUSER                 = 'LoginUser'                 # email, password
-    CREATEUSER                = 'CreateUser'                # first_name, last_name, email, dob, password, voting_token
-    CREATEORG                 = 'CreateOrg'                 # user_id, org_name
-    ENROLLUSER                = 'EnrollUser'                # user_id, org_id
-    GETUSER                   = 'GetUser'                   # user_id
-    GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
-    GETUSERELECTIONS          = 'GetUserElections'          # user_id
-    GETORGANIZATIONUSERS      = 'GetOrganizationUsers'      # org_id
-    GETUSERELECTIONSALTERNATE = 'GeUserElectionsAlternate'  # user_id
