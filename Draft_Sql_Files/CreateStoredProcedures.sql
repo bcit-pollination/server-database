@@ -574,7 +574,7 @@ BEGIN
 		ON el.org_id = en.org_id
     INNER JOIN Users u
 		ON en.user_id = u.user_id
-	WHERE election_id = election_id;
+	WHERE el.election_id = election_id;
         
 END; //
 
