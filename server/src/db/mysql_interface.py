@@ -1,8 +1,7 @@
 import MySQLdb
-
 from contextlib import closing
-from swagger_server.models.user import User
-from swagger_server.models.org import Org
+from server.swagger_server.models.user import User
+from server.swagger_server.models.org import Org
 
 
 def get_db_connection() -> MySQLdb.Connection:
