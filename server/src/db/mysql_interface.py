@@ -4,6 +4,7 @@ from contextlib import closing
 from swagger_server.models.user import User
 from swagger_server.models.org import Org
 from .procedures import PROCEDURE
+from .privileges import PRIVILEGE
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -92,25 +93,29 @@ def get_organizations(user: User):
     return call_proc(PROCEDURE.GETORGANIZATIONS, (user.id,), resp_many=True)
 
 
-def get_arganization(org: Org):
+def get_organization(org: Org):
     return call_proc(PROCEDURE.GETORGANIZATION, (org.id,))
 
 
-def get_user_elections_alternate(user: User):
-    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+def update_organization(org: Org):
+    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org.id, org.name))
 
 
-def get_user_elections_alternate(user: User):
-    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+def disband_org(org: Org):
+    return call_proc(PROCEDURE.DISBANDORG, (org.id,))
 
 
-def get_user_elections_alternate(user: User):
-    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+def get_verifier_password(user: User):
+    return call_proc(PROCEDURE.GETVERIFIERPASSWORD, (user.id,))
 
 
-def get_user_elections_alternate(user: User):
-    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+def get_users_from_org(org: Org):
+    return call_proc(PROCEDURE.GETUSERSFROMORG, (org.id,), resp_many=True)
 
 
-def get_user_elections_alternate(user: User):
-    return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user.id,), resp_many=True)
+def update_privilege(user: User, privilege_level):
+    return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user.id, privilege_level), resp_many=True)
+
+
+def Invite_user(user: User, org: Org):
+    return call_proc(PROCEDURE.INVITEUSER, (user.id, org.id), resp_many=True)
