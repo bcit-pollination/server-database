@@ -286,25 +286,31 @@ BEGIN
 
 	SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
-    FROM Election el
-		INNER JOIN Question q
-			ON el.election_id = q.election_id
-		INNER JOIN Opt o
-			ON q.question_id = o.question_id
-		INNER JOIN Choice c
-			ON o.opt_id = c.opt_id
+    FROM Users u
 		INNER JOIN Vote v
-			ON c.vote_id = v.vote_id
-	WHERE v.user_id = user_id;
+			ON v.user_id = u.user_id
+		INNER JOIN Enrollment e
+			ON e.user_id = u.user_id
+		INNER JOIN Organization o
+			ON o.org_id = e.org_id
+		INNER JOIN Election el
+			ON el.org_id = o.org_id
+	WHERE el.election_id = election_id;
 
 	IF (prev_time_stamp IS NULL) THEN
 		INSERT INTO Vote(user_id, time_stamp)
 		VALUES(user_id, time_stamp);
 		SELECT LAST_INSERT_ID();
-    ELSEIF (time_stamp > prev_time_stamp) THEN
+    ELSEIF (time_stamp < prev_time_stamp) THEN
 		UPDATE Vote v
 			SET v.time_stamp = time_stamp
 			WHERE v.user_id = user_id;
+		SET SQL_SAFE_UPDATES = 0;
+		UPDATE Opt op
+			INNER JOIN Choice c ON op.opt_id = c.opt_id
+			SET op.total_choices = op.total_choices - 1
+            WHERE c.vote_id = vote_id;
+		SET SQL_SAFE_UPDATES = 1;
         DELETE FROM Choice c 
 			WHERE c.vote_id = vote_id;
         SELECT vote_id;
@@ -320,6 +326,9 @@ CREATE PROCEDURE CreateChoice(
 BEGIN
 	INSERT INTO Choice(vote_id, opt_id)
 	VALUES(vote_id, opt_id);
+    UPDATE Opt o
+		SET o.total_choices = o.total_choices + 1
+        WHERE o.opt_id = opt_id;
 END; //
 
 

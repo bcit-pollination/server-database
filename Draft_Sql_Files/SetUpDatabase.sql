@@ -90,7 +90,7 @@ CREATE TABLE Opt (
     opt_id 		    INT 			NOT NULL 	AUTO_INCREMENT,
     question_id 	INT 			NOT NULL,
     description 	VARCHAR(40) 	NOT NULL,
-    total_votes		INT				NOT NULL	DEFAULT 0,
+    total_choices   INT				NOT NULL	DEFAULT 0,
     PRIMARY KEY (opt_id),
     FOREIGN KEY (question_id)
         REFERENCES Question (question_id)
