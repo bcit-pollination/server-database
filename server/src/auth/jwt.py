@@ -9,6 +9,9 @@ JWT_SECRET = 'l4GrQUps9mxmwgKVVvtDHBi6f86ZdQplBcNEmWyDt9KGYAoNUndskgMUEnQoxIgs'
 JWT_LIFETIME_SECONDS = 600
 JWT_ALGORITHM = 'HS256'
 
+JWT_TIMESTAMP_KEY = "iat"
+JWT_EXPIRATION_KEY = "exp"
+JWT_UID_KEY = "uid"
 
 def generate_token(user_id):
     """
@@ -17,9 +20,9 @@ def generate_token(user_id):
     timestamp = _current_timestamp()
     payload = {
         "iss": JWT_ISSUER,
-        "iat": int(timestamp),
-        "exp": int(timestamp + JWT_LIFETIME_SECONDS),
-        "uid": str(user_id),
+        JWT_TIMESTAMP_KEY: int(timestamp),
+        JWT_EXPIRATION_KEY: int(timestamp + JWT_LIFETIME_SECONDS),
+        JWT_UID_KEY: str(user_id),
     }
 
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
