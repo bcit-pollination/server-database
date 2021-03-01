@@ -10,7 +10,11 @@ class UserInfoKeys:
 
 
 class OrgInfoKeys:
+    NAME = "name"
     ORG_ID = "org_id"
+    PRIVILEGE = "privilege"
+    INVITES = "invites"
+    USER_ORG_ID = "user_org_id"
 
 
 class LoginKeys:

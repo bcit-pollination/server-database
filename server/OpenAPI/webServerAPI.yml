@@ -1292,19 +1292,19 @@ components:
           schema:
             additionalProperties: false
             required:
-              - orgId
+              - org_id
               - uid
-              - newPrivileges
+              - privilege
             properties:
               uid:
                 type: integer
                 description: user id of the user to changed
-              newPrivileges:
+              privilege:
                 type:
                   integer
                 description:
                   the new privileges for the user
-              orgId:
+              org_id:
                 type:
                   integer
                 description: The id of the org in which to change the privileges

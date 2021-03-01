@@ -1,9 +1,14 @@
 import connexion
 import six
 
-from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
-from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
-from swagger_server import util
+from server.swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
+from server.swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
+from server.swagger_server import util
+from server.src.auth.jwt import decode_token
+import server.src.db.mysql_interface as db
+from server.src.constants_enums.obj_keys import *
+from server.src.constants_enums.privileges import *
+from server.src.email.sendgrid_email import *
 
 
 def accept_org_invite(encrypted_data):  # noqa: E501
@@ -16,7 +21,13 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    new_user = decode_token(encrypted_data)
+    change_user_privilege({
+        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.INVITEE,
+        OrgInfoKeys.ORG_ID: new_user[OrgInfoKeys.ORG_ID],
+        UserInfoKeys.UID: new_user[UserInfoKeys.UID]
+    })
+    return None
 
 
 def change_user_privilege(body):  # noqa: E501
@@ -29,9 +40,10 @@ def change_user_privilege(body):  # noqa: E501
 
     :rtype: None
     """
+    # TODO change user priv
     if connexion.request.is_json:
         body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return None
 
 
 def get_org_users(org_id):  # noqa: E501
@@ -44,7 +56,8 @@ def get_org_users(org_id):  # noqa: E501
 
     :rtype: InlineResponse2003
     """
-    return 'do some magic!'
+    org_users = db.get_users_from_org(org_id)
+    return org_users
 
 
 def kick_org_user(body):  # noqa: E501
@@ -57,9 +70,12 @@ def kick_org_user(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    change_user_privilege({
+        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.KICKED,
+        OrgInfoKeys.ORG_ID: body[OrgInfoKeys.ORG_ID],
+        UserInfoKeys.UID: body[UserInfoKeys.UID]
+    })
+    return None
 
 
 def org_invite_user(body):  # noqa: E501
@@ -72,6 +88,12 @@ def org_invite_user(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    users_to_invite = body[OrgInfoKeys.INVITES]
+    org_id = body[OrgInfoKeys.ORG_ID]
+    org_name = db.get_organization(org_id)[OrgInfoKeys.NAME]
+    for user in users_to_invite:
+        email = user[UserInfoKeys.EMAIL]
+        user_org_id = user[OrgInfoKeys.USER_ORG_ID]
+        send_registration_email(org_name, org_id, email)
+        # TODO add to db
+    return None
