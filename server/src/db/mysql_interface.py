@@ -138,3 +138,58 @@ def get_election(election_id):
 def get_org_elections(org_id):
     return call_proc(PROCEDURE.GETELECTIONLISTORG, (org_id,), resp_many=True)
 
+
+def get_election_votes(election_id):
+    return call_proc(PROCEDURE.GETINDIVIDUALVOTES, (election_id,), resp_many=True)
+
+
+def get_question_opt(question_id):
+    return call_proc(PROCEDURE.GETQUESTIONOPT, (question_id,))
+
+
+def get_election_questions(election_id):
+    return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,))
+
+
+def get_public_elections():
+    return call_proc(PROCEDURE.GETPUBLICELECTIONS, (None,), resp_many=True)
+
+
+def add_questions(election_id, description):
+    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description), resp_many=True)
+
+
+def drop_question(question_id):
+    return call_proc(PROCEDURE.ADDQUESTION, (question_id,))
+
+
+def update_question(question_id, description):
+    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description))
+
+
+def add_question_opt(opt_id):
+    return call_proc(PROCEDURE.ADDOPT, (opt_id,))
+
+
+def remove_question_opt(opt_id):
+    return call_proc(PROCEDURE.DROPOPT, (opt_id,))
+
+
+def update_question_opt(opt_id, description):
+    return call_proc(PROCEDURE.DROPOPT, (opt_id, description))
+
+
+def get_privilege(org_id, user_id):
+    return call_proc(PROCEDURE.GETPRIVILEGE, (org_id, user_id))
+
+
+def get_idvt(election_id):
+    return call_proc(PROCEDURE.GETPRIVILEGE, (election_id,))
+
+
+def create_vote(voting_token, time_stamp):
+    return call_proc(PROCEDURE.CREATEVOTE, (voting_token, time_stamp))
+
+
+def create_choice(vote_id, opt_id):
+    return call_proc(PROCEDURE.CREATEVOTE, (vote_id, opt_id))
