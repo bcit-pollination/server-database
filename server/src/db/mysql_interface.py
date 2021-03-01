@@ -1,7 +1,7 @@
 import MySQLdb
 
-from swagger_server.models.user import User
-from server.src.constants_enums.privileges import PRIVILEGE
+from server.swagger_server.models.user import User
+from server.src.constants_enums.privileges import PrivilegeLevels
 from .procedures import PROCEDURE
 
 
@@ -111,7 +111,7 @@ def get_users_from_org(org_id):
     return call_proc(PROCEDURE.GETUSERSFROMORG, (org_id,), resp_many=True)
 
 
-def update_privilege(user_id, privilege_level: PRIVILEGE):
+def update_privilege(user_id, privilege_level: PrivilegeLevels):
     return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, privilege_level))
 
 

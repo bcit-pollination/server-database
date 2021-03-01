@@ -2,7 +2,7 @@ import connexion
 import six
 
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
-from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from swagger_server.models.user import User  # noqa: E501
 from swagger_server.models.voting_token import VotingToken  # noqa: E501
 from swagger_server import util
 
@@ -28,7 +28,7 @@ def get_user():  # noqa: E501
      # noqa: E501
 
 
-    :rtype: InlineResponse2001
+    :rtype: User
     """
     return 'do some magic!'
 

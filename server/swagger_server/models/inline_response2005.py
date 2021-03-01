@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.org_user import OrgUser  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +14,20 @@ class InlineResponse2005(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, users: List[OrgUser]=None):  # noqa: E501
+    def __init__(self, election_id: int=None):  # noqa: E501
         """InlineResponse2005 - a model defined in Swagger
 
-        :param users: The users of this InlineResponse2005.  # noqa: E501
-        :type users: List[OrgUser]
+        :param election_id: The election_id of this InlineResponse2005.  # noqa: E501
+        :type election_id: int
         """
         self.swagger_types = {
-            'users': List[OrgUser]
+            'election_id': int
         }
 
         self.attribute_map = {
-            'users': 'users'
+            'election_id': 'election_id'
         }
-        self._users = users
+        self._election_id = election_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2005':
@@ -42,24 +41,24 @@ class InlineResponse2005(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def users(self) -> List[OrgUser]:
-        """Gets the users of this InlineResponse2005.
+    def election_id(self) -> int:
+        """Gets the election_id of this InlineResponse2005.
 
-        An array of all users subscribed to vote  # noqa: E501
+        The id of the election just created  # noqa: E501
 
-        :return: The users of this InlineResponse2005.
-        :rtype: List[OrgUser]
+        :return: The election_id of this InlineResponse2005.
+        :rtype: int
         """
-        return self._users
+        return self._election_id
 
-    @users.setter
-    def users(self, users: List[OrgUser]):
-        """Sets the users of this InlineResponse2005.
+    @election_id.setter
+    def election_id(self, election_id: int):
+        """Sets the election_id of this InlineResponse2005.
 
-        An array of all users subscribed to vote  # noqa: E501
+        The id of the election just created  # noqa: E501
 
-        :param users: The users of this InlineResponse2005.
-        :type users: List[OrgUser]
+        :param election_id: The election_id of this InlineResponse2005.
+        :type election_id: int
         """
 
-        self._users = users
+        self._election_id = election_id

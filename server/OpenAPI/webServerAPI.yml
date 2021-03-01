@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.10"
+  version: "1.12"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -93,7 +93,7 @@ paths:
     delete:
       tags:
         - user
-      summary: Remove user from service. Only a user can remove himself, hence the user is infered from the JWT
+      summary: Remove user from service. Only a user can remove himself, hence the user is inferred from the JWT
       operationId: remove_user
       security:
         - user: [ ]
@@ -213,7 +213,7 @@ paths:
       summary: Disband org
       operationId: disband_org
       description:
-        An org can only be disbanded by it's owner, hence the org is infered from the JWT
+        An org can only be disbanded by it's owner, hence the org is inferred from the JWT
       security:
         - owner: [ ]
       responses:
@@ -653,6 +653,10 @@ components:
           type: string
           format: date
           example: "yyyy-mm-dd"
+        password:
+          description: Will be null except when creating user
+          type: string
+
 
     voting_token:
       type: object
@@ -998,10 +1002,7 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
-            properties:
-              user_info:
-                $ref: "#/components/schemas/user"
+            $ref: "#/components/schemas/user"
 
     bad_users:
       description: Users that could not get invited to org
@@ -1041,10 +1042,7 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
-            properties:
-              org:
-                $ref: '#/components/schemas/user_org'
+            $ref: '#/components/schemas/user_org'
 
 
     org_users:
@@ -1066,10 +1064,7 @@ components:
       content:
         application/json:
           schema:
-            additionalProperties: false
-            properties:
-              election:
-                $ref: "#/components/schemas/election"
+            $ref: "#/components/schemas/election"
 
     election_list:
       description: Get a list of elections

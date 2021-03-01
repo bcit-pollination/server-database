@@ -9,7 +9,7 @@ info:
      1 := member<br>
      2 := admin<br>
      3 := owner
-  version: "1.10"
+  version: "1.12"
 servers:
 - url: https://pollination.live/api
 tags:
@@ -67,7 +67,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/user'
         "400":
           description: Invalid syntax
         "401":
@@ -148,7 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                $ref: '#/components/schemas/inline_response_200_1'
         "400":
           description: Invalid syntax
         "401":
@@ -179,7 +179,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/user_org'
         "400":
           description: Invalid syntax
         "401":
@@ -221,7 +221,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                $ref: '#/components/schemas/inline_response_200_2'
         "400":
           description: Invalid syntax
         "401":
@@ -271,7 +271,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                $ref: '#/components/schemas/inline_response_200_3'
         "400":
           description: Invalid syntax
         "401":
@@ -419,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
+                $ref: '#/components/schemas/inline_response_200_4'
         "400":
           description: Invalid syntax
         "401":
@@ -451,7 +451,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_7'
+                $ref: '#/components/schemas/election'
         "400":
           description: Invalid syntax
         "401":
@@ -497,7 +497,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_8'
+                $ref: '#/components/schemas/inline_response_200_5'
         "400":
           description: Invalid syntax
         "401":
@@ -566,7 +566,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_9'
+                $ref: '#/components/schemas/inline_response_200_6'
         "400":
           description: Invalid syntax
         "401":
@@ -694,7 +694,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_10'
+                $ref: '#/components/schemas/inline_response_200_7'
         "400":
           description: Invalid syntax
         "401":
@@ -726,9 +726,13 @@ components:
         dob:
           type: string
           format: date
+        password:
+          type: string
+          description: Will be null except when creating user
       additionalProperties: false
       description: A user. user can be voters, and admins or verifiers
       example:
+        password: password
         dob: 2000-01-23
         last_name: last_name
         id: 0
@@ -1078,19 +1082,6 @@ components:
     inline_response_200_1:
       type: object
       properties:
-        user_info:
-          $ref: '#/components/schemas/user'
-      additionalProperties: false
-      example:
-        user_info:
-          dob: 2000-01-23
-          last_name: last_name
-          id: 0
-          first_name: first_name
-          email: email
-    inline_response_200_2:
-      type: object
-      properties:
         orgs:
           type: array
           description: A list of all the orgs the user belongs to
@@ -1109,20 +1100,7 @@ components:
             name: name
             id: 6
           privilege: 0
-    inline_response_200_3:
-      type: object
-      properties:
-        org:
-          $ref: '#/components/schemas/user_org'
-      additionalProperties: false
-      example:
-        org:
-          user_org_id: user_org_id
-          org:
-            name: name
-            id: 6
-          privilege: 0
-    inline_response_200_4:
+    inline_response_200_2:
       type: object
       properties:
         org_id:
@@ -1131,7 +1109,7 @@ components:
       additionalProperties: false
       example:
         org_id: 0
-    inline_response_200_5:
+    inline_response_200_3:
       type: object
       properties:
         users:
@@ -1152,7 +1130,7 @@ components:
           items:
             $ref: '#/components/schemas/org_user_invite'
       additionalProperties: false
-    inline_response_200_6:
+    inline_response_200_4:
       type: object
       properties:
         elections:
@@ -1212,40 +1190,7 @@ components:
             max_selection_count: 5
           anonymous: true
           election_description: election_description
-    inline_response_200_7:
-      type: object
-      properties:
-        election:
-          $ref: '#/components/schemas/election'
-      additionalProperties: false
-      example:
-        election:
-          start_time: 2000-01-23T04:56:07.000+00:00
-          org_id: 6
-          election_id: 0
-          end_time: 2000-01-23T04:56:07.000+00:00
-          verified: true
-          public_results: true
-          questions:
-          - question_description: question_description
-            election_id: 1
-            options:
-            - option_description: option_description
-              option_id: 5
-            - option_description: option_description
-              option_id: 5
-            max_selection_count: 5
-          - question_description: question_description
-            election_id: 1
-            options:
-            - option_description: option_description
-              option_id: 5
-            - option_description: option_description
-              option_id: 5
-            max_selection_count: 5
-          anonymous: true
-          election_description: election_description
-    inline_response_200_8:
+    inline_response_200_5:
       type: object
       properties:
         election_id:
@@ -1254,7 +1199,7 @@ components:
       additionalProperties: false
       example:
         election_id: 0
-    inline_response_200_9:
+    inline_response_200_6:
       type: object
       properties:
         elections:
@@ -1266,7 +1211,7 @@ components:
         elections:
         - ""
         - ""
-    inline_response_200_10:
+    inline_response_200_7:
       type: object
       properties:
         verifier_password:
@@ -1337,7 +1282,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_1'
+            $ref: '#/components/schemas/user'
     bad_users:
       description: Users that could not get invited to org
       content:
@@ -1355,32 +1300,32 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_2'
+            $ref: '#/components/schemas/inline_response_200_1'
     org:
       description: Contains all the information relating to the user of the org
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_3'
+            $ref: '#/components/schemas/user_org'
     org_users:
       description: A list of all users in the org, together with lists of admin, verifier
         id's
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_5'
+            $ref: '#/components/schemas/inline_response_200_3'
     election:
       description: Info about election
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_7'
+            $ref: '#/components/schemas/election'
     election_list:
       description: Get a list of elections
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_6'
+            $ref: '#/components/schemas/inline_response_200_4'
     verifier_password:
       description: The password used by id verifiers to login to voting machine
       content:
@@ -1398,14 +1343,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_9'
+            $ref: '#/components/schemas/inline_response_200_6'
     election_package:
       description: All of the information needed to run an offline election using
         the Pollination voting machines
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_10'
+            $ref: '#/components/schemas/inline_response_200_7'
   parameters:
     org_p:
       name: org_id

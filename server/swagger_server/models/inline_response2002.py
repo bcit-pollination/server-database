@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user_org import UserOrg  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +14,20 @@ class InlineResponse2002(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, orgs: List[UserOrg]=None):  # noqa: E501
+    def __init__(self, org_id: int=None):  # noqa: E501
         """InlineResponse2002 - a model defined in Swagger
 
-        :param orgs: The orgs of this InlineResponse2002.  # noqa: E501
-        :type orgs: List[UserOrg]
+        :param org_id: The org_id of this InlineResponse2002.  # noqa: E501
+        :type org_id: int
         """
         self.swagger_types = {
-            'orgs': List[UserOrg]
+            'org_id': int
         }
 
         self.attribute_map = {
-            'orgs': 'orgs'
+            'org_id': 'org_id'
         }
-        self._orgs = orgs
+        self._org_id = org_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2002':
@@ -42,24 +41,24 @@ class InlineResponse2002(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def orgs(self) -> List[UserOrg]:
-        """Gets the orgs of this InlineResponse2002.
+    def org_id(self) -> int:
+        """Gets the org_id of this InlineResponse2002.
 
-        A list of all the orgs the user belongs to  # noqa: E501
+        The id of the implied org  # noqa: E501
 
-        :return: The orgs of this InlineResponse2002.
-        :rtype: List[UserOrg]
+        :return: The org_id of this InlineResponse2002.
+        :rtype: int
         """
-        return self._orgs
+        return self._org_id
 
-    @orgs.setter
-    def orgs(self, orgs: List[UserOrg]):
-        """Sets the orgs of this InlineResponse2002.
+    @org_id.setter
+    def org_id(self, org_id: int):
+        """Sets the org_id of this InlineResponse2002.
 
-        A list of all the orgs the user belongs to  # noqa: E501
+        The id of the implied org  # noqa: E501
 
-        :param orgs: The orgs of this InlineResponse2002.
-        :type orgs: List[UserOrg]
+        :param org_id: The org_id of this InlineResponse2002.
+        :type org_id: int
         """
 
-        self._orgs = orgs
+        self._org_id = org_id

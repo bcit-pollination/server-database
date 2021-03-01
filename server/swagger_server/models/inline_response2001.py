@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user import User  # noqa: F401,E501
+from swagger_server.models.user_org import UserOrg  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +15,20 @@ class InlineResponse2001(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, user_info: User=None):  # noqa: E501
+    def __init__(self, orgs: List[UserOrg]=None):  # noqa: E501
         """InlineResponse2001 - a model defined in Swagger
 
-        :param user_info: The user_info of this InlineResponse2001.  # noqa: E501
-        :type user_info: User
+        :param orgs: The orgs of this InlineResponse2001.  # noqa: E501
+        :type orgs: List[UserOrg]
         """
         self.swagger_types = {
-            'user_info': User
+            'orgs': List[UserOrg]
         }
 
         self.attribute_map = {
-            'user_info': 'user_info'
+            'orgs': 'orgs'
         }
-        self._user_info = user_info
+        self._orgs = orgs
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2001':
@@ -42,22 +42,24 @@ class InlineResponse2001(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def user_info(self) -> User:
-        """Gets the user_info of this InlineResponse2001.
+    def orgs(self) -> List[UserOrg]:
+        """Gets the orgs of this InlineResponse2001.
 
+        A list of all the orgs the user belongs to  # noqa: E501
 
-        :return: The user_info of this InlineResponse2001.
-        :rtype: User
+        :return: The orgs of this InlineResponse2001.
+        :rtype: List[UserOrg]
         """
-        return self._user_info
+        return self._orgs
 
-    @user_info.setter
-    def user_info(self, user_info: User):
-        """Sets the user_info of this InlineResponse2001.
+    @orgs.setter
+    def orgs(self, orgs: List[UserOrg]):
+        """Sets the orgs of this InlineResponse2001.
 
+        A list of all the orgs the user belongs to  # noqa: E501
 
-        :param user_info: The user_info of this InlineResponse2001.
-        :type user_info: User
+        :param orgs: The orgs of this InlineResponse2001.
+        :type orgs: List[UserOrg]
         """
 
-        self._user_info = user_info
+        self._orgs = orgs

@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.user_org import UserOrg  # noqa: F401,E501
+from swagger_server.models.org_user import OrgUser  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,20 +15,20 @@ class InlineResponse2003(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org: UserOrg=None):  # noqa: E501
+    def __init__(self, users: List[OrgUser]=None):  # noqa: E501
         """InlineResponse2003 - a model defined in Swagger
 
-        :param org: The org of this InlineResponse2003.  # noqa: E501
-        :type org: UserOrg
+        :param users: The users of this InlineResponse2003.  # noqa: E501
+        :type users: List[OrgUser]
         """
         self.swagger_types = {
-            'org': UserOrg
+            'users': List[OrgUser]
         }
 
         self.attribute_map = {
-            'org': 'org'
+            'users': 'users'
         }
-        self._org = org
+        self._users = users
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2003':
@@ -42,22 +42,24 @@ class InlineResponse2003(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org(self) -> UserOrg:
-        """Gets the org of this InlineResponse2003.
+    def users(self) -> List[OrgUser]:
+        """Gets the users of this InlineResponse2003.
 
+        An array of all users subscribed to vote  # noqa: E501
 
-        :return: The org of this InlineResponse2003.
-        :rtype: UserOrg
+        :return: The users of this InlineResponse2003.
+        :rtype: List[OrgUser]
         """
-        return self._org
+        return self._users
 
-    @org.setter
-    def org(self, org: UserOrg):
-        """Sets the org of this InlineResponse2003.
+    @users.setter
+    def users(self, users: List[OrgUser]):
+        """Sets the users of this InlineResponse2003.
 
+        An array of all users subscribed to vote  # noqa: E501
 
-        :param org: The org of this InlineResponse2003.
-        :type org: UserOrg
+        :param users: The users of this InlineResponse2003.
+        :type users: List[OrgUser]
         """
 
-        self._org = org
+        self._users = users

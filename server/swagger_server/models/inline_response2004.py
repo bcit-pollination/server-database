@@ -6,6 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.election import Election  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -14,20 +15,20 @@ class InlineResponse2004(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, org_id: int=None):  # noqa: E501
+    def __init__(self, elections: List[Election]=None):  # noqa: E501
         """InlineResponse2004 - a model defined in Swagger
 
-        :param org_id: The org_id of this InlineResponse2004.  # noqa: E501
-        :type org_id: int
+        :param elections: The elections of this InlineResponse2004.  # noqa: E501
+        :type elections: List[Election]
         """
         self.swagger_types = {
-            'org_id': int
+            'elections': List[Election]
         }
 
         self.attribute_map = {
-            'org_id': 'org_id'
+            'elections': 'elections'
         }
-        self._org_id = org_id
+        self._elections = elections
 
     @classmethod
     def from_dict(cls, dikt) -> 'InlineResponse2004':
@@ -41,24 +42,22 @@ class InlineResponse2004(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def org_id(self) -> int:
-        """Gets the org_id of this InlineResponse2004.
+    def elections(self) -> List[Election]:
+        """Gets the elections of this InlineResponse2004.
 
-        The id of the implied org  # noqa: E501
 
-        :return: The org_id of this InlineResponse2004.
-        :rtype: int
+        :return: The elections of this InlineResponse2004.
+        :rtype: List[Election]
         """
-        return self._org_id
+        return self._elections
 
-    @org_id.setter
-    def org_id(self, org_id: int):
-        """Sets the org_id of this InlineResponse2004.
+    @elections.setter
+    def elections(self, elections: List[Election]):
+        """Sets the elections of this InlineResponse2004.
 
-        The id of the implied org  # noqa: E501
 
-        :param org_id: The org_id of this InlineResponse2004.
-        :type org_id: int
+        :param elections: The elections of this InlineResponse2004.
+        :type elections: List[Election]
         """
 
-        self._org_id = org_id
+        self._elections = elections

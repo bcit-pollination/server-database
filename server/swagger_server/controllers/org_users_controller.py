@@ -1,7 +1,7 @@
 import connexion
 import six
 
-from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
+from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server import util
 
@@ -42,7 +42,7 @@ def get_org_users(org_id):  # noqa: E501
     :param org_id: The id of the org
     :type org_id: int
 
-    :rtype: InlineResponse2005
+    :rtype: InlineResponse2003
     """
     return 'do some magic!'
 
