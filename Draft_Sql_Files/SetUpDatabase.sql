@@ -10,7 +10,7 @@ CREATE TABLE Users (
     dob                 DATE            NOT NULL,
     password	        VARCHAR(72)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
-    disabled			BOOLEAN			NOT NULL	DEFAULT(FALSE),
+    deactivated			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE Enrollment (
     org_id 				INT 			NOT NULL,
     privilege 	        INT 			NOT NULL 	DEFAULT(0), /* Lowest privilege level is 0. */
     user_org_id 		VARCHAR(40)     NOT NULL,
-    disabled			BOOLEAN			NOT NULL 	DEFAULT(FALSE),
+    inactive			BOOLEAN			NOT NULL 	DEFAULT(FALSE),
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
         REFERENCES Users (user_id)
@@ -54,11 +54,11 @@ CREATE TABLE Election (
     election_id 	            INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			            INT 		NOT NULL,
     election_description		VARCHAR(40)	NOT NULL,
-    verified                    BOOLEAN     NOT NULL	DEFAULT(FALSE),
     start_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
     anonymous 	                BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
     public_results              BOOLEAN     NOT NULL    DEFAULT(FALSE),
+    verified                    BOOLEAN     NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)

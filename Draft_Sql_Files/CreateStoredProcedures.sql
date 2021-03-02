@@ -38,9 +38,9 @@ DROP PROCEDURE IF EXISTS UpdateQuestion;
 DROP PROCEDURE IF EXISTS AddOption;
 DROP PROCEDURE IF EXISTS DeleteOption;
 DROP PROCEDURE IF EXISTS UpdateOption;
-DROP PROCEDURE IF EXISTS GetQuestionOption;
-DROP PROCEDURE IF EXISTS GetElectionQuestions;
-DROP PROCEDURE IF EXISTS GetElectionQuestionsAndOptions;
+DROP PROCEDURE IF EXISTS GetQuestionOptions;
+DROP PROCEDURE IF EXISTS GetQuestions;
+DROP PROCEDURE IF EXISTS GetQuestionsAndOptions;
 
 DROP PROCEDURE IF EXISTS GetUserVotes;
 
@@ -75,12 +75,12 @@ CREATE PROCEDURE DeactivateUser(
     IN user_id INT)
 BEGIN
     UPDATE Users u
-    SET disabled = TRUE
+    SET deactivated = TRUE
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET disabled = TRUE
-    WHERE u.user_id = user_id;
+    SET inactive = TRUE
+    WHERE e.user_id = user_id;
 END; //
 
 /**
@@ -110,7 +110,7 @@ BEGIN
         password, voting_token)
     VALUES(first_name, last_name, email, dob, 
         password, voting_token);
-    SELECT LAST_INSERT_ID();
+    SELECT LAST_INSERT_ID() AS `user_id`;
 END; //
 
 /**
@@ -141,22 +141,28 @@ END; //
 /**
  * Disbands an organization, kicking everyone
  * from the organization.
- * NOTE: This procedure can be done since we are not allowing for
+ * NOTE: This procedure can be done safely since we are not allowing for
  * a user to be the owner of more than one organization.
  */
 CREATE PROCEDURE DisbandOrg(
     IN user_id INT)
 BEGIN
-    SET SQL_SAFE_UPDATES = 0;
+    DECLARE org_id INT;
+    
+    SELECT o.org_id
+    INTO org_id
+    FROM Enrollment e
+        INNER JOIN Organization o
+            ON e.org_id = o.org_id
+    WHERE e.user_id = user_id;
+
     UPDATE Organization o
-        INNER JOIN Enrollment e ON e.org_id = o.org_id
-        SET o.disabled = TRUE
-        WHERE e.user_id = user_id;
-    SET SQL_SAFE_UPDATES = 1;
+    SET o.disabled = TRUE
+    WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET disabled = TRUE
-    WHERE e.user_id = user_id;
+    SET e.inactive = TRUE
+    WHERE e.org_id = org_id;
 END; //
 
 /**
@@ -187,9 +193,9 @@ CREATE PROCEDURE CreateOrg(
 BEGIN
     INSERT INTO Organization(org_name, verifier_password)
     VALUES(org_name, verifier_password);
-    SELECT LAST_INSERT_ID();
-    INSERT INTO Enrollment(user_id, org_id, user_org_id)
-    VALUES(user_id, LAST_INSERT_ID());
+    SELECT LAST_INSERT_ID() AS `org_id`;
+    INSERT INTO Enrollment(user_id, org_id, user_org_id, privilege)
+    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 3);
 END; //
 
 /** 
@@ -210,7 +216,7 @@ END; //
  CREATE PROCEDURE UpdateUserOrgId(
      IN user_id INT,
      IN org_id INT,
-     IN user_org_id INT)
+     IN user_org_id VARCHAR(40))
  BEGIN
     UPDATE Enrollment e
     SET e.user_org_id = user_org_id
@@ -237,8 +243,8 @@ END; //
 CREATE PROCEDURE GetOrg(
     IN org_id INT)
 BEGIN
-    SELECT org_id, org_name FROM Organization o
-    WHERE org_id = id;
+    SELECT o.org_id, o.org_name FROM Organization o
+    WHERE o.org_id = org_id;
 END; //
 
 /**
@@ -302,7 +308,8 @@ END; //
  * Invites a user to the specified organization.
  */
 CREATE PROCEDURE InviteUser(
-    IN email INT, 
+    IN email VARCHAR(40), 
+    IN user_org_id VARCHAR(40),
     IN org_id INT)
 BEGIN
     DECLARE user_id INT;
@@ -312,8 +319,8 @@ BEGIN
     FROM Users u
     WHERE u.email = email;
 
-    INSERT INTO Enrollment(user_id, org_id)
-    VALUES(user_id, org_id);
+    INSERT INTO Enrollment(user_id, org_id, user_org_id)
+    VALUES(user_id, org_id, user_org_id);
 END; //
 
 
@@ -325,7 +332,7 @@ CREATE PROCEDURE KickUser(
     IN org_id INT)
 BEGIN
     UPDATE Enrollment e
-    SET e.disabled = TRUE
+    SET e.inactive = TRUE
     WHERE e.user_id = user_id
     AND e.org_id = org_id;
 END; //
@@ -390,9 +397,9 @@ CREATE PROCEDURE CreateElection(
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
 BEGIN
-    INSERT INTO Election(org_id, election_description, start_time, end_time, anonymous, public_results)
-    VALUES(org_id, election_description, start_time, end_time, anonymous, public_results);
-    SELECT LAST_INSERT_ID();
+    INSERT INTO Election(org_id, election_description, start_time, end_time, anonymous, public_results, verified)
+    VALUES(org_id, election_description, start_time, end_time, anonymous, public_results, verified);
+    SELECT LAST_INSERT_ID() AS `election_id`;
 END;//
 
 /**
@@ -489,9 +496,9 @@ BEGIN
     INSERT INTO Opt (question_id, option_description) 
     VALUES(question_id, option_description);
     
-    UPDATE Question
+    UPDATE Question q
         SET max_selection_count = max_selection_count + 1
-        WHERE question_id = id;
+        WHERE q.question_id = question_id;
 END; //
 
 /** 
@@ -518,16 +525,16 @@ CREATE PROCEDURE UpdateOption(
 BEGIN
     UPDATE Opt o
     SET o.option_description = option_description
-    WHERE o.option_id = id;
+    WHERE o.option_id = option_id;
 END; //
 
 
 
 /**
- * Gets all the details about the specified question option, 
- * including the total votes cast for it.
+ * Gets all the details about the specified question's options, 
+ * including the total votes cast for each option.
  */
-CREATE PROCEDURE GetQuestionOption(
+CREATE PROCEDURE GetQuestionOptions(
     IN question_id INT)
 BEGIN
     SELECT o.* FROM Opt o
@@ -537,20 +544,20 @@ END; //
 /** 
  * Gets all the questions from the specified election.
  */
-CREATE PROCEDURE GetElectionQuestions(
+CREATE PROCEDURE GetQuestions(
     IN election_id INT)
 BEGIN
     SELECT q.* FROM Question q
         INNER JOIN Election e
         ON e.election_id = q.election_id
-        WHERE q.election_id = id;
+        WHERE q.election_id = election_id;
 END; //
 
 /** 
  * Gets all the questions and options from the specified election,
  * including the total votes cast for each option.
  */
-CREATE PROCEDURE GetElectionQuestionsAndOptions(
+CREATE PROCEDURE GetQuestionsAndOptions(
     IN election_id INT)
 BEGIN
     SELECT q.*, o.* FROM Question q
@@ -558,7 +565,7 @@ BEGIN
         ON e.election_id = q.election_id
         INNER JOIN Opt o
         ON o.question_id = q.question_id
-        WHERE q.election_id = id;
+        WHERE q.election_id = election_id;
 END; //
 
 
@@ -622,7 +629,7 @@ BEGIN
     IF (prev_time_stamp IS NULL) THEN
         INSERT INTO Vote(user_id, time_stamp)
         VALUES(user_id, time_stamp);
-        SELECT LAST_INSERT_ID();
+        SELECT LAST_INSERT_ID() AS `vote_id`;
     ELSEIF (time_stamp < prev_time_stamp) THEN
         UPDATE Vote v
             SET v.time_stamp = time_stamp
@@ -677,8 +684,8 @@ END; //
  */
 CREATE PROCEDURE GetPublicElections()
 BEGIN
-    SELECT * FROM Election
-    WHERE public_results = TRUE;
+    SELECT e.* FROM Election e
+    WHERE e.public_results = TRUE;
 END; //
 
 
