@@ -79,7 +79,7 @@ END; //
  */
 CREATE PROCEDURE GetUser(IN id INT)
 BEGIN
-    SELECT user_id, first_name, last_name, email, date_of_birth FROM Users
+    SELECT user_id, first_name, last_name, email, dob FROM Users
     WHERE user_id = id;
 END; //
 
@@ -91,13 +91,13 @@ CREATE PROCEDURE CreateUser(
     IN first_name VARCHAR(40), 
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
-    IN date_of_birth DATE,
+    IN dob DATE,
     IN password VARCHAR(40),
     IN voting_token VARCHAR(36))
 BEGIN
-    INSERT INTO Users(first_name, last_name, email, date_of_birth, 
+    INSERT INTO Users(first_name, last_name, email, dob, 
         password, voting_token)
-    VALUES(first_name, last_name, email, date_of_birth, 
+    VALUES(first_name, last_name, email, dob, 
         password, voting_token);
     SELECT LAST_INSERT_ID();
 END; //
@@ -140,7 +140,7 @@ BEGIN
 END; //
 
 /** 
- * Gets the privilege_level of a particular user
+ * Gets the privilege of a particular user
  * from a particular organization.
  */
 CREATE PROCEDURE GetPrivilege(
@@ -148,7 +148,7 @@ CREATE PROCEDURE GetPrivilege(
     IN user_id INT
 )
 BEGIN
-    SELECT privilege_level FROM Enrollment
+    SELECT privilege FROM Enrollment
     WHERE org_id = org_id
     AND user_id = user_id;
 END; //
@@ -191,7 +191,7 @@ END; //
     that the user specified belongs to.*/
 CREATE PROCEDURE GetOrganizations(IN id INT)
 BEGIN
-    SELECT e.privilege_level, o.org_id, o.org_name FROM Users u
+    SELECT e.privilege, o.org_id, o.org_name FROM Users u
         INNER JOIN Enrollment e
             ON u.user_id = e.user_id
         INNER JOIN Organization o
@@ -211,18 +211,18 @@ END; //
 
 /** Takes in the id of an organization and the privilege level as parameters, and
     displays all of the users who are currently in that organization.
-    This includes their id, firstname, lastname, email, date_of_birth, and voting_token
+    This includes their id, firstname, lastname, email, dob, and voting_token
     (I avoided any sensitive information such as their passwords of course).*/
 
-CREATE PROCEDURE GetUsersFromOrg(IN id INT, IN privilege_level INT)
+CREATE PROCEDURE GetUsersFromOrg(IN id INT, IN privilege INT)
 BEGIN
-    SELECT e.user_id, first_name, last_name, email, date_of_birth, voting_token, e.privilege FROM Users
+    SELECT e.user_id, first_name, last_name, email, dob, voting_token, e.privilege FROM Users
         INNER JOIN Enrollment e
            ON u.user_id = e.user_id
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = id
-    AND e.privilege_level = privelege_level;
+    AND e.privilege = privilege;
 END; //
 
 /** Takes in the id of a user and an organization, then 
@@ -240,11 +240,11 @@ END; //
 CREATE PROCEDURE UpdatePrivilege(
     IN in_user_id INT,
     IN in_org_id INT,
-    IN in_privilege_level INT
+    IN in_privilege INT
 )
 BEGIN
     UPDATE Enrollment
-    SET privilege_level = in_privilege_level
+    SET privilege = in_privilege
     WHERE user_id = in_user_id
     AND org_id = in_org_id;
 END; //
@@ -278,12 +278,12 @@ CREATE PROCEDURE CreateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN,
-    IN is_public BOOLEAN,
+    IN anonymous BOOLEAN,
+    IN public_results BOOLEAN,
     IN verified BOOLEAN)
 BEGIN
-    INSERT INTO Election(org_id, description, start_time, end_time, is_anonymous, is_public)
-    VALUES(org_id, description, start_time, end_time, is_anonymous, is_public);
+    INSERT INTO Election(org_id, description, start_time, end_time, anonymous, public_results)
+    VALUES(org_id, description, start_time, end_time, anonymous, public_results);
     SELECT LAST_INSERT_ID();
 END;//
 
@@ -296,8 +296,8 @@ CREATE PROCEDURE UpdateElection(
     IN description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
-    IN is_anonymous BOOLEAN,
-    IN is_public BOOLEAN,
+    IN anonymous BOOLEAN,
+    IN public_results BOOLEAN,
     IN verified BOOLEAN
     )
 BEGIN
@@ -318,11 +318,11 @@ BEGIN
         WHERE election_id = id;
         
     UPDATE Election
-        SET is_anonymous = is_anonymous
+        SET anonymous = anonymous
         WHERE election_id = id;
         
     UPDATE Election
-        SET is_public = is_public
+        SET public_results = public_results
         WHERE election_id = id;
 END; //
 
@@ -342,7 +342,7 @@ END; //
 CREATE PROCEDURE GetElectionListUser(IN id INT)
 BEGIN
     SELECT election_id, el.org_id, start_time,
-        end_time, verified, is_anonymous, is_public FROM Users u
+        end_time, verified, anonymous, public_results FROM Users u
             INNER JOIN Enrollment e
                 ON e.user_id = u.user_id
             INNER JOIN Election el
@@ -356,11 +356,11 @@ END; //
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
     IN description VARCHAR(40),
-    IN choice_limit INT
+    IN max_selection_count INT
 )
 BEGIN
-    INSERT INTO Question (election_id, description, choice_limit)
-        VALUES (election_id, description, choice_limit);
+    INSERT INTO Question (election_id, description, max_selection_count)
+        VALUES (election_id, description, max_selection_count);
 END; //
 
 /** Drops Question from an election. */
@@ -398,7 +398,7 @@ BEGIN
     VALUES(id, descr);
     
     UPDATE Question
-        SET choice_limit = choice_limit + 1
+        SET max_selection_count = max_selection_count + 1
         WHERE question_id = id;
     
 END; //
@@ -412,7 +412,7 @@ BEGIN
 
     UPDATE Question q
     INNER JOIN Opt c ON q.question_id = c.question_id
-    SET choice_limit = choice_limit - 1
+    SET max_selection_count = max_selection_count - 1
     WHERE c.opt_id = id;
     
     DELETE FROM Opt
@@ -519,7 +519,7 @@ BEGIN
         SET SQL_SAFE_UPDATES = 0;
         UPDATE Opt op
             INNER JOIN Choice c ON op.opt_id = c.opt_id
-            SET op.total_choices = op.total_choices - 1
+            SET op.total_votes_for = op.total_votes_for - 1
             WHERE c.vote_id = vote_id;
         SET SQL_SAFE_UPDATES = 1;
         DELETE FROM Choice c 
@@ -538,7 +538,7 @@ BEGIN
     INSERT INTO Choice(vote_id, opt_id)
     VALUES(vote_id, opt_id);
     UPDATE Opt o
-        SET o.total_choices = o.total_choices + 1
+        SET o.total_votes_for = o.total_votes_for + 1
         WHERE o.opt_id = opt_id;
 END; //
 
@@ -550,7 +550,7 @@ CREATE PROCEDURE GetIdVt(
     IN election_id INT
 )
 BEGIN
-    SELECT u.user_id, u.voting_token, en.identification FROM Election el
+    SELECT u.user_id, u.voting_token, en.user_org_id FROM Election el
     INNER JOIN Enrollment en 
         ON el.org_id = en.org_id
     INNER JOIN Users u
@@ -566,7 +566,7 @@ END; //
 CREATE PROCEDURE GetPublicElections()
 BEGIN
     SELECT * FROM Election
-    WHERE is_public = TRUE;
+    WHERE public_results = TRUE;
 END; //
 
 
@@ -578,8 +578,8 @@ END; //
     as the election.*/
     CREATE PROCEDURE GetElectionsAlternate(IN id INT)
     BEGIN
-        SELECT e.user_id, e.org_id, election_id, privilege_level, 
-        start_time, end_time, verified, is_anonymous, is_public FROM Users u
+        SELECT e.user_id, e.org_id, election_id, privilege, 
+        start_time, end_time, verified, anonymous, public_results FROM Users u
         INNER JOIN Enrollment e
             ON e.user_id = u.user_id
         INNER JOIN Election el
