@@ -57,7 +57,7 @@ DELIMITER //
 //
 
 /**
- * Returns the user_id correspoding to the email and password.
+ * Returns the user_id corresponding to the email and password.
  */
 CREATE PROCEDURE LoginUser(
     IN email VARCHAR(40),
@@ -271,7 +271,7 @@ END; //
 
 /**
  * Gets the org_id, org_name, privilege, and user_org_id
- * for the user's organizations in which they are a user.
+ * for the user's organizations in which they are a member or higher.
  */
 CREATE PROCEDURE GetUserOrgListInfo(
     IN user_id INT)
@@ -321,6 +321,7 @@ BEGIN
 
     INSERT INTO Enrollment(user_id, org_id, user_org_id)
     VALUES(user_id, org_id, user_org_id);
+    SELECT user_id;
 END; //
 
 
@@ -656,6 +657,7 @@ CREATE PROCEDURE AddChoice(
 BEGIN
     INSERT INTO Choice(vote_id, option_id)
     VALUES(vote_id, option_id);
+    SELECT LAST_INSERT_ID() AS `choice_id`;
     UPDATE Opt o
         SET o.total_votes_for = o.total_votes_for + 1
         WHERE o.option_id = option_id;
