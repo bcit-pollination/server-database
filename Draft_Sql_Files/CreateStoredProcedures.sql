@@ -383,15 +383,15 @@ END; //
  */
 CREATE PROCEDURE CreateElection(
     IN org_id INT, 
-    IN description VARCHAR(40),
+    IN election_description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
 BEGIN
-    INSERT INTO Election(org_id, description, start_time, end_time, anonymous, public_results)
-    VALUES(org_id, description, start_time, end_time, anonymous, public_results);
+    INSERT INTO Election(org_id, election_description, start_time, end_time, anonymous, public_results)
+    VALUES(org_id, election_description, start_time, end_time, anonymous, public_results);
     SELECT LAST_INSERT_ID();
 END;//
 
@@ -400,7 +400,7 @@ END;//
  */
 CREATE PROCEDURE UpdateElection(
     IN id INT,
-    IN description VARCHAR(40),
+    IN election_description VARCHAR(40),
     IN start_time TIMESTAMP,
     IN end_time TIMESTAMP,
     IN anonymous BOOLEAN,
@@ -408,7 +408,7 @@ CREATE PROCEDURE UpdateElection(
     IN verified BOOLEAN)
 BEGIN
     UPDATE Election e
-    SET e.description = description,
+    SET e.election_description = election_description,
         e.start_time = start_time,
         e.end_time = end_time,
         e.anonymous = anonymous,
@@ -449,11 +449,11 @@ END; //
  */
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
-    IN description VARCHAR(40),
+    IN question_description VARCHAR(40),
     IN max_selection_count INT)
 BEGIN
-    INSERT INTO Question (election_id, description, max_selection_count)
-        VALUES (election_id, description, max_selection_count);
+    INSERT INTO Question (election_id, question_description, max_selection_count)
+        VALUES (election_id, question_description, max_selection_count);
 END; //
 
 /**
@@ -471,10 +471,10 @@ END; //
  */
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
-    IN description VARCHAR(40))
+    IN question_description VARCHAR(40))
 BEGIN
     UPDATE Question q
-        SET q.description = description
+        SET q.question_description = question_description
         WHERE q.question_id = question_id;
 END; //
     
@@ -484,10 +484,10 @@ END; //
  */
 CREATE PROCEDURE AddOption(
     IN question_id INT,
-    IN description VARCHAR(40))
+    IN option_description VARCHAR(40))
 BEGIN
-    INSERT INTO Opt (question_id, description) 
-    VALUES(question_id, description);
+    INSERT INTO Opt (question_id, option_description) 
+    VALUES(question_id, option_description);
     
     UPDATE Question
         SET max_selection_count = max_selection_count + 1
@@ -514,10 +514,10 @@ END; //
  */
 CREATE PROCEDURE UpdateOption(
     IN option_id INT,
-    IN description VARCHAR(40))
+    IN option_description VARCHAR(40))
 BEGIN
     UPDATE Opt o
-    SET o.description = description
+    SET o.option_description = option_description
     WHERE o.option_id = id;
 END; //
 
@@ -571,8 +571,8 @@ END; //
 CREATE PROCEDURE GetUserVotes(
     IN election_id INT)
 BEGIN   
-    SELECT u.first_name, u.last_name, q.question_id, q.description AS `question_description`, 
-        o.option_id, o.description AS `option_description` FROM Election el
+    SELECT u.first_name, u.last_name, q.question_id, q.question_description, 
+        o.option_id, o.option_description FROM Election el
         INNER JOIN Question q
             ON el.election_id = q.election_id
         INNER JOIN Opt o

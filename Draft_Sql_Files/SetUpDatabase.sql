@@ -51,14 +51,14 @@ CREATE TABLE Enrollment (
 );
 
 CREATE TABLE Election (
-    election_id 	INT 		NOT NULL 	AUTO_INCREMENT,
-    org_id 			INT 		NOT NULL,
-    description		VARCHAR(40)	NOT NULL,
-    verified        BOOLEAN     NOT NULL	DEFAULT(FALSE),
-    start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
-    end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
-    anonymous 	    BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
-    public_results  BOOLEAN     NOT NULL    DEFAULT(FALSE),
+    election_id 	            INT 		NOT NULL 	AUTO_INCREMENT,
+    org_id 			            INT 		NOT NULL,
+    election_description		VARCHAR(40)	NOT NULL,
+    verified                    BOOLEAN     NOT NULL	DEFAULT(FALSE),
+    start_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
+    end_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
+    anonymous 	                BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
+    public_results              BOOLEAN     NOT NULL    DEFAULT(FALSE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
@@ -66,10 +66,10 @@ CREATE TABLE Election (
 );
 
 CREATE TABLE Question (
-    question_id 		INT 			NOT NULL 	AUTO_INCREMENT,
-    election_id 		INT 			NOT NULL,
-    description 		VARCHAR(40) 	NOT NULL,
-    max_selection_count INT 			NOT NULL,
+    question_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
+    election_id 		        INT 			NOT NULL,
+    question_description 		VARCHAR(40) 	NOT NULL,
+    max_selection_count         INT 			NOT NULL,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
@@ -77,10 +77,10 @@ CREATE TABLE Question (
 );
 
 CREATE TABLE Opt (
-    option_id 		    INT 			NOT NULL 	AUTO_INCREMENT,
-    question_id 	    INT 			NOT NULL,
-    description 	    VARCHAR(40) 	NOT NULL,
-    total_votes_for     INT				NOT NULL	DEFAULT 0,
+    option_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
+    question_id 	        INT 			NOT NULL,
+    option_description      VARCHAR(40) 	NOT NULL,
+    total_votes_for         INT				NOT NULL	DEFAULT 0,
     PRIMARY KEY (option_id),
     FOREIGN KEY (question_id)
         REFERENCES Question (question_id)
