@@ -9,45 +9,52 @@ DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS UpdateUser;
 
 DROP PROCEDURE IF EXISTS DisbandOrg;
-DROP PROCEDURE IF EXISTS GetPrivilege;
-DROP PROCEDURE IF EXISTS GetOrganization;
+DROP PROCEDURE IF EXISTS GetOwnerOrgInfo;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS UpdateOrg;
-DROP PROCEDURE IF EXISTS GetOrganizations;
+DROP PROCEDURE IF EXISTS UpdateUserOrgId;
+DROP PROCEDURE IF EXISTS UpdateVerifierPassword;
+DROP PROCEDURE IF EXISTS GetOrg;
+DROP PROCEDURE IF EXISTS GetUserOrgId;
 DROP PROCEDURE IF EXISTS GetVerifierPassword;
+DROP PROCEDURE IF EXISTS GetUserOrgListInfo;
 
 DROP PROCEDURE IF EXISTS GetUsersFromOrg;
 DROP PROCEDURE IF EXISTS InviteUser;
+DROP PROCEDURE IF EXISTS KickUser;
 DROP PROCEDURE IF EXISTS UpdatePrivilege;
+DROP PROCEDURE IF EXISTS GetPrivilege;
 
 DROP PROCEDURE IF EXISTS DeleteElection;
 DROP PROCEDURE IF EXISTS GetElection;
 DROP PROCEDURE IF EXISTS CreateElection;
 DROP PROCEDURE IF EXISTS UpdateElection;
-DROP PROCEDURE IF EXISTS GetElectionListOrg;
-DROP PROCEDURE IF EXISTS GetElectionListUser;
+DROP PROCEDURE IF EXISTS GetOrgElections;
+DROP PROCEDURE IF EXISTS GetUserElections;
 
 DROP PROCEDURE IF EXISTS AddQuestion;
-DROP PROCEDURE IF EXISTS DropQuestion;
+DROP PROCEDURE IF EXISTS DeleteQuestion;
 DROP PROCEDURE IF EXISTS UpdateQuestion;
-DROP PROCEDURE IF EXISTS AddOpt;
-DROP PROCEDURE IF EXISTS DropOpt;
-DROP PROCEDURE IF EXISTS UpdateOpt;
-DROP PROCEDURE IF EXISTS GetQuestionOpt;
+DROP PROCEDURE IF EXISTS AddOption;
+DROP PROCEDURE IF EXISTS DeleteOption;
+DROP PROCEDURE IF EXISTS UpdateOption;
+DROP PROCEDURE IF EXISTS GetQuestionOption;
 DROP PROCEDURE IF EXISTS GetElectionQuestions;
+DROP PROCEDURE IF EXISTS GetElectionQuestionsAndOptions;
 
-DROP PROCEDURE IF EXISTS GetIndividualVotes;
+DROP PROCEDURE IF EXISTS GetUserVotes;
 
-DROP PROCEDURE IF EXISTS CreateVote;
-DROP PROCEDURE IF EXISTS CreateChoice;
+DROP PROCEDURE IF EXISTS AddVote;
+DROP PROCEDURE IF EXISTS AddChoice;
 
-DROP PROCEDURE IF EXISTS GetIdVt;
+DROP PROCEDURE IF EXISTS GetVoterList;
 
 DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DELIMITER //
+//
 
 /**
  * Returns the user_id correspoding to the email and password.
@@ -64,23 +71,27 @@ END; //
 /**
  * Deactivates the user (also kicks them from their joined organizations).
  */
-CREATE PROCEDURE DeactivateUser(IN id INT)
+CREATE PROCEDURE DeactivateUser(
+    IN user_id INT)
 BEGIN
-    UPDATE Users
+    UPDATE Users u
     SET disabled = TRUE
-    WHERE user_id = id;
-    UPDATE Enrollment
+    WHERE u.user_id = user_id;
+
+    UPDATE Enrollment e
     SET disabled = TRUE
-    WHERE user_id = id;
+    WHERE u.user_id = user_id;
 END; //
 
 /**
  * Gets the user's non-sensitive data.
  */
-CREATE PROCEDURE GetUser(IN id INT)
+CREATE PROCEDURE GetUser(
+    IN user_id INT)
 BEGIN
-    SELECT user_id, first_name, last_name, email, dob FROM Users
-    WHERE user_id = id;
+    SELECT user_id, first_name, last_name, email, dob 
+    FROM Users u
+    WHERE u.user_id = user_id;
 END; //
 
 /**
@@ -105,174 +116,271 @@ END; //
 /**
  * Gets the user's voting_token.
  */
-CREATE PROCEDURE GetUserToken(IN id INT)
+CREATE PROCEDURE GetUserToken(
+    IN user_id INT)
 BEGIN
-    SELECT voting_token FROM Users
-    WHERE user_id = id;
+    SELECT voting_token
+    FROM Users u
+    WHERE u.user_id = user_id;
 END; //
 
 /**
  * Updates a user's password.
  */
 CREATE PROCEDURE UpdateUser(
-    IN in_user_id INT,
-    IN in_password VARCHAR(72)
-)
+    IN user_id INT,
+    IN password VARCHAR(72))
 BEGIN
-    UPDATE Users
-    SET password = in_password
-    WHERE user_id = in_user_id;
+    UPDATE Users u
+    SET u.password = password
+    WHERE u.user_id = user_id;
 END; //
 
 
 
 /**
- * Disbands an organization by setting its disabled flag and the enrollment disabled flags.
+ * Disbands an organization, kicking everyone
+ * from the organization.
+ * NOTE: This procedure can be done since we are not allowing for
+ * a user to be the owner of more than one organization.
  */
-CREATE PROCEDURE DisbandOrg(IN in_org_id INT)
+CREATE PROCEDURE DisbandOrg(
+    IN user_id INT)
 BEGIN
-    UPDATE Organization
+    SET SQL_SAFE_UPDATES = 0;
+    UPDATE Organization o
+        INNER JOIN Enrollment e ON e.org_id = o.org_id
+        SET o.disabled = TRUE
+        WHERE e.user_id = user_id;
+    SET SQL_SAFE_UPDATES = 1;
+
+    UPDATE Enrollment e
     SET disabled = TRUE
-    WHERE org_id = in_org_id;
-    UPDATE Enrollment
-    SET disabled = TRUE
-    WHERE org_id = in_org_id;
+    WHERE e.user_id = user_id;
 END; //
 
-/** 
- * Gets the privilege of a particular user
- * from a particular organization.
+/**
+ * Gets the org_id, org_name, privilege, and user_org_id
+ * for the user's organization in which they are the owner.
  */
-CREATE PROCEDURE GetPrivilege(
-    IN org_id INT,
-    IN user_id INT
-)
+CREATE PROCEDURE GetOwnerOrgInfo(
+    IN user_id INT)
 BEGIN
-    SELECT privilege FROM Enrollment
-    WHERE org_id = org_id
-    AND user_id = user_id;
-END; //
-
-/** Gets an organization's data from
-    an organization id.*/
-CREATE PROCEDURE GetOrganization(IN id INT)
-BEGIN
-    SELECT org_id, org_name FROM Organization
-    WHERE org_id = id;
-END; //
-
-/** Takes in a user id and a name for the organization,
-    then uses this information to create an organization.*/
-CREATE PROCEDURE CreateOrg(
-    IN user_id INT, 
-    IN org_name VARCHAR(40),
-    IN verifier_password VARCHAR(72))
-BEGIN
-    INSERT INTO Organization(org_name, verifier_password)
-    VALUES(org_name, verifier_password);
-    SELECT LAST_INSERT_ID();
-    INSERT INTO Enrollment(user_id, org_id)
-    VALUES(user_id, LAST_INSERT_ID());
-END; //
-
-/** Updates an organization's password and name. **/
-CREATE PROCEDURE UpdateOrg(
-    IN in_org_id INT, 
-    IN in_org_name VARCHAR(40),
-    IN in_verifier_password VARCHAR(72))
-BEGIN
-    UPDATE Organization
-    SET verifier_password = in_verifier_password,
-    org_name = in_org_name
-    WHERE org_id = in_org_id;
-END; //
-
-/** Takes in a user's id, and returns the data of the organizations
-    that the user specified belongs to.*/
-CREATE PROCEDURE GetOrganizations(IN id INT)
-BEGIN
-    SELECT e.privilege, o.org_id, o.org_name FROM Users u
+    SELECT o.org_id, o.org_name, e.privilege, e.user_org_id FROM Users u
         INNER JOIN Enrollment e
             ON u.user_id = e.user_id
         INNER JOIN Organization o
             ON e.org_id = o.org_id
-    WHERE e.user_id = id;
+    WHERE e.user_id = user_id
+    AND e.privilege = 3;
 END; //
 
-/** Gets the verifier password for the specified organization. */
-CREATE PROCEDURE GetVerifierPassword(IN in_org_id INT)
+/**
+ * Creates an organization with the given user_id, org_name, verifier_password,
+ * as well as the owner's user_org_id.
+ */
+CREATE PROCEDURE CreateOrg(
+    IN user_id INT, 
+    IN org_name VARCHAR(40),
+    IN verifier_password VARCHAR(72),
+    IN user_org_id VARCHAR(40))
+BEGIN
+    INSERT INTO Organization(org_name, verifier_password)
+    VALUES(org_name, verifier_password);
+    SELECT LAST_INSERT_ID();
+    INSERT INTO Enrollment(user_id, org_id, user_org_id)
+    VALUES(user_id, LAST_INSERT_ID());
+END; //
+
+/** 
+ * Updates an organization's name. 
+ */
+CREATE PROCEDURE UpdateOrg(
+    IN org_id INT, 
+    IN org_name VARCHAR(40))
+BEGIN
+    UPDATE Organization o
+    SET o.org_name = org_name
+    WHERE o.org_id = org_id;
+END; //
+
+/**
+ * Updates the user_org_id of the specified user of the organization.
+ */
+ CREATE PROCEDURE UpdateUserOrgId(
+     IN user_id INT,
+     IN org_id INT,
+     IN user_org_id INT)
+ BEGIN
+    UPDATE Enrollment e
+    SET e.user_org_id = user_org_id
+    WHERE e.user_id = user_id
+    AND e.org_id = org_id;
+ END; //
+
+/** 
+ * Updates the verifier password for the specified organization. 
+ */
+CREATE PROCEDURE UpdateVerifierPassword(
+    IN org_id INT,
+    IN verifier_password VARCHAR(72))
+BEGIN
+    UPDATE Organization o
+    SET o.verifier_password = verifier_password
+    WHERE o.org_id = org_id;
+END; //
+
+
+/** 
+ * Gets an organization's id and name.
+ */
+CREATE PROCEDURE GetOrg(
+    IN org_id INT)
+BEGIN
+    SELECT org_id, org_name FROM Organization o
+    WHERE org_id = id;
+END; //
+
+/**
+ * Gets the user_org_id of the specified user of the organization.
+ */
+ CREATE PROCEDURE GetUserOrgId(
+     IN user_id INT,
+     IN org_id INT)
+ BEGIN
+    SELECT user_org_id FROM Enrollment e
+    WHERE e.user_id = user_id
+    AND e.org_id = org_id;
+ END; //
+
+/** 
+ * Gets the verifier password for the specified organization. 
+ */
+CREATE PROCEDURE GetVerifierPassword(
+    IN in_org_id INT)
 BEGIN
     SELECT verifier_password FROM Organization
     WHERE org_id = in_org_id;
 END; //
 
+/**
+ * Gets the org_id, org_name, privilege, and user_org_id
+ * for the user's organizations in which they are a user.
+ */
+CREATE PROCEDURE GetUserOrgListInfo(
+    IN user_id INT)
+BEGIN
+    SELECT o.org_id, o.org_name, e.privilege, e.user_org_id FROM Users u
+        INNER JOIN Enrollment e
+            ON u.user_id = e.user_id
+        INNER JOIN Organization o
+            ON e.org_id = o.org_id
+    WHERE e.user_id = user_id
+    AND e.privilege > 0;
+END; //
  
 
 
-/** Takes in the id of an organization and the privilege level as parameters, and
-    displays all of the users who are currently in that organization.
-    This includes their id, firstname, lastname, email, dob, and voting_token
-    (I avoided any sensitive information such as their passwords of course).*/
-
-CREATE PROCEDURE GetUsersFromOrg(IN id INT, IN privilege INT)
+/**
+ * Gets a list of the users' user_id, first_name, last_name
+ * email, dob, privilege, and user_org_id from an organization.
+ */
+CREATE PROCEDURE GetUsersFromOrg(
+    IN org_id INT)
 BEGIN
-    SELECT e.user_id, first_name, last_name, email, dob, voting_token, e.privilege FROM Users
+    SELECT u.user_id, u.first_name, u.last_name, u.email, u.dob, e.privilege, e.user_org_id 
+    FROM Users u
         INNER JOIN Enrollment e
-           ON u.user_id = e.user_id
+           ON e.user_id = u.user_id
         INNER JOIN Organization o
            ON o.org_id = e.org_id
-    WHERE o.org_id = id
-    AND e.privilege = privilege;
+    WHERE o.org_id = org_id
+    AND e.privilege > 0;
 END; //
 
-/** Takes in the id of a user and an organization, then 
-    invites a user into an organization.*/
+/**
+ * Invites a user to the specified organization.
+ */
 CREATE PROCEDURE InviteUser(
+    IN email INT, 
+    IN org_id INT)
+BEGIN
+    DECLARE user_id INT;
+    
+    SELECT u.user_id
+    INTO user_id
+    FROM Users u
+    WHERE u.email = email;
+
+    INSERT INTO Enrollment(user_id, org_id)
+    VALUES(user_id, org_id);
+END; //
+
+
+/**
+ * Kicks a user from the specified organization.
+ */
+CREATE PROCEDURE KickUser(
     IN user_id INT, 
     IN org_id INT)
 BEGIN
-    INSERT INTO Enrollment(user_id, org_id)
-    VALUES(user_id, org_id);
-    SELECT LAST_INSERT_ID();
+    UPDATE Enrollment e
+    SET e.disabled = TRUE
+    WHERE e.user_id = user_id
+    AND e.org_id = org_id;
 END; //
 
-/** Updates the prvilege level for a user. */
+/** 
+ * Updates the privilege level of the specified user of the organization.
+ */
 CREATE PROCEDURE UpdatePrivilege(
-    IN in_user_id INT,
-    IN in_org_id INT,
-    IN in_privilege INT
-)
+    IN user_id INT,
+    IN org_id INT,
+    IN privilege INT)
 BEGIN
-    UPDATE Enrollment
-    SET privilege = in_privilege
-    WHERE user_id = in_user_id
-    AND org_id = in_org_id;
+    UPDATE Enrollment e
+    SET e.privilege = privilege
+    WHERE e.user_id = user_id
+    AND e.org_id = org_id;
+END; //
+
+/** 
+ * Gets the privilege level of the specified user of the organization.
+ */
+CREATE PROCEDURE GetPrivilege(
+    IN org_id INT,
+    IN user_id INT)
+BEGIN
+    SELECT e.privilege FROM Enrollment e
+    WHERE e.org_id = org_id
+    AND e.user_id = user_id;
 END; //
 
 
 
-/** Takes in an election's id, and deletes the election
-    attached to it.*/
-
+/**
+ * Deletes the specified election.
+ */
 CREATE PROCEDURE DeleteElection(
-    IN id INT
-    )
+    IN election_id INT)
 BEGIN
-    DELETE FROM Election
-    WHERE election_id = id;
+    DELETE FROM Election e
+    WHERE e.election_id = election_id;
 END; //
 
-/** Gets an election from an election id. */
-
+/**
+ * Gets the details of a specified election, excluding the questions and options.
+ */
 CREATE PROCEDURE GetElection(
-    IN id INT
-    )
+    IN election_id INT)
 BEGIN
-    SELECT * FROM Election
-        WHERE election_id = id;
+    SELECT * FROM Election e
+        WHERE e.election_id = election_id;
 END; //
 
-/** Takes in information, and uses it to create an election.*/
+/**
+ * Creates an election with the specified parameters, returning the created election's id.
+ */
 CREATE PROCEDURE CreateElection(
     IN org_id INT, 
     IN description VARCHAR(40),
@@ -287,10 +395,9 @@ BEGIN
     SELECT LAST_INSERT_ID();
 END;//
 
-/** Takes in several values as a parameter,
-    then updates their corresponding fields.
-    */
-
+/**
+ * Updates an election with the specified parameters.
+ */
 CREATE PROCEDURE UpdateElection(
     IN id INT,
     IN description VARCHAR(40),
@@ -298,178 +405,180 @@ CREATE PROCEDURE UpdateElection(
     IN end_time TIMESTAMP,
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
-    IN verified BOOLEAN
-    )
+    IN verified BOOLEAN)
 BEGIN
-    UPDATE Election
-        SET description = description
-        WHERE election_id = id;
-        
-    UPDATE Election
-        SET verified = verified
-        WHERE election_id = id;
-    
-    UPDATE Election
-        SET start_time = start_time
-        WHERE election_id = id;
-        
-    UPDATE Election
-        SET end_time = end_time
-        WHERE election_id = id;
-        
-    UPDATE Election
-        SET anonymous = anonymous
-        WHERE election_id = id;
-        
-    UPDATE Election
-        SET public_results = public_results
-        WHERE election_id = id;
+    UPDATE Election e
+    SET e.description = description,
+        e.start_time = start_time,
+        e.end_time = end_time,
+        e.anonymous = anonymous,
+        e.public_results = public_results,
+        e.verified = verified
+    WHERE election_id = id;
 END; //
 
-/** Gets elections from an organization id. */
-
-CREATE PROCEDURE GetElectionListOrg(
-    IN id INT
-    )
+/**
+ * Gets the details of all elections of an organization,
+ * excluding the questions and options.
+ */
+CREATE PROCEDURE GetOrgElections(
+    IN org_id INT)
 BEGIN
-    SELECT * FROM Election
-        WHERE org_id = id;
+    SELECT e.* FROM Election e
+        WHERE e.org_id = org_id;
 END; //
 
-/** Takes in a user's id, and gets the elections 
-    that are available to them.*/
-
-CREATE PROCEDURE GetElectionListUser(IN id INT)
+/**
+ * Gets the details of all elections of organizations a user belongs to,
+ * excluding the questions and options.
+ */
+CREATE PROCEDURE GetUserElections(
+    IN user_id INT)
 BEGIN
-    SELECT election_id, el.org_id, start_time,
-        end_time, verified, anonymous, public_results FROM Users u
-            INNER JOIN Enrollment e
-                ON e.user_id = u.user_id
-            INNER JOIN Election el
-                ON e.org_id = el.org_id	
-    WHERE e.user_id = id;
+    SELECT e.* FROM Users u
+        INNER JOIN Enrollment e
+            ON e.user_id = u.user_id
+        INNER JOIN Election el
+            ON e.org_id = el.org_id	
+    WHERE e.user_id = user_id;
 END; //
 
 
-/** Adds question to election. */
-
+/**
+ * Adds a question to an election.
+ */
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
     IN description VARCHAR(40),
-    IN max_selection_count INT
-)
+    IN max_selection_count INT)
 BEGIN
     INSERT INTO Question (election_id, description, max_selection_count)
         VALUES (election_id, description, max_selection_count);
 END; //
 
-/** Drops Question from an election. */
-
-CREATE PROCEDURE DropQuestion(
-    IN id INT
-)
+/**
+ * Deletes a question to an election.
+ */
+CREATE PROCEDURE DeleteQuestion(
+    IN question_id INT)
 BEGIN
-    DELETE FROM Question
-    WHERE question_id = id;
+    DELETE FROM Question q
+    WHERE q.question_id = question_id;
 END; //
 
-/** Updates a question. */
-
+/**
+ * Updates the specified question.
+ */
 CREATE PROCEDURE UpdateQuestion(
-    IN id INT,
-    IN description VARCHAR(40)
-)
+    IN question_id INT,
+    IN description VARCHAR(40))
 BEGIN
-
-    UPDATE Question
-        SET description = description
-        WHERE question_id = id;
+    UPDATE Question q
+        SET q.description = description
+        WHERE q.question_id = question_id;
 END; //
     
 
-/** Adds a choice to a question. */
-
-CREATE PROCEDURE AddOpt(
-    IN id INT,
-    IN descr VARCHAR(40)
-)
+/** 
+ * Adds a choice to a question. 
+ */
+CREATE PROCEDURE AddOption(
+    IN question_id INT,
+    IN description VARCHAR(40))
 BEGIN
     INSERT INTO Opt (question_id, description) 
-    VALUES(id, descr);
+    VALUES(question_id, description);
     
     UPDATE Question
         SET max_selection_count = max_selection_count + 1
         WHERE question_id = id;
-    
 END; //
 
-/** Drops a choice from a question. */
-
-CREATE PROCEDURE DropOpt(
-    IN id INT
-)
+/** 
+ * Deletes a choice to a question. 
+ */
+CREATE PROCEDURE DeleteOption(
+    IN option_id INT)
 BEGIN
-
     UPDATE Question q
-    INNER JOIN Opt c ON q.question_id = c.question_id
-    SET max_selection_count = max_selection_count - 1
-    WHERE c.opt_id = id;
+    INNER JOIN Opt o ON q.question_id = o.question_id
+    SET q.max_selection_count = q.max_selection_count - 1
+    WHERE o.option_id = option_id;
     
-    DELETE FROM Opt
-    WHERE opt_id = id; 
-    
+    DELETE FROM Opt o
+    WHERE o.option_id = option_id; 
 END; //
 
-/** Updates choice for question.*/
-
-CREATE PROCEDURE UpdateOpt(
-    IN id INT,
-    IN descr VARCHAR(40)
-)
+/** 
+ * Updates a choice to a question. 
+ */
+CREATE PROCEDURE UpdateOption(
+    IN option_id INT,
+    IN description VARCHAR(40))
 BEGIN
-    UPDATE Opt
-    SET description = descr
-    WHERE opt_id = id;
+    UPDATE Opt o
+    SET o.description = description
+    WHERE o.option_id = id;
 END; //
 
 
-/** Gets all the potential answers to questions specified in
-    param.*/
-    
-CREATE PROCEDURE GetQuestionOpt(
-    IN id INT
-)
+
+/**
+ * Gets all the details about the specified question option, 
+ * including the total votes cast for it.
+ */
+CREATE PROCEDURE GetQuestionOption(
+    IN question_id INT)
 BEGIN
-    SELECT * FROM Opt
-        WHERE question_id = id;
+    SELECT o.* FROM Opt o
+        WHERE o.question_id = question_id;
 END; //
 
-/** Gets all of the questions from a specific election.*/
-
+/** 
+ * Gets all the questions from the specified election.
+ */
 CREATE PROCEDURE GetElectionQuestions(
-    IN id INT
-    )
+    IN election_id INT)
 BEGIN
     SELECT q.* FROM Question q
-        INNER JOIN Election el
-        ON el.election_id = q.election_id
+        INNER JOIN Election e
+        ON e.election_id = q.election_id
+        WHERE q.election_id = id;
+END; //
+
+/** 
+ * Gets all the questions and options from the specified election,
+ * including the total votes cast for each option.
+ */
+CREATE PROCEDURE GetElectionQuestionsAndOptions(
+    IN election_id INT)
+BEGIN
+    SELECT q.*, o.* FROM Question q
+        INNER JOIN Election e
+        ON e.election_id = q.election_id
+        INNER JOIN Opt o
+        ON o.question_id = q.question_id
         WHERE q.election_id = id;
 END; //
 
 
 
-/** Gets votes of each user for a particular election. */
-CREATE PROCEDURE GetIndividualVotes(
-    IN election_id INT
-)
+/**
+ * Gets the first_name, last_name, question_id, question_description,
+ * option_id, and option_description pertaining to each of the casted votes
+ * for the specified election.
+ */
+CREATE PROCEDURE GetUserVotes(
+    IN election_id INT)
 BEGIN   
-    SELECT u.first_name, u.last_name, q.question_id, q.description AS `question_description`, o.opt_id, o.description AS `option_description` FROM Election el
+    SELECT u.first_name, u.last_name, q.question_id, q.description AS `question_description`, 
+        o.option_id, o.description AS `option_description` FROM Election el
         INNER JOIN Question q
             ON el.election_id = q.election_id
         INNER JOIN Opt o
             ON q.question_id = o.question_id
         INNER JOIN Choice c
-            ON o.opt_id = c.opt_id
+            ON o.option_id = c.option_id
         INNER JOIN Vote v
             ON c.vote_id = v.vote_id
         INNER JOIN Users u
@@ -478,13 +587,15 @@ END; //
 
 
 
-/** Adds a vote, getting the ID if successfully added or updated.
-    Previously selected choices are deleted if vote was updated. */
-CREATE PROCEDURE CreateVote(
+/** 
+ * Adds a vote, getting the ID if successfully added or updated.
+ * Previously chosen options have their total_votes_for value
+ * decremented if the vote was updated. 
+ */
+CREATE PROCEDURE AddVote(
     IN voting_token VARCHAR(36),
     IN time_stamp TIMESTAMP,
-    IN election_id INT
-)
+    IN election_id INT)
 BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
@@ -518,7 +629,7 @@ BEGIN
             WHERE v.user_id = user_id;
         SET SQL_SAFE_UPDATES = 0;
         UPDATE Opt op
-            INNER JOIN Choice c ON op.opt_id = c.opt_id
+            INNER JOIN Choice c ON op.option_id = c.option_id
             SET op.total_votes_for = op.total_votes_for - 1
             WHERE c.vote_id = vote_id;
         SET SQL_SAFE_UPDATES = 1;
@@ -529,26 +640,26 @@ BEGIN
 END; //
 
 
-/** Adds a choice. */
-CREATE PROCEDURE CreateChoice(
+/** 
+ * Adds a choice to the casted vote.
+ */
+CREATE PROCEDURE AddChoice(
     IN vote_id INT,
-    IN opt_id INT
-)
+    IN option_id INT)
 BEGIN
-    INSERT INTO Choice(vote_id, opt_id)
-    VALUES(vote_id, opt_id);
+    INSERT INTO Choice(vote_id, option_id)
+    VALUES(vote_id, option_id);
     UPDATE Opt o
         SET o.total_votes_for = o.total_votes_for + 1
-        WHERE o.opt_id = opt_id;
+        WHERE o.option_id = option_id;
 END; //
 
 
 /**
  * Gets the voter_list for a particular election.
  */
-CREATE PROCEDURE GetIdVt(
-    IN election_id INT
-)
+CREATE PROCEDURE GetVoterList(
+    IN election_id INT)
 BEGIN
     SELECT u.user_id, u.voting_token, en.user_org_id FROM Election el
     INNER JOIN Enrollment en 
@@ -561,8 +672,9 @@ END; //
 
 
 
-/** Gets all elections if they are open to public. */
-
+/** 
+ * Gets all public elections. 
+ */
 CREATE PROCEDURE GetPublicElections()
 BEGIN
     SELECT * FROM Election
