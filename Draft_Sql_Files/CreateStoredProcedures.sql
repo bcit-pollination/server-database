@@ -60,12 +60,12 @@ DELIMITER //
  * Returns the user_id correspoding to the email and password.
  */
 CREATE PROCEDURE LoginUser(
-    IN in_email VARCHAR(40),
-    IN in_password VARCHAR(72))
+    IN email VARCHAR(40),
+    IN password VARCHAR(72))
 BEGIN
     SELECT user_id FROM Users u
-    WHERE in_email = u.email 
-    AND in_password = u.password;
+    WHERE u.email = email 
+    AND u.password = password;
 END; //
 
 /**
@@ -263,10 +263,10 @@ END; //
  * Gets the verifier password for the specified organization. 
  */
 CREATE PROCEDURE GetVerifierPassword(
-    IN in_org_id INT)
+    IN org_id INT)
 BEGIN
-    SELECT verifier_password FROM Organization
-    WHERE org_id = in_org_id;
+    SELECT verifier_password FROM Organization o
+    WHERE o.org_id = org_id;
 END; //
 
 /**
