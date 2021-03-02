@@ -154,7 +154,8 @@ BEGIN
     FROM Enrollment e
         INNER JOIN Organization o
             ON e.org_id = o.org_id
-    WHERE e.user_id = user_id;
+    WHERE e.user_id = user_id
+    AND e.privilege = 3;
 
     UPDATE Organization o
     SET o.disabled = TRUE

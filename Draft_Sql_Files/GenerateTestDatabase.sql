@@ -34,7 +34,7 @@ CALL UpdateUser(1, "password");
 CALL DeactivateUser(2);
 CALL UpdatePrivilege(2, 2, 0);
 CALL UpdateOrg(1, "This is an org name");
-CALL DisbandOrg(2);
+CALL DisbandOrg(1);
 
 CALL AddVote('123', '2028-01-04 07:09:07', 1);
 CALL AddChoice(1, 1);
