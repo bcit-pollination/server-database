@@ -6,9 +6,9 @@ CREATE TABLE Users (
     user_id 			INT 			NOT NULL 	AUTO_INCREMENT,
     first_name 			VARCHAR(40) 	NOT NULL,
     last_name 			VARCHAR(40) 	NOT NULL,
-	email               VARCHAR(40)     NOT NULL	UNIQUE,
-	date_of_birth       DATE            NOT NULL,
-	password	        VARCHAR(72)     NOT NULL,
+    email               VARCHAR(40)     NOT NULL	UNIQUE,
+    date_of_birth       DATE            NOT NULL,
+    password	        VARCHAR(72)     NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL,
     disabled			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)
@@ -37,7 +37,7 @@ CREATE TABLE Vote (
 CREATE TABLE Organization (
     org_id 				INT 			NOT NULL 	AUTO_INCREMENT,
     org_name 			VARCHAR(40) 	NOT NULL 	DEFAULT('Unknown'),
-	verifier_password   VARCHAR(72)     NOT NULL,
+    verifier_password   VARCHAR(72)     NOT NULL,
     disabled			BOOLEAN			NOT NULL    DEFAULT(FALSE),
     PRIMARY KEY (org_id)
 );
@@ -47,7 +47,7 @@ CREATE TABLE Enrollment (
     user_id 			INT 			NOT NULL,
     org_id 				INT 			NOT NULL,
     privilege_level 	INT 			NOT NULL 	DEFAULT(0), /* Lowest privilege level is 0. */
-	identification 		VARCHAR(40),
+    identification 		VARCHAR(40),
     disabled			BOOLEAN			NOT NULL 	DEFAULT(FALSE),
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
@@ -56,7 +56,7 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	UNIQUE KEY (user_id, org_id),
+    UNIQUE KEY (user_id, org_id),
     CHECK (privilege_level BETWEEN 0 AND 3)
 );
 
@@ -64,11 +64,11 @@ CREATE TABLE Election (
     election_id 	INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			INT 		NOT NULL,
     description		VARCHAR(40)	NOT NULL,
-	verified        BOOLEAN     NOT NULL	DEFAULT(FALSE),
+    verified        BOOLEAN     NOT NULL	DEFAULT(FALSE),
     start_time 		TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
     end_time 		TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
     is_anonymous 	BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
-	is_public       BOOLEAN     NOT NULL    DEFAULT(FALSE),
+    is_public       BOOLEAN     NOT NULL    DEFAULT(FALSE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
@@ -108,6 +108,6 @@ CREATE TABLE Choice (
     FOREIGN KEY (opt_id)
         REFERENCES Opt (opt_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	UNIQUE KEY (vote_id, opt_id)
+    UNIQUE KEY (vote_id, opt_id)
 );
 
