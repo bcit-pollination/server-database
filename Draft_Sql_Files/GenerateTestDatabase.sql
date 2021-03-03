@@ -32,7 +32,7 @@ CALL UpdateElection(1, 'Web Dev Survey', '2021-10-05', '2021-11-09', TRUE, FALSE
 
 CALL UpdateUser(1, "password");
 CALL DeactivateUser(2);
-CALL UpdatePrivilege(2, 2, 0);
+CALL UpdatePrivilege(2, 2, -1);
 CALL UpdateOrg(1, "This is an org name");
 CALL DisbandOrg(1);
 
