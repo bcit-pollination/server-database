@@ -7,7 +7,7 @@ from src.constants_enums.obj_keys import JwtTokenKeys
 
 JWT_ISSUER = 'pollination.live'
 JWT_SECRET = 'l4GrQUps9mxmwgKVVvtDHBi6f86ZdQplBcNEmWyDt9KGYAoNUndskgMUEnQoxIgs'
-JWT_LIFETIME_SECONDS = 600
+JWT_LIFETIME_SECONDS = 6000000
 JWT_ALGORITHM = 'HS256'
 
 

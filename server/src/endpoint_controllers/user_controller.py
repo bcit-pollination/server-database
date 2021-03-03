@@ -36,7 +36,7 @@ def get_user(token_info):  # noqa: E501
     :rtype: User
     """
     user = db.get_user(token_info[JwtTokenKeys.UID])
-    return User.from_dict(user)
+    return user
 
 
 def get_voting_token(token_info):  # noqa: E501
