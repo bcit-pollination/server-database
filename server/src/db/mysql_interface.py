@@ -1,5 +1,5 @@
 import MySQLdb
-from werkzeug.exceptions import Conflict, NotFound
+from werkzeug.exceptions import Conflict, NotFound, InternalServerError
 
 from swagger_server.models.user import User
 from src.constants_enums.privileges import PrivilegeLevels
@@ -36,6 +36,7 @@ def call_proc(proc_name, args=None, resp_many=False):
             raise Conflict("Already in DB")
         if err.args[0] == 1366:
             raise NotFound("Not Found")
+        raise InternalServerError()
     return resp
 
 
