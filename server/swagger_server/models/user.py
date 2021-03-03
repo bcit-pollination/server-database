@@ -14,7 +14,7 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None):  # noqa: E501
+    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
         :param id: The id of this User.  # noqa: E501
@@ -27,13 +27,16 @@ class User(Model):
         :type email: str
         :param dob: The dob of this User.  # noqa: E501
         :type dob: date
+        :param password: The password of this User.  # noqa: E501
+        :type password: str
         """
         self.swagger_types = {
             'id': int,
             'first_name': str,
             'last_name': str,
             'email': str,
-            'dob': date
+            'dob': date,
+            'password': str
         }
 
         self.attribute_map = {
@@ -41,13 +44,15 @@ class User(Model):
             'first_name': 'first_name',
             'last_name': 'last_name',
             'email': 'email',
-            'dob': 'dob'
+            'dob': 'dob',
+            'password': 'password'
         }
         self._id = id
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
         self._dob = dob
+        self._password = password
 
     @classmethod
     def from_dict(cls, dikt) -> 'User':
@@ -172,3 +177,26 @@ class User(Model):
             raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501
 
         self._dob = dob
+
+    @property
+    def password(self) -> str:
+        """Gets the password of this User.
+
+        Will be null except when creating user  # noqa: E501
+
+        :return: The password of this User.
+        :rtype: str
+        """
+        return self._password
+
+    @password.setter
+    def password(self, password: str):
+        """Sets the password of this User.
+
+        Will be null except when creating user  # noqa: E501
+
+        :param password: The password of this User.
+        :type password: str
+        """
+
+        self._password = password

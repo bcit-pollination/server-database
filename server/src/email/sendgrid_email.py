@@ -24,8 +24,7 @@ def _encrypt_user_info(org_id, user_org_id, user_email):
         "iat": int(timestamp),
         "exp": int(timestamp + JWT_LIFETIME_SECONDS),
         "org_id": str(org_id),
-        "user_org_id": str(user_org_id),
-        "user_email": user_email
+        "email": user_email
     }
 
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
@@ -47,7 +46,7 @@ def _current_timestamp() -> int:
     return int(time.time())
 
 
-def send_registration_email(org_name, org_id, user_org_id, user_email):
+def send_registration_email(org_name, org_id, user_email):
     """
     Send a registration email.
 
@@ -56,7 +55,7 @@ def send_registration_email(org_name, org_id, user_org_id, user_email):
     :param: user_email The email of the user
     :throws: RuntimeError if the response status is not 2xx
     """
-    encrypted_data = _encrypt_user_info(org_id, user_org_id, user_email)
+    encrypted_data = _encrypt_user_info(org_id, user_email)
     message = Mail(
         from_email='registration@pollination.live',
         to_emails=user_email,

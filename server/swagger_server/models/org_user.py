@@ -15,7 +15,7 @@ class OrgUser(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
+    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
         """OrgUser - a model defined in Swagger
 
         :param id: The id of this OrgUser.  # noqa: E501
@@ -28,6 +28,8 @@ class OrgUser(Model):
         :type email: str
         :param dob: The dob of this OrgUser.  # noqa: E501
         :type dob: date
+        :param password: The password of this OrgUser.  # noqa: E501
+        :type password: str
         :param privilege: The privilege of this OrgUser.  # noqa: E501
         :type privilege: int
         :param user_org_id: The user_org_id of this OrgUser.  # noqa: E501
@@ -39,6 +41,7 @@ class OrgUser(Model):
             'last_name': str,
             'email': str,
             'dob': date,
+            'password': str,
             'privilege': int,
             'user_org_id': str
         }
@@ -49,6 +52,7 @@ class OrgUser(Model):
             'last_name': 'last_name',
             'email': 'email',
             'dob': 'dob',
+            'password': 'password',
             'privilege': 'privilege',
             'user_org_id': 'user_org_id'
         }
@@ -57,6 +61,7 @@ class OrgUser(Model):
         self._last_name = last_name
         self._email = email
         self._dob = dob
+        self._password = password
         self._privilege = privilege
         self._user_org_id = user_org_id
 
@@ -183,6 +188,29 @@ class OrgUser(Model):
             raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501
 
         self._dob = dob
+
+    @property
+    def password(self) -> str:
+        """Gets the password of this OrgUser.
+
+        Will be null except when creating user  # noqa: E501
+
+        :return: The password of this OrgUser.
+        :rtype: str
+        """
+        return self._password
+
+    @password.setter
+    def password(self, password: str):
+        """Sets the password of this OrgUser.
+
+        Will be null except when creating user  # noqa: E501
+
+        :param password: The password of this OrgUser.
+        :type password: str
+        """
+
+        self._password = password
 
     @property
     def privilege(self) -> int:
