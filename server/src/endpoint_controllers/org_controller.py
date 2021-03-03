@@ -1,3 +1,4 @@
+from swagger_server.models import Org
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server.models.user_org import UserOrg  # noqa: E501
@@ -35,6 +36,11 @@ def disband_org(token_info):  # noqa: E501
     return None
 
 
+def db_org_to_UserOrg(org_id, name, user_org_id, privilege):
+    return UserOrg(privilege, user_org_id, Org(org_id, name))
+
+
+
 def get_org(org_id):  # noqa: E501
     """Get org info
 
@@ -46,7 +52,8 @@ def get_org(org_id):  # noqa: E501
     :rtype: UserOrg
     """
     org = db.get_organization(org_id)
-    return org
+    # TODO
+    return db_org_to_UserOrg(org_id, "fake_name", "fake id", -2)
 
 
 def get_org_list(token_info):  # noqa: E501
@@ -58,7 +65,7 @@ def get_org_list(token_info):  # noqa: E501
     :rtype: InlineResponse2001
     """
     uid = token_info[UserInfoKeys.UID]
-    org_list = db.get_organizations(uid)
+    org_list = db.get_user_org_list(uid)
     return org_list
 
 

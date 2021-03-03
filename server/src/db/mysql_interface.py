@@ -8,7 +8,7 @@ from src.constants_enums.datetime_format import *
 
 
 def get_db_connection() -> MySQLdb.Connection:
-    return MySQLdb.connect('localhost', 'root', 'M1lo123!', 'voting_system')
+    return MySQLdb.connect(read_default_file='~/.my.cnf')
 
 
 def call_proc(proc_name, args=None, resp_many=False):
