@@ -8,7 +8,7 @@ from src.constants_enums.datetime_format import *
 
 
 def get_db_connection() -> MySQLdb.Connection:
-    return MySQLdb.connect(read_default_file='~/.my.cnf')
+    return MySQLdb.connect('localhost', 'root', 'M1lo123!', 'voting_system')
 
 
 def call_proc(proc_name, args=None, resp_many=False):
@@ -65,12 +65,13 @@ def get_user(uid):
     return user
 
 
+# SQL process failed: (1048, "Column 'privilege' cannot be null")
 def create_org(user_id, org_name, verifier_password, user_org_id):
     return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, verifier_password, user_org_id))
 
 
 def get_users_organization(user_id):
-    return call_proc(PROCEDURE.GETUSERORGANIZATION, (user_id,))
+    return call_proc(PROCEDURE.GETUSERORGANIZATIONS, (user_id,))
 
 
 def get_user_elections(user_id):
@@ -89,6 +90,7 @@ def update_user(user_id, password):
     return call_proc(PROCEDURE.UPDATEUSER, (user_id, password))
 
 
+# SQL process failed: (1048, "Column 'privilege' cannot be null")
 def deactivate_user(user_id):
     return call_proc(PROCEDURE.DEACTIVATEUSER, (user_id,))
 
@@ -97,8 +99,8 @@ def get_user_token(user_id):
     return call_proc(PROCEDURE.GETUSERTOKEN, (user_id,))
 
 
-def get_organizations(user_id):
-    return call_proc(PROCEDURE.GETORGANIZATIONS, (user_id,), resp_many=True)
+def get_user_org_list(user_id):
+    return call_proc(PROCEDURE.GETUSERORGLIST, (user_id,), resp_many=True)
 
 
 def get_organization(org_id):
@@ -124,17 +126,19 @@ def get_users_from_org(org_id):
 def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
     return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, org_id, privilege_level))
 
-
-def invite_user(email, user_org_id, org_id ):
+# SQL process failed: (1048, "Column 'user_id' cannot be null")
+def invite_user(email, user_org_id, org_id):
     return call_proc(PROCEDURE.INVITEUSER, (email, user_org_id, user_org_id))
 
 
 def create_election(org_id, description, start_time, end_time, anonymous, is_public, verified):
-    return call_proc(PROCEDURE.CREATEELECTION, (org_id, description, start_time, end_time, anonymous, is_public, verified))
+    return call_proc(PROCEDURE.CREATEELECTION,
+                     (org_id, description, start_time, end_time, anonymous, is_public, verified))
 
 
 def update_election(election_id, description, start_time, end_time, anonymous, is_public, verified):
-    return call_proc(PROCEDURE.UPDATEELECTION, (election_id, description, start_time, end_time, anonymous, is_public, verified))
+    return call_proc(PROCEDURE.UPDATEELECTION,
+                     (election_id, description, start_time, end_time, anonymous, is_public, verified))
 
 
 def delete_election(election_id):
@@ -195,6 +199,7 @@ def update_question_opt(opt_id, description):
 
 def get_privilege(org_id, user_id):
     return call_proc(PROCEDURE.GETPRIVILEGE, (org_id, user_id))
+
 
 # TODO what was this?
 # def get_idvt(election_id):
