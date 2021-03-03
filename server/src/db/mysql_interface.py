@@ -43,8 +43,8 @@ def create_user(user: User) -> int:
     return user[0] if user else user
 
 
-def add_user_to_org(user_id, org_id):
-    return call_proc(PROCEDURE.ENROLLUSER, (user_id, org_id))
+def add_user_to_org(user_id, user_org_id, email):
+    return call_proc(PROCEDURE.ENROLLUSER, (user_id, user_org_id, email))
 
 
 def get_user(uid):
@@ -55,8 +55,8 @@ def get_user(uid):
     return user
 
 
-def create_org(org_name, user_id):
-    return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, "temp holder"))
+def create_org(org_name, user_org_id, user_id, verifier_password):
+    return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, user_org_id, verifier_password))
 
 
 def get_users_organization(user_id):
@@ -99,20 +99,20 @@ def update_organization(org_id, org_name):
     return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name))
 
 
-def disband_org(org_id):
-    return call_proc(PROCEDURE.DISBANDORG, (org_id,))
+def disband_org(uid):
+    return call_proc(PROCEDURE.DISBANDORG, (uid,))
 
 
-def get_verifier_password(user_id):
-    return call_proc(PROCEDURE.GETVERIFIERPASSWORD, (user_id,))
+def get_verifier_password(org_id):
+    return call_proc(PROCEDURE.GETVERIFIERPASSWORD, (org_id,))
 
 
 def get_users_from_org(org_id):
     return call_proc(PROCEDURE.GETUSERSFROMORG, (org_id,), resp_many=True)
 
 
-def update_privilege(user_id, privilege_level: PrivilegeLevels):
-    return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, privilege_level))
+def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
+    return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, org_id, privilege_level))
 
 
 def invite_user(user_id, org_id):

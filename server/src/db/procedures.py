@@ -5,8 +5,8 @@ class PROCEDURE:
     # name                    = proc_name                   # procedure parameters
     LOGINUSER                 = 'LoginUser'                 # email, password
     CREATEUSER                = 'CreateUser'                # first_name, last_name, email, dob, password, voting_token
-    CREATEORG                 = 'CreateOrg'                 # user_id, org_name
-    ENROLLUSER                = 'EnrollUser'                # user_id, org_id
+    CREATEORG                 = 'CreateOrg'                 # user_id, org_name, user_org_id, verifier_password
+    ENROLLUSER                = 'EnrollUser'                # user_id, user_org_id, email
     GETUSER                   = 'GetUser'                   # user_id
     GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
     GETUSERELECTIONS          = 'GetUserElections'          # user_id
