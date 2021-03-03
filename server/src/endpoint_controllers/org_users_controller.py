@@ -1,4 +1,4 @@
-from email.sendgrid_email import send_registration_email
+from src.email.sendgrid_email import send_registration_email
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from src.auth.jwt import decode_token
 import src.db.mysql_interface as db
