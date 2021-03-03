@@ -55,8 +55,8 @@ def get_user(uid):
     return user
 
 
-def create_org(org_name, user_org_id, user_id, verifier_password):
-    return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, user_org_id, verifier_password))
+def create_org(user_id, org_name, verifier_password, user_org_id):
+    return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, verifier_password, user_org_id))
 
 
 def get_users_organization(user_id):
@@ -75,8 +75,8 @@ def get_user_elections_alternate(user_id):
     return call_proc(PROCEDURE.GETUSERELECTIONSALTERNATE, (user_id,), resp_many=True)
 
 
-def update_user(user_id, first_name, last_name, email, password):
-    return call_proc(PROCEDURE.UPDATEUSER, (user_id, first_name, last_name, email, password))
+def update_user(user_id, password):
+    return call_proc(PROCEDURE.UPDATEUSER, (user_id, password))
 
 
 def deactivate_user(user_id):
@@ -96,7 +96,7 @@ def get_organization(org_id):
 
 
 def update_organization(org_id, org_name, verifier_password):
-    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name,verifier_password))
+    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name, verifier_password))
 
 
 def disband_org(uid):
@@ -115,16 +115,16 @@ def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
     return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, org_id, privilege_level))
 
 
-def invite_user(user_id, org_id, user_org_id):
-    return call_proc(PROCEDURE.INVITEUSER, (user_id, org_id, user_org_id))
+def invite_user(email, user_org_id, org_id ):
+    return call_proc(PROCEDURE.INVITEUSER, (email, user_org_id, user_org_id))
 
 
-def create_election(org_id, description, start_time, end_time, is_public, anonymous):
-    return call_proc(PROCEDURE.CREATEELECTION, (org_id, description, start_time, end_time, is_public, anonymous))
+def create_election(org_id, description, start_time, end_time, anonymous, is_public, verified):
+    return call_proc(PROCEDURE.CREATEELECTION, (org_id, description, start_time, end_time, anonymous, is_public, verified))
 
 
-def update_election(election_id, description, start_time, end_time, is_public, anonymous):
-    return call_proc(PROCEDURE.UPDATEELECTION, (election_id, description, start_time, end_time, is_public, anonymous))
+def update_election(election_id, description, start_time, end_time, anonymous, is_public, verified):
+    return call_proc(PROCEDURE.UPDATEELECTION, (election_id, description, start_time, end_time, anonymous, is_public, verified))
 
 
 def delete_election(election_id):
@@ -143,6 +143,10 @@ def get_election_votes(election_id):
     return call_proc(PROCEDURE.GETINDIVIDUALVOTES, (election_id,), resp_many=True)
 
 
+def get_questions(election_id):
+    return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,))
+
+
 def get_question_opt(question_id):
     return call_proc(PROCEDURE.GETQUESTIONOPT, (question_id,))
 
@@ -155,20 +159,20 @@ def get_public_elections():
     return call_proc(PROCEDURE.GETPUBLICELECTIONS, (None,), resp_many=True)
 
 
-def add_questions(election_id, description):
-    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description), resp_many=True)
+def add_questions(election_id, description, max_selection_count):
+    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description, max_selection_count), resp_many=True)
 
 
 def drop_question(question_id):
     return call_proc(PROCEDURE.ADDQUESTION, (question_id,))
 
 
-def update_question(question_id, description):
-    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description))
+def update_question(question_id, description, max_selection_count):
+    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, max_selection_count))
 
 
-def add_question_opt(opt_id):
-    return call_proc(PROCEDURE.ADDOPT, (opt_id,))
+def add_question_opt(opt_id, option_description):
+    return call_proc(PROCEDURE.ADDOPT, (opt_id, option_description))
 
 
 def remove_question_opt(opt_id):
@@ -182,9 +186,9 @@ def update_question_opt(opt_id, description):
 def get_privilege(org_id, user_id):
     return call_proc(PROCEDURE.GETPRIVILEGE, (org_id, user_id))
 
-
-def get_idvt(election_id):
-    return call_proc(PROCEDURE.GETPRIVILEGE, (election_id,))
+# TODO what was this?
+# def get_idvt(election_id):
+#     return call_proc(PROCEDURE.GETPRIVILEGE, (election_id,))
 
 
 def create_vote(voting_token, time_stamp):

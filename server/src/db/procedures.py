@@ -32,7 +32,7 @@ class PROCEDURE:
     GETINDIVIDUALVOTES        = 'GetIndividualVotes'        # election_id
     GETELECTIONSATLERNATE     = 'GetElectionsAlternate'     # user_id
     GETQUESTIONOPT            = 'GetQuestionOpt'            # question_id
-    GETELECTIONQUESTIONS      = 'GetElectionQuestions'      # election_id
+    GETELECTIONQUESTIONS      = 'GetQuestions'      # election_id
     GETPUBLICELECTIONS        = 'GetPublicElections'        # NOTHING
     ADDQUESTION               = 'AddQuestion'               # election_id, description
     DROPQUESTION              = 'DropQuestion'              # question_id

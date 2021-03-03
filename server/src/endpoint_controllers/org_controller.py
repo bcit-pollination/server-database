@@ -3,7 +3,7 @@ from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa
 from swagger_server.models.user_org import UserOrg  # noqa: E501
 from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 import src.db.mysql_interface as db
-
+from src.constants_enums.obj_keys import *
 
 def create_org(body, token_info):  # noqa
     """Create org
@@ -18,7 +18,7 @@ def create_org(body, token_info):  # noqa
     name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    org_id = db.create_org(name, user_org_id, token_info[JwtTokenKeys.UID], verifier_password)
+    org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password, user_org_id)
     return org_id
 
 
