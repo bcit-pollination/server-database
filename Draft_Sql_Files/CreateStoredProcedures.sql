@@ -153,7 +153,7 @@ END; //
  */
 CREATE PROCEDURE DisbandOrg(
     IN user_id INT)
-BEGIN
+proc: BEGIN
     DECLARE org_id INT;
     
     SELECT o.org_id
@@ -163,6 +163,10 @@ BEGIN
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
     AND e.privilege = @privilege_owner;
+
+    IF (org_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     UPDATE Organization o
     SET o.disabled = TRUE
@@ -326,13 +330,17 @@ CREATE PROCEDURE InviteUser(
     IN email VARCHAR(40), 
     IN user_org_id VARCHAR(40),
     IN org_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     
     SELECT u.user_id
     INTO user_id
     FROM Users u
     WHERE u.email = email;
+    
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     INSERT INTO Enrollment(user_id, org_id, user_org_id)
     VALUES(user_id, org_id, user_org_id);
@@ -607,7 +615,7 @@ CREATE PROCEDURE AddVote(
     IN voting_token VARCHAR(36),
     IN time_stamp TIMESTAMP,
     IN election_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
     DECLARE vote_id INT;
@@ -616,6 +624,10 @@ BEGIN
     INTO user_id
     FROM Users u
     WHERE u.voting_token = voting_token;
+
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
