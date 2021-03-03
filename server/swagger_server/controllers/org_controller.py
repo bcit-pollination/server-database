@@ -26,7 +26,7 @@ def create_org(body):  # noqa: E501
 def disband_org():  # noqa: E501
     """Disband org
 
-    An org can only be disbanded by it&#x27;s owner, hence the org is infered from the JWT # noqa: E501
+    An org can only be disbanded by it&#x27;s owner, hence the org is inferred from the JWT # noqa: E501
 
 
     :rtype: None

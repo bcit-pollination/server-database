@@ -1,14 +1,16 @@
 import connexion
 import six
 
-from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
-from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
-from swagger_server.models.user_org import UserOrg  # noqa: E501
-from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
-from swagger_server import util
+from server.swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from server.swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
+from server.swagger_server.models.user_org import UserOrg  # noqa: E501
+from server.swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
+from server.swagger_server import util
+import server.src.db.mysql_interface as db
+from server.src.constants_enums.obj_keys import *
 
 
-def create_org(body):  # noqa: E501
+def create_org(body, token_info):  # noqa
     """Create org
 
      # noqa: E501
@@ -18,12 +20,14 @@ def create_org(body):  # noqa: E501
 
     :rtype: InlineResponse2002
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    user_org_id = body[OrgInfoKeys.USER_ORG_ID]
+    verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
+    # TODO create_org
     return 'do some magic!'
 
 
-def disband_org():  # noqa: E501
+def disband_org(token_info):  # noqa: E501
     """Disband org
 
     An org can only be disbanded by it&#x27;s owner, hence the org is infered from the JWT # noqa: E501
@@ -31,7 +35,9 @@ def disband_org():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    uid = token_info[UserInfoKeys.UID]
+    db.disband_org(uid)
+    return None
 
 
 def get_org(org_id):  # noqa: E501
@@ -44,10 +50,11 @@ def get_org(org_id):  # noqa: E501
 
     :rtype: UserOrg
     """
-    return 'do some magic!'
+    org = db.get_organization(org_id)
+    return org
 
 
-def get_org_list():  # noqa: E501
+def get_org_list(token_info):  # noqa: E501
     """Get org info
 
      # noqa: E501
@@ -55,7 +62,9 @@ def get_org_list():  # noqa: E501
 
     :rtype: InlineResponse2001
     """
-    return 'do some magic!'
+    uid = token_info[UserInfoKeys.UID]
+    org_list = db.get_organizations(uid)
+    return org_list
 
 
 def get_verifier_password(body):  # noqa: E501
@@ -68,9 +77,9 @@ def get_verifier_password(body):  # noqa: E501
 
     :rtype: VerifierPassword
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    org_id = body[OrgInfoKeys.ORG_ID]
+    verifier_password = db.get_verifier_password(org_id)
+    return verifier_password
 
 
 def update_org(body):  # noqa: E501
@@ -83,6 +92,8 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
+    # TODO update org
+    db.update_organization()
+    return None

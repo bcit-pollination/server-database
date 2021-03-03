@@ -100,7 +100,7 @@ paths:
       tags:
       - user
       summary: Remove user from service. Only a user can remove himself, hence the
-        user is infered from the JWT
+        user is inferred from the JWT
       operationId: remove_user
       responses:
         "200":
@@ -233,7 +233,7 @@ paths:
       tags:
       - org
       summary: Disband org
-      description: An org can only be disbanded by it's owner, hence the org is infered
+      description: An org can only be disbanded by it's owner, hence the org is inferred
         from the JWT
       operationId: disband_org
       responses:
@@ -1370,15 +1370,6 @@ components:
       explode: false
       schema:
         type: integer
-    location_p:
-      name: election_id
-      in: header
-      description: The id of the location
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: integer
   requestBodies:
     login:
       content:
@@ -1528,18 +1519,18 @@ components:
         application/json:
           schema:
             required:
-            - newPrivileges
-            - orgId
+            - org_id
+            - privilege
             - uid
             type: object
             properties:
               uid:
                 type: integer
                 description: user id of the user to changed
-              newPrivileges:
+              privilege:
                 type: integer
                 description: the new privileges for the user
-              orgId:
+              org_id:
                 type: integer
                 description: The id of the org in which to change the privileges
             additionalProperties: false

@@ -15,6 +15,8 @@ class OrgInfoKeys:
     PRIVILEGE = "privilege"
     INVITES = "invites"
     USER_ORG_ID = "user_org_id"
+    ORG_INFO = "org_info"
+    VERIFIER_PASSWORD = "verifier_password"
 
 
 class LoginKeys:

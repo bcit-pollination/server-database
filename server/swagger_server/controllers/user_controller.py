@@ -45,7 +45,7 @@ def get_voting_token():  # noqa: E501
 
 
 def remove_user():  # noqa: E501
-    """Remove user from service. Only a user can remove himself, hence the user is infered from the JWT
+    """Remove user from service. Only a user can remove himself, hence the user is inferred from the JWT
 
      # noqa: E501
 

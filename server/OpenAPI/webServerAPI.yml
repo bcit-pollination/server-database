@@ -1378,14 +1378,6 @@ components:
       schema:
         type: integer
 
-    location_p:
-      name: election_id
-      in: header
-      description: The id of the location
-      required: true
-      schema:
-        type: integer
-
 
   securitySchemes:
     user:
