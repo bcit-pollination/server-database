@@ -6,7 +6,7 @@ from src.db.procedures import PROCEDURE
 
 
 def get_db_connection() -> MySQLdb.Connection:
-    return MySQLdb.connect(read_default_file='~/.my.cnf')
+    return MySQLdb.connect('localhost', 'root', 'M1lo123!', 'voting_system')
 
 
 def call_proc(proc_name, args=None, resp_many=False):
@@ -55,12 +55,13 @@ def get_user(uid):
     return user
 
 
+# SQL process failed: (1048, "Column 'privilege' cannot be null")
 def create_org(user_id, org_name, verifier_password, user_org_id):
     return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, verifier_password, user_org_id))
 
 
 def get_users_organization(user_id):
-    return call_proc(PROCEDURE.GETUSERORGANIZATION, (user_id,))
+    return call_proc(PROCEDURE.GETUSERORGANIZATIONS, (user_id,))
 
 
 def get_user_elections(user_id):

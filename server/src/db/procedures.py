@@ -1,5 +1,7 @@
 """
-List of available procedures available in the MySql database.
+List of available procedures available in the Pollination MySql database.
+
+https://docs.google.com/document/d/1ny0d3P38eVzZHJG2Odj71t52vtQhlIupdYiwLjgoMec/edit
 """
 class PROCEDURE:
     # name                    = proc_name                   # procedure parameters
@@ -8,10 +10,10 @@ class PROCEDURE:
     CREATEORG                 = 'CreateOrg'                 # user_id, org_name, user_org_id, verifier_password
     ENROLLUSER                = 'EnrollUser'                # user_id, user_org_id, email
     GETUSER                   = 'GetUser'                   # user_id
-    GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
+    GETUSERORGANIZATIONS      = 'GetUserOrgListInfo'        # user_id
     GETUSERELECTIONS          = 'GetUserElections'          # user_id
-    GETORGANIZATIONUSERS      = 'GetOrganizationUsers'      # org_id
-    GETUSERELECTIONSALTERNATE = 'GetUserElectionsAlternate' # user_id
+    GETORGANIZATIONUSERS      = 'GetUsersFromOrg'           # org_id
+    GETUSERELECTIONSALTERNATE = 'GetElectionsAlternate'     # user_id
     UPDATEUSER                = 'UpdateUser'                # user_id, first_name, last_name, email, password
     DEACTIVATEUSER            = 'DeactivateUser'            # user_id
     GETUSERTOKEN              = 'GetUserToken'              # user_id
