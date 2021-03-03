@@ -17,8 +17,8 @@ class PROCEDURE:
     UPDATEUSER                = 'UpdateUser'                # user_id, first_name, last_name, email, password
     DEACTIVATEUSER            = 'DeactivateUser'            # user_id
     GETUSERTOKEN              = 'GetUserToken'              # user_id
-    GETORGANIZATIONS          = 'GetOrganizations'          # user_id
-    GETORGANIZATION           = 'GetOrganization'           # org_id
+    GETUSERORGLIST            = 'GetUserOrgListInfo'        # user_id
+    GETORGANIZATION           = 'GetOrg'                    # org_id
     UPDATEORGANIZATION        = 'UpdateOrg'                 # org_id, org_name, verifier_password
     DISBANDORG                = 'DisbandOrg'                # org_id
     GETVERIFIERPASSWORD       = 'GetVerifierPassword'       # org_id
@@ -29,7 +29,7 @@ class PROCEDURE:
     UPDATEELECTION            = 'UpdateElection'            # election_id, description, start_time, end_time, status, is_public, is_anonymous, questions
     DELETEELECTION            = 'DeleteElection'            # election_id
     GETELECTION               = 'GetElection'               # election_id
-    GETELECTIONLISTORG        = 'GetElectionListOrg'        # org_id
+    GETELECTIONLISTORG        = 'GetOrgElections'           # org_id
     GETELECTIONLISTUSER       = 'GetElectionListUser'       # user_id
     GETINDIVIDUALVOTES        = 'GetIndividualVotes'        # election_id
     GETELECTIONSATLERNATE     = 'GetElectionsAlternate'     # user_id
