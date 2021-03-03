@@ -1,8 +1,10 @@
 import MySQLdb
+from werkzeug.exceptions import Conflict, NotFound
 
 from swagger_server.models.user import User
 from src.constants_enums.privileges import PrivilegeLevels
 from src.db.procedures import PROCEDURE
+from src.constants_enums.datetime_format import *
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -25,8 +27,11 @@ def call_proc(proc_name, args=None, resp_many=False):
             db.commit()
     except MySQLdb.MySQLError as err:
         print("SQL process failed:", err)
-    finally:
-        return resp
+        if err.args[0] == 1062:
+            raise Conflict("Already in DB")
+        if err.args[0] == 1366:
+            raise NotFound("Not Found")
+    return resp
 
 
 def get_uid_with_credentials(email, password):
@@ -51,7 +56,11 @@ def get_user(uid):
     user = call_proc(PROCEDURE.GETUSER, (uid,))
     if user:
         print(user)
-        user = User.from_dict(dict(id=user[0], first_name=user[1], last_name=user[2], email=user[3], dob=user[4]))
+        user = User.from_dict(dict(id=user[0],
+                                   last_name=user[1],
+                                   first_name=user[2],
+                                   email=user[3],
+                                   dob=user[4].strftime(DOB_TIME_FORMAT)))
     return user
 
 
