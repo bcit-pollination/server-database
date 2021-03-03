@@ -79,7 +79,7 @@ BEGIN
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET inactive = TRUE
+    SET e.privilege = -1
     WHERE e.user_id = user_id;
 END; //
 
@@ -155,14 +155,14 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = 3;
+    AND e.privilege = 4;
 
     UPDATE Organization o
     SET o.disabled = TRUE
     WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET e.inactive = TRUE
+    SET e.privilege = -1
     WHERE e.org_id = org_id;
 END; //
 
@@ -179,7 +179,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = 3;
+    AND e.privilege = 4;
 END; //
 
 /**
@@ -323,20 +323,6 @@ BEGIN
     INSERT INTO Enrollment(user_id, org_id, user_org_id)
     VALUES(user_id, org_id, user_org_id);
     SELECT user_id;
-END; //
-
-
-/**
- * Kicks a user from the specified organization.
- */
-CREATE PROCEDURE KickUser(
-    IN user_id INT, 
-    IN org_id INT)
-BEGIN
-    UPDATE Enrollment e
-    SET e.inactive = TRUE
-    WHERE e.user_id = user_id
-    AND e.org_id = org_id;
 END; //
 
 /** 
