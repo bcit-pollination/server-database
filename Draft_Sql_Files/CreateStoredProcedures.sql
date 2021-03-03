@@ -54,12 +54,6 @@ DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
-SET @privilege_kicked := -1;
-SET @privilege_invited := 0;
-SET @privilege_member := 1;
-SET @privilege_admin := 2;
-SET @privilege_owner := 3;
-
 DELIMITER //
 //
 
@@ -86,7 +80,7 @@ BEGIN
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 'removed'
     WHERE e.user_id = user_id;
 END; //
 
@@ -162,7 +156,7 @@ proc: BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 'owner';
 
     IF (org_id IS NULL) THEN
         LEAVE proc;
@@ -173,7 +167,7 @@ proc: BEGIN
     WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 'removed'
     WHERE e.org_id = org_id;
 END; //
 
@@ -190,7 +184,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 'owner';
 END; //
 
 /**
@@ -207,7 +201,7 @@ BEGIN
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
     INSERT INTO Enrollment(user_id, org_id, user_org_id, privilege)
-    VALUES(user_id, LAST_INSERT_ID(), user_org_id, @privilege_owner);
+    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 'owner');
 END; //
 
 /** 
@@ -301,7 +295,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 'invited';
 END; //
  
 
@@ -320,7 +314,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 'invited';
 END; //
 
 /**

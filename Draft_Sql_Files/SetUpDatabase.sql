@@ -36,7 +36,8 @@ CREATE TABLE Enrollment (
     enrollment_id 		INT 			NOT NULL 	AUTO_INCREMENT,
     user_id 			INT 			NOT NULL,
     org_id 				INT 			NOT NULL,
-    privilege 	        INT 			NOT NULL 	DEFAULT(0), /* Lowest privilege level is 0. */
+    privilege 	        ENUM('removed', 'invited', 'member', 'admin', 'owner')
+										NOT NULL 	DEFAULT(1),
     user_org_id 		VARCHAR(40)     NOT NULL,
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
@@ -45,8 +46,7 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    UNIQUE KEY (user_id, org_id),
-    CHECK (privilege BETWEEN -1 AND 3)
+    UNIQUE KEY (user_id, org_id)
 );
 
 CREATE TABLE Election (
