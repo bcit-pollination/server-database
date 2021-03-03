@@ -1,14 +1,9 @@
-import connexion
-import six
-
-from server.swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
-from server.swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
-from server.swagger_server import util
-from server.src.auth.jwt import decode_token
-import server.src.db.mysql_interface as db
-from server.src.constants_enums.obj_keys import *
-from server.src.constants_enums.privileges import *
-from server.src.email.sendgrid_email import *
+from src.email.sendgrid_email import send_registration_email
+from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
+from src.auth.jwt import decode_token
+import src.db.mysql_interface as db
+from src.constants_enums.obj_keys import *
+from src.constants_enums.privileges import PrivilegeLevels
 
 
 def accept_org_invite(encrypted_data):  # noqa: E501
@@ -41,8 +36,10 @@ def change_user_privilege(body):  # noqa: E501
     :rtype: None
     """
     # TODO change user priv
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+    uid = body[UserInfoKeys.UID]
+    privilege = body[OrgInfoKeys.PRIVILEGE]
+    org_id = body[OrgInfoKeys.ORG_ID]
+    db.update_privilege(uid, org_id, privilege)
     return None
 
 
@@ -60,7 +57,7 @@ def get_org_users(org_id):  # noqa: E501
     return org_users
 
 
-def kick_org_user(body):  # noqa: E501
+def remove_org_user(body):  # noqa: E501
     """Kick user from org
 
      # noqa: E501
@@ -71,7 +68,7 @@ def kick_org_user(body):  # noqa: E501
     :rtype: None
     """
     change_user_privilege({
-        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.KICKED,
+        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.REMOVED,
         OrgInfoKeys.ORG_ID: body[OrgInfoKeys.ORG_ID],
         UserInfoKeys.UID: body[UserInfoKeys.UID]
     })
@@ -94,6 +91,6 @@ def org_invite_user(body):  # noqa: E501
     for user in users_to_invite:
         email = user[UserInfoKeys.EMAIL]
         user_org_id = user[OrgInfoKeys.USER_ORG_ID]
+        db.invite_user(email, user_org_id, org_id)
         send_registration_email(org_name, org_id, email)
-        # TODO add to db
     return None

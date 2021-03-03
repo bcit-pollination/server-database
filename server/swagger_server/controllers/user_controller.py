@@ -1,10 +1,4 @@
-import connexion
-import six
-
-from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
-from swagger_server.models.user import User  # noqa: E501
-from swagger_server.models.voting_token import VotingToken  # noqa: E501
-from swagger_server import util
+from src.endpoint_controllers import user_controller
 
 
 def app_create_user(body):  # noqa: E501
@@ -17,12 +11,11 @@ def app_create_user(body):  # noqa: E501
 
     :rtype: InlineResponse200
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return user_controller.app_create_user(body)
 
 
-def get_user():  # noqa: E501
+def get_user(token_info):  # noqa: E501
     """Get user info
 
      # noqa: E501
@@ -30,10 +23,10 @@ def get_user():  # noqa: E501
 
     :rtype: User
     """
-    return 'do some magic!'
+    return user_controller.get_user(token_info)
 
 
-def get_voting_token():  # noqa: E501
+def get_voting_token(token_info):  # noqa: E501
     """Get token used to vote
 
      # noqa: E501
@@ -41,10 +34,10 @@ def get_voting_token():  # noqa: E501
 
     :rtype: VotingToken
     """
-    return 'do some magic!'
+    return user_controller.get_voting_token(token_info)
 
 
-def remove_user():  # noqa: E501
+def remove_user(token_info):  # noqa: E501
     """Remove user from service. Only a user can remove himself, hence the user is inferred from the JWT
 
      # noqa: E501
@@ -52,4 +45,4 @@ def remove_user():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return user_controller.remove_user(token_info)

@@ -6,9 +6,10 @@ from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa
 from swagger_server.models.user_org import UserOrg  # noqa: E501
 from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 from swagger_server import util
+from src.endpoint_controllers import org_controller
 
 
-def create_org(body):  # noqa: E501
+def create_org(body, token_info):  # noqa
     """Create org
 
      # noqa: E501
@@ -18,12 +19,10 @@ def create_org(body):  # noqa: E501
 
     :rtype: InlineResponse2002
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_controller.create_org(body, token_info)
 
 
-def disband_org():  # noqa: E501
+def disband_org(token_info):  # noqa: E501
     """Disband org
 
     An org can only be disbanded by it&#x27;s owner, hence the org is inferred from the JWT # noqa: E501
@@ -31,7 +30,7 @@ def disband_org():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return org_controller.disband_org(token_info)
 
 
 def get_org(org_id):  # noqa: E501
@@ -44,10 +43,10 @@ def get_org(org_id):  # noqa: E501
 
     :rtype: UserOrg
     """
-    return 'do some magic!'
+    return org_controller.get_org(org_id)
 
 
-def get_org_list():  # noqa: E501
+def get_org_list(token_info):  # noqa: E501
     """Get org info
 
      # noqa: E501
@@ -55,7 +54,7 @@ def get_org_list():  # noqa: E501
 
     :rtype: InlineResponse2001
     """
-    return 'do some magic!'
+    return org_controller.get_org_list(token_info)
 
 
 def get_verifier_password(body):  # noqa: E501
@@ -68,9 +67,7 @@ def get_verifier_password(body):  # noqa: E501
 
     :rtype: VerifierPassword
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_controller.get_verifier_password(body)
 
 
 def update_org(body):  # noqa: E501
@@ -83,6 +80,4 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_controller.update_org(body)

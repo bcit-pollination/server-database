@@ -5,8 +5,8 @@ class PROCEDURE:
     # name                    = proc_name                   # procedure parameters
     LOGINUSER                 = 'LoginUser'                 # email, password
     CREATEUSER                = 'CreateUser'                # first_name, last_name, email, dob, password, voting_token
-    CREATEORG                 = 'CreateOrg'                 # user_id, org_name
-    ENROLLUSER                = 'EnrollUser'                # user_id, org_id
+    CREATEORG                 = 'CreateOrg'                 # user_id, org_name, user_org_id, verifier_password
+    ENROLLUSER                = 'EnrollUser'                # user_id, user_org_id, email
     GETUSER                   = 'GetUser'                   # user_id
     GETUSERORGANIZATION       = 'GetUserOrganization'       # user_id
     GETUSERELECTIONS          = 'GetUserElections'          # user_id
@@ -17,12 +17,12 @@ class PROCEDURE:
     GETUSERTOKEN              = 'GetUserToken'              # user_id
     GETORGANIZATIONS          = 'GetOrganizations'          # user_id
     GETORGANIZATION           = 'GetOrganization'           # org_id
-    UPDATEORGANIZATION        = 'UpdateOrg'                 # org_id, org_name
+    UPDATEORGANIZATION        = 'UpdateOrg'                 # org_id, org_name, verifier_password
     DISBANDORG                = 'DisbandOrg'                # org_id
     GETVERIFIERPASSWORD       = 'GetVerifierPassword'       # org_id
     GETUSERSFROMORG           = 'GetUsersFromOrg'           # org_id, privilege_level
     UPDATEPRIVILEGE           = 'UpdatePrivilege'           # user_id, org_id, privilege_level
-    INVITEUSER                = 'InviteUser'                # user_id, org_id
+    INVITEUSER                = 'InviteUser'                # user_id, org_id, user_org_id
     CREATEELECTION            = 'CreateElection'            # org_id, description, start_time, end_time, status, is_public, is_anonymous
     UPDATEELECTION            = 'UpdateElection'            # election_id, description, start_time, end_time, status, is_public, is_anonymous, questions
     DELETEELECTION            = 'DeleteElection'            # election_id
@@ -32,7 +32,7 @@ class PROCEDURE:
     GETINDIVIDUALVOTES        = 'GetIndividualVotes'        # election_id
     GETELECTIONSATLERNATE     = 'GetElectionsAlternate'     # user_id
     GETQUESTIONOPT            = 'GetQuestionOpt'            # question_id
-    GETELECTIONQUESTIONS      = 'GetElectionQuestions'      # election_id
+    GETELECTIONQUESTIONS      = 'GetQuestions'      # election_id
     GETPUBLICELECTIONS        = 'GetPublicElections'        # NOTHING
     ADDQUESTION               = 'AddQuestion'               # election_id, description
     DROPQUESTION              = 'DropQuestion'              # question_id

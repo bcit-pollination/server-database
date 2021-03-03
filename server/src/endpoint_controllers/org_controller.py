@@ -1,14 +1,9 @@
-import connexion
-import six
-
-from server.swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
-from server.swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
-from server.swagger_server.models.user_org import UserOrg  # noqa: E501
-from server.swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
-from server.swagger_server import util
-import server.src.db.mysql_interface as db
-from server.src.constants_enums.obj_keys import *
-
+from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
+from swagger_server.models.user_org import UserOrg  # noqa: E501
+from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
+import src.db.mysql_interface as db
+from src.constants_enums.obj_keys import *
 
 def create_org(body, token_info):  # noqa
     """Create org
@@ -23,8 +18,8 @@ def create_org(body, token_info):  # noqa
     name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    # TODO create_org
-    return 'do some magic!'
+    org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password, user_org_id)
+    return org_id
 
 
 def disband_org(token_info):  # noqa: E501
@@ -94,6 +89,6 @@ def update_org(body):  # noqa: E501
     """
     name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    # TODO update org
-    db.update_organization()
+    org_id = body[OrgInfoKeys.ORG_ID]
+    db.update_organization(org_id, name, verifier_password)
     return None
