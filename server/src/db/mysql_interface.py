@@ -18,11 +18,16 @@ def call_proc(proc_name, args=None, resp_many=False):
         with get_db_connection() as db:
             with db.cursor() as cursor:
                 print("Calling proc:", proc_name, args)
-                cursor.callproc(proc_name, args)
+                if args:
+                    cursor.callproc(proc_name, args)
+                else:
+                    cursor.callproc(proc_name)
+
                 if resp_many:
                     resp = cursor.fetchall()
                 else:
                     resp = cursor.fetchone()
+
                 print("Database return:", resp)
             db.commit()
     except MySQLdb.MySQLError as err:
@@ -169,7 +174,7 @@ def get_election_questions(election_id):
 
 
 def get_public_elections():
-    return call_proc(PROCEDURE.GETPUBLICELECTIONS, (None,), resp_many=True)
+    return call_proc(PROCEDURE.GETPUBLICELECTIONS, None, resp_many=True)
 
 
 def add_questions(election_id, description, max_selection_count):
@@ -177,37 +182,32 @@ def add_questions(election_id, description, max_selection_count):
 
 
 def drop_question(question_id):
-    return call_proc(PROCEDURE.ADDQUESTION, (question_id,))
+    return call_proc(PROCEDURE.DROPQUESTION, (question_id,))
 
 
 def update_question(question_id, description, max_selection_count):
     return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, max_selection_count))
 
 
-def add_question_opt(opt_id, option_description):
-    return call_proc(PROCEDURE.ADDOPT, (opt_id, option_description))
+def add_question_opt(question_id, option_description):
+    return call_proc(PROCEDURE.ADDOPT, (question_id, option_description))
 
 
 def remove_question_opt(opt_id):
-    return call_proc(PROCEDURE.DROPOPT, (opt_id,))
+    return call_proc(PROCEDURE.DELETEOPTION, (opt_id,))
 
 
 def update_question_opt(opt_id, description):
-    return call_proc(PROCEDURE.DROPOPT, (opt_id, description))
+    return call_proc(PROCEDURE.UPDATEQUESTIONOPT, (opt_id, description))
 
 
 def get_privilege(org_id, user_id):
     return call_proc(PROCEDURE.GETPRIVILEGE, (org_id, user_id))
 
 
-# TODO what was this?
-# def get_idvt(election_id):
-#     return call_proc(PROCEDURE.GETPRIVILEGE, (election_id,))
+def add_vote(voting_token, time_stamp, election_id):
+    return call_proc(PROCEDURE.ADDVOTE, (voting_token, time_stamp, election_id))
 
 
-def create_vote(voting_token, time_stamp):
-    return call_proc(PROCEDURE.CREATEVOTE, (voting_token, time_stamp))
-
-
-def create_choice(vote_id, opt_id):
-    return call_proc(PROCEDURE.CREATEVOTE, (vote_id, opt_id))
+def add_choice(vote_id, opt_id):
+    return call_proc(PROCEDURE.ADDCHOICE, (vote_id, opt_id))
