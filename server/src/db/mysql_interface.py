@@ -1,8 +1,8 @@
 import MySQLdb
 
-from server.swagger_server.models.user import User
-from server.src.constants_enums.privileges import PrivilegeLevels
-from .procedures import PROCEDURE
+from swagger_server.models.user import User
+from src.constants_enums.privileges import PrivilegeLevels
+from src.db.procedures import PROCEDURE
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -33,13 +33,13 @@ def get_uid_with_credentials(email, password):
     return call_proc(PROCEDURE.LOGINUSER, (email, password))
 
 
-def create_user(user: User) -> int:
+def create_user(user: User, voting_token) -> int:
     user = call_proc(PROCEDURE.CREATEUSER, (user.first_name,
                                             user.last_name,
                                             user.email,
-                                            "2021-02-15",
+                                            user.dob,
                                             user.password,
-                                            "test_token"))
+                                            voting_token))
     return user[0] if user else user
 
 

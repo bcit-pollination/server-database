@@ -1,10 +1,10 @@
 from werkzeug.exceptions import Unauthorized, BadRequest, NotFound
 
-import server.src.auth.jwt as jwt
+import src.auth.jwt as jwt
 import connexion
-import server.src.db.mysql_interface as db
-from server.src.constants_enums.obj_keys import *
-from server.src.constants_enums.privileges import PrivilegeLevels
+import src.db.mysql_interface as db
+from src.constants_enums.obj_keys import *
+from src.constants_enums.privileges import *
 """
 controller generated to handled auth operation described at:
 https://connexion.readthedocs.io/en/latest/security.html

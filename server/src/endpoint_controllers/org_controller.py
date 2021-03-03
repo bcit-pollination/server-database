@@ -1,13 +1,8 @@
-import connexion
-import six
-
-from server.swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
-from server.swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
-from server.swagger_server.models.user_org import UserOrg  # noqa: E501
-from server.swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
-from server.swagger_server import util
-import server.src.db.mysql_interface as db
-from server.src.constants_enums.obj_keys import *
+from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
+from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
+from swagger_server.models.user_org import UserOrg  # noqa: E501
+from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
+import src.db.mysql_interface as db
 
 
 def create_org(body, token_info):  # noqa

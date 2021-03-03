@@ -1,14 +1,6 @@
-import connexion
-import six
-
-from server.swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
-from server.swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
-from server.swagger_server import util
-from server.src.auth.jwt import decode_token
-import server.src.db.mysql_interface as db
-from server.src.constants_enums.obj_keys import *
-from server.src.constants_enums.privileges import *
-from server.src.email.sendgrid_email import *
+from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
+from src.auth.jwt import decode_token
+import src.db.mysql_interface as db
 
 
 def accept_org_invite(encrypted_data):  # noqa: E501

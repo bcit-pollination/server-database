@@ -1,11 +1,4 @@
-import connexion
-import six
-
-from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
-from swagger_server.models.user import User  # noqa: E501
-from swagger_server.models.voting_token import VotingToken  # noqa: E501
-from swagger_server import util
-from server.src.endpoint_controllers import user_controller
+from src.endpoint_controllers import user_controller
 
 
 def app_create_user(body):  # noqa: E501
