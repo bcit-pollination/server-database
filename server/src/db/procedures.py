@@ -1,7 +1,7 @@
-"""
-List of available procedures available in the MySql database.
-"""
 class PROCEDURE:
+    """
+    List of available procedures available in the Pollination MySql database.
+    """
     # name                    = proc_name                   # procedure parameters
     LOGINUSER                 = 'LoginUser'                 # email, password
     CREATEUSER                = 'CreateUser'                # first_name, last_name, email, dob, password, voting_token
