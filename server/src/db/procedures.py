@@ -17,7 +17,7 @@ class PROCEDURE:
     GETUSERTOKEN              = 'GetUserToken'              # user_id
     GETORGANIZATIONS          = 'GetOrganizations'          # user_id
     GETORGANIZATION           = 'GetOrganization'           # org_id
-    UPDATEORGANIZATION        = 'UpdateOrg'                 # org_id, org_name
+    UPDATEORGANIZATION        = 'UpdateOrg'                 # org_id, org_name, verifier_password
     DISBANDORG                = 'DisbandOrg'                # org_id
     GETVERIFIERPASSWORD       = 'GetVerifierPassword'       # org_id
     GETUSERSFROMORG           = 'GetUsersFromOrg'           # org_id, privilege_level

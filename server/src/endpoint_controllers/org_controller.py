@@ -23,8 +23,8 @@ def create_org(body, token_info):  # noqa
     name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    # TODO create_org
-    return 'do some magic!'
+    org_id = db.create_org(name, user_org_id, token_info[JwtTokenKeys.UID], verifier_password)
+    return org_id
 
 
 def disband_org(token_info):  # noqa: E501
@@ -94,6 +94,6 @@ def update_org(body):  # noqa: E501
     """
     name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    # TODO update org
-    db.update_organization()
+    org_id = body[OrgInfoKeys.ORG_ID]
+    db.update_organization(org_id, name, verifier_password)
     return None

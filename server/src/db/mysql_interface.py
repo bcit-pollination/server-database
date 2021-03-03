@@ -95,8 +95,8 @@ def get_organization(org_id):
     return call_proc(PROCEDURE.GETORGANIZATION, (org_id,))
 
 
-def update_organization(org_id, org_name):
-    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name))
+def update_organization(org_id, org_name, verifier_password):
+    return call_proc(PROCEDURE.UPDATEORGANIZATION, (org_id, org_name,verifier_password))
 
 
 def disband_org(uid):
