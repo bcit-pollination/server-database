@@ -9,7 +9,7 @@ CREATE TABLE Users (
     email               VARCHAR(40)     NOT NULL	UNIQUE,
     dob                 DATE            NOT NULL,
     password	        VARCHAR(72)     NOT NULL,
-    voting_token		VARCHAR(36) 	NOT NULL,
+    voting_token		VARCHAR(36) 	NOT NULL	UNIQUE,
     deactivated			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)
 );

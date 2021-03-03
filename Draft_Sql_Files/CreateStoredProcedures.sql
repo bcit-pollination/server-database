@@ -206,7 +206,7 @@ BEGIN
 END; //
 
 /** 
- * Updates an organization's name. 
+ * Updates an organization's name and verifier_password. 
  */
 CREATE PROCEDURE UpdateOrg(
     IN org_id INT, 
@@ -474,10 +474,12 @@ END; //
  */
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
-    IN question_description VARCHAR(40))
+    IN question_description VARCHAR(40),
+    IN max_selection_count INT)
 BEGIN
     UPDATE Question q
-        SET q.question_description = question_description
+        SET q.question_description = question_description,
+        q.max_selection_count = max_selection_count
         WHERE q.question_id = question_id;
 END; //
     
