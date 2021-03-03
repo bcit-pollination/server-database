@@ -9,6 +9,7 @@ DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS UpdateUser;
 
 DROP PROCEDURE IF EXISTS DisbandOrg;
+DROP PROCEDURE IF EXISTS GetUserOrgInfo;
 DROP PROCEDURE IF EXISTS GetOwnerOrgInfo;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS UpdateOrg;
@@ -53,11 +54,11 @@ DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
-SET @privilege_kicked = -1;
-SET @privilege_invited = 0;
-SET @privilege_member = 1;
-SET @privilege_admin = 2;
-SET @privilege_owner = 3;
+SET @privilege_kicked := -1;
+SET @privilege_invited := 0;
+SET @privilege_member := 1;
+SET @privilege_admin := 2;
+SET @privilege_owner := 3;
 
 DELIMITER //
 //
@@ -247,12 +248,17 @@ END; //
 
 
 /** 
- * Gets an organization's id and name.
+ * Gets an organization's id and name, 
+ * as well as all of the users' privileges and user_org_ids.
  */
 CREATE PROCEDURE GetOrg(
     IN org_id INT)
 BEGIN
-    SELECT o.org_id, o.org_name FROM Organization o
+    SELECT o.org_id, o.org_name, e.privilege, e.user_org_id FROM Users u
+        INNER JOIN Enrollment e
+            ON u.user_id = e.user_id
+        INNER JOIN Organization o
+            ON e.org_id = o.org_id
     WHERE o.org_id = org_id;
 END; //
 
