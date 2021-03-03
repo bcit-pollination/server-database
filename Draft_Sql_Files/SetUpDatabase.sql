@@ -46,7 +46,7 @@ CREATE TABLE Enrollment (
         REFERENCES Organization (org_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE KEY (user_id, org_id),
-    CHECK (privilege BETWEEN 0 AND 3)
+    CHECK (privilege BETWEEN -1 AND 3)
 );
 
 CREATE TABLE Election (
