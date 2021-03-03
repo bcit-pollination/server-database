@@ -22,7 +22,7 @@ class PROCEDURE:
     GETVERIFIERPASSWORD       = 'GetVerifierPassword'       # org_id
     GETUSERSFROMORG           = 'GetUsersFromOrg'           # org_id, privilege_level
     UPDATEPRIVILEGE           = 'UpdatePrivilege'           # user_id, org_id, privilege_level
-    INVITEUSER                = 'InviteUser'                # user_id, org_id
+    INVITEUSER                = 'InviteUser'                # user_id, org_id, user_org_id
     CREATEELECTION            = 'CreateElection'            # org_id, description, start_time, end_time, status, is_public, is_anonymous
     UPDATEELECTION            = 'UpdateElection'            # election_id, description, start_time, end_time, status, is_public, is_anonymous, questions
     DELETEELECTION            = 'DeleteElection'            # election_id

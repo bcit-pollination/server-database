@@ -115,8 +115,8 @@ def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
     return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, org_id, privilege_level))
 
 
-def invite_user(user_id, org_id):
-    return call_proc(PROCEDURE.INVITEUSER, (user_id, org_id))
+def invite_user(user_id, org_id, user_org_id):
+    return call_proc(PROCEDURE.INVITEUSER, (user_id, org_id, user_org_id))
 
 
 def create_election(org_id, description, start_time, end_time, is_public, anonymous):

@@ -41,8 +41,10 @@ def change_user_privilege(body):  # noqa: E501
     :rtype: None
     """
     # TODO change user priv
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+    uid = body[UserInfoKeys.UID]
+    privilege = body[OrgInfoKeys.PRIVILEGE]
+    org_id = body[OrgInfoKeys.ORG_ID]
+    db.update_privilege(uid, org_id, privilege)
     return None
 
 
@@ -60,7 +62,7 @@ def get_org_users(org_id):  # noqa: E501
     return org_users
 
 
-def kick_org_user(body):  # noqa: E501
+def remove_org_user(body):  # noqa: E501
     """Kick user from org
 
      # noqa: E501
@@ -71,7 +73,7 @@ def kick_org_user(body):  # noqa: E501
     :rtype: None
     """
     change_user_privilege({
-        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.KICKED,
+        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.REMOVED,
         OrgInfoKeys.ORG_ID: body[OrgInfoKeys.ORG_ID],
         UserInfoKeys.UID: body[UserInfoKeys.UID]
     })
@@ -94,6 +96,6 @@ def org_invite_user(body):  # noqa: E501
     for user in users_to_invite:
         email = user[UserInfoKeys.EMAIL]
         user_org_id = user[OrgInfoKeys.USER_ORG_ID]
+        db.invite_user(email, user_org_id, org_id)
         send_registration_email(org_name, org_id, email)
-        # TODO add to db
     return None
