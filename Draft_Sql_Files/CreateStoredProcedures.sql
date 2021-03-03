@@ -210,10 +210,12 @@ END; //
  */
 CREATE PROCEDURE UpdateOrg(
     IN org_id INT, 
-    IN org_name VARCHAR(40))
+    IN org_name VARCHAR(40),
+    IN verifier_password VARCHAR(72))
 BEGIN
     UPDATE Organization o
-    SET o.org_name = org_name
+    SET o.org_name = org_name,
+    o.verifier_password = verifier_password
     WHERE o.org_id = org_id;
 END; //
 
