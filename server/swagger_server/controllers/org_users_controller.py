@@ -4,6 +4,7 @@ import six
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server import util
+from src.endpoint_controllers import org_users_controller
 
 
 def accept_org_invite(encrypted_data):  # noqa: E501
@@ -16,7 +17,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return org_users_controller.accept_org_invite(encrypted_data)
 
 
 def change_user_privilege(body):  # noqa: E501
@@ -29,9 +30,7 @@ def change_user_privilege(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_users_controller.change_user_privilege(body)
 
 
 def get_org_users(org_id):  # noqa: E501
@@ -44,7 +43,7 @@ def get_org_users(org_id):  # noqa: E501
 
     :rtype: InlineResponse2003
     """
-    return 'do some magic!'
+    return org_users_controller.get_org_users(org_id)
 
 
 def kick_org_user(body):  # noqa: E501
@@ -57,9 +56,7 @@ def kick_org_user(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_users_controller.remove_org_user(body)
 
 
 def org_invite_user(body):  # noqa: E501
@@ -72,6 +69,4 @@ def org_invite_user(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_users_controller.org_invite_user(body)
