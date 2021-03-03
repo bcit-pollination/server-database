@@ -22,7 +22,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 def change_user_privilege(body):  # noqa: E501
     """Change user privileges
 
-    user privileges are:&lt;br&gt; - 0 :&#x3D; invited&lt;br&gt; - 1 :&#x3D; member&lt;br&gt; - 2 :&#x3D; admin&lt;br&gt; - 3 :&#x3D; owner  # noqa: E501
+    user privileges are:&lt;br&gt;  -1 :&#x3D; removed&lt;br&gt;   0 :&#x3D; invited&lt;br&gt;   1 :&#x3D; member&lt;br&gt;   2 :&#x3D; admin&lt;br&gt;   3 :&#x3D; owner  # noqa: E501
 
     :param body: Information about the user to have the privileges changed
     :type body: dict | bytes
@@ -47,12 +47,12 @@ def get_org_users(org_id):  # noqa: E501
     return 'do some magic!'
 
 
-def kick_org_user(body):  # noqa: E501
-    """Kick user from org
+def org_invite_user(body):  # noqa: E501
+    """Add user to org
 
-     # noqa: E501
+    Use this to invite user to org # noqa: E501
 
-    :param body: 
+    :param body: A list of info for users to be invited
     :type body: dict | bytes
 
     :rtype: None
@@ -62,12 +62,12 @@ def kick_org_user(body):  # noqa: E501
     return 'do some magic!'
 
 
-def org_invite_user(body):  # noqa: E501
-    """Add user to org
+def remove_org_user(body):  # noqa: E501
+    """Remove user from org
 
-    Use this to invite user to org # noqa: E501
+     # noqa: E501
 
-    :param body: A list of info for users to be invited
+    :param body: 
     :type body: dict | bytes
 
     :rtype: None

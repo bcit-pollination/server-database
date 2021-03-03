@@ -7,6 +7,7 @@ info:
 
 
     Org user privileges are:<br>
+    -1 := removed<br>
      0 := invited<br>
      1 := member<br>
      2 := admin<br>
@@ -301,9 +302,9 @@ paths:
     post:
       tags:
         - org.users
-      summary: Kick user from org
+      summary: Remove user from org
       operationId:
-        kick_org_user
+        remove_org_user
       security:
         - admin: [ ]
       requestBody:
@@ -325,10 +326,11 @@ paths:
       summary: Change user privileges
       description: >
         user privileges are:<br>
-        - 0 := invited<br>
-        - 1 := member<br>
-        - 2 := admin<br>
-        - 3 := owner
+         -1 := removed<br>
+          0 := invited<br>
+          1 := member<br>
+          2 := admin<br>
+          3 := owner
       operationId:
         change_user_privilege
       security:

@@ -4,7 +4,7 @@ info:
   description: |
     All values in this API are required and not nullable unless specifically stated.
 
-    Org user privileges are:<br>
+    Org user privileges are:<br> -1 := removed<br>
      0 := invited<br>
      1 := member<br>
      2 := admin<br>
@@ -335,8 +335,8 @@ paths:
     post:
       tags:
       - org.users
-      summary: Kick user from org
-      operationId: kick_org_user
+      summary: Remove user from org
+      operationId: remove_org_user
       requestBody:
         $ref: '#/components/requestBodies/org_user'
       responses:
@@ -357,7 +357,12 @@ paths:
       - org.users
       summary: Change user privileges
       description: |
-        user privileges are:<br> - 0 := invited<br> - 1 := member<br> - 2 := admin<br> - 3 := owner
+        user privileges are:<br>
+         -1 := removed<br>
+          0 := invited<br>
+          1 := member<br>
+          2 := admin<br>
+          3 := owner
       operationId: change_user_privilege
       requestBody:
         $ref: '#/components/requestBodies/change_user_privileges'
