@@ -5,11 +5,11 @@ info:
     All values in this API are required and not nullable unless specifically stated.
 
     Org user privileges are:<br>
-     1 := removed<br>
-     2 := invited<br>
-     3 := member<br>
-     4 := admin<br>
-     5 := owner
+     0 := removed<br>
+     1 := invited<br>
+     2 := member<br>
+     3 := admin<br>
+     4 := owner
   version: "1.14"
 servers:
 - url: https://pollination.live/api
@@ -356,7 +356,7 @@ paths:
       - org.users
       summary: Change user privileges
       description: |
-        user privileges are:<br> 1 := removed<br> 2 := invited<br> 3 := member<br> 4 := admin<br> 5 := owner
+        user privileges are:<br> 0 := removed<br> 1 := invited<br> 2 := member<br> 3 := admin<br> 4 := owner
       operationId: change_user_privilege
       requestBody:
         $ref: '#/components/requestBodies/change_user_privileges'

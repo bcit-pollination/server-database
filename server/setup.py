@@ -28,6 +28,6 @@ setup(
     entry_points={
         'console_scripts': ['swagger_server=swagger_server.__main__:main']},
     long_description="""\
-    All values in this API are required and not nullable unless specifically stated.  Org user privileges are:&lt;br&gt;  1 :&#x3D; removed&lt;br&gt;  2 :&#x3D; invited&lt;br&gt;  3 :&#x3D; member&lt;br&gt;  4 :&#x3D; admin&lt;br&gt;  5 :&#x3D; owner 
+    All values in this API are required and not nullable unless specifically stated.  Org user privileges are:&lt;br&gt;  0 :&#x3D; removed&lt;br&gt;  1 :&#x3D; invited&lt;br&gt;  2 :&#x3D; member&lt;br&gt;  3 :&#x3D; admin&lt;br&gt;  4 :&#x3D; owner 
     """
 )
