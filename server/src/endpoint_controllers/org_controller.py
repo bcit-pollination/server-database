@@ -6,6 +6,7 @@ from swagger_server.models.verifier_password import VerifierPassword  # noqa: E5
 import src.db.mysql_interface as db
 from src.constants_enums.obj_keys import *
 
+
 def create_org(body, token_info):  # noqa
     """Create org
 
@@ -40,7 +41,6 @@ def db_org_to_UserOrg(org_id, name, user_org_id, privilege):
     return UserOrg(privilege, user_org_id, Org(org_id, name))
 
 
-
 def get_org(org_id):  # noqa: E501
     """Get org info
 
@@ -52,8 +52,8 @@ def get_org(org_id):  # noqa: E501
     :rtype: UserOrg
     """
     org = db.get_organization(org_id)
-    # TODO
-    return db_org_to_UserOrg(org_id, "fake_name", "fake id", -2)
+    user_org = db_org_to_UserOrg(org_id, org[1], org[3], org[2])
+    return user_org
 
 
 def get_org_list(token_info):  # noqa: E501
@@ -66,7 +66,11 @@ def get_org_list(token_info):  # noqa: E501
     """
     uid = token_info[UserInfoKeys.UID]
     org_list = db.get_user_org_list(uid)
-    return org_list
+    user_org_list = []
+    for org in org_list:
+        user_org_list.append(db_org_to_UserOrg(org[0], org[1], org[3], org[2]))
+    org_list_model = InlineResponse2001(user_org_list)
+    return org_list_model
 
 
 def get_verifier_password(body):  # noqa: E501
