@@ -1,16 +1,17 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.12"
+  version: "1.14"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
 
     Org user privileges are:<br>
-     0 := invited<br>
-     1 := member<br>
-     2 := admin<br>
-     3 := owner
+     1 := removed<br>
+     2 := invited<br>
+     3 := member<br>
+     4 := admin<br>
+     5 := owner
 
 servers:
   - url: https://pollination.live/api
@@ -24,8 +25,6 @@ tags:
     description: An org aggregates users who can vote, administrate, or verify elections
   - name: org.users
     description: Related to the users of an org
-  - name: org.locations
-    description: Related to the management of election locations
   - name: org.elections
     description: Related to the management of org elections
   - name: org.election.results
@@ -325,10 +324,11 @@ paths:
       summary: Change user privileges
       description: >
         user privileges are:<br>
-        - 0 := invited<br>
-        - 1 := member<br>
-        - 2 := admin<br>
-        - 3 := owner
+        1 := removed<br>
+        2 := invited<br>
+        3 := member<br>
+        4 := admin<br>
+        5 := owner
       operationId:
         change_user_privilege
       security:
