@@ -54,12 +54,6 @@ DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
-SET @privilege_kicked := -1;
-SET @privilege_invited := 0;
-SET @privilege_member := 1;
-SET @privilege_admin := 2;
-SET @privilege_owner := 3;
-
 DELIMITER //
 //
 
@@ -86,7 +80,7 @@ BEGIN
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 'removed'
     WHERE e.user_id = user_id;
 END; //
 
@@ -153,7 +147,7 @@ END; //
  */
 CREATE PROCEDURE DisbandOrg(
     IN user_id INT)
-BEGIN
+proc: BEGIN
     DECLARE org_id INT;
     
     SELECT o.org_id
@@ -162,14 +156,18 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 'owner';
+
+    IF (org_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     UPDATE Organization o
     SET o.disabled = TRUE
     WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 'removed'
     WHERE e.org_id = org_id;
 END; //
 
@@ -186,7 +184,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 'owner';
 END; //
 
 /**
@@ -203,7 +201,7 @@ BEGIN
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
     INSERT INTO Enrollment(user_id, org_id, user_org_id, privilege)
-    VALUES(user_id, LAST_INSERT_ID(), user_org_id, @privilege_owner);
+    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 'owner');
 END; //
 
 /** 
@@ -297,7 +295,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 'invited';
 END; //
  
 
@@ -316,7 +314,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 'invited';
 END; //
 
 /**
@@ -326,13 +324,17 @@ CREATE PROCEDURE InviteUser(
     IN email VARCHAR(40), 
     IN user_org_id VARCHAR(40),
     IN org_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     
     SELECT u.user_id
     INTO user_id
     FROM Users u
     WHERE u.email = email;
+    
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     INSERT INTO Enrollment(user_id, org_id, user_org_id)
     VALUES(user_id, org_id, user_org_id);
@@ -607,7 +609,7 @@ CREATE PROCEDURE AddVote(
     IN voting_token VARCHAR(36),
     IN time_stamp TIMESTAMP,
     IN election_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
     DECLARE vote_id INT;
@@ -616,6 +618,10 @@ BEGIN
     INTO user_id
     FROM Users u
     WHERE u.voting_token = voting_token;
+
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
