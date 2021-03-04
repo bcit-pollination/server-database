@@ -27,7 +27,7 @@ CALL AddOption(1, 'Javascript'); /** First option is added. */
 CALL AddOption(1, 'CSS'); /** Second option is added. */
 CALL AddOption(1, 'HTML'); /** Third option is added. */
 CALL UpdateOption(2, 'PHP'); /** Changes option 'CSS' to 'PHP'*/
-CALL UpdateQuestion(1, 'What language is the best?'); /** Changes the question. */
+CALL UpdateQuestion(1, 'What language is the best?', 1); /** Changes the question. */
 CALL UpdateElection(1, 'Web Dev Survey', '2021-10-05', '2021-11-09', TRUE, FALSE, FALSE); /** Updates election name to web dev survey. */
 
 CALL UpdateUser(1, "password");

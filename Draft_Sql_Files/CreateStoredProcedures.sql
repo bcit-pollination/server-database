@@ -80,7 +80,7 @@ BEGIN
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET e.privilege = 'removed'
+    SET e.privilege = 0
     WHERE e.user_id = user_id;
 END; //
 
@@ -156,7 +156,7 @@ proc: BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = 'owner';
+    AND e.privilege = 4;
 
     IF (org_id IS NULL) THEN
         LEAVE proc;
@@ -167,7 +167,7 @@ proc: BEGIN
     WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET e.privilege = 'removed'
+    SET e.privilege = 0
     WHERE e.org_id = org_id;
 END; //
 
@@ -184,7 +184,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = 'owner';
+    AND e.privilege = 4;
 END; //
 
 /**
@@ -201,7 +201,7 @@ BEGIN
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
     INSERT INTO Enrollment(user_id, org_id, user_org_id, privilege)
-    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 'owner');
+    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 4);
 END; //
 
 /** 
@@ -295,7 +295,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege > 'invited';
+    AND e.privilege > 1;
 END; //
  
 
@@ -314,7 +314,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > 'invited';
+    AND e.privilege > 1;
 END; //
 
 /**
