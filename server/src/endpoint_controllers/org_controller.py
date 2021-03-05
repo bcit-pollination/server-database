@@ -1,9 +1,11 @@
+from swagger_server.models import Org
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server.models.user_org import UserOrg  # noqa: E501
 from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 import src.db.mysql_interface as db
 from src.constants_enums.obj_keys import *
+
 
 def create_org(body, token_info):  # noqa
     """Create org
@@ -15,7 +17,7 @@ def create_org(body, token_info):  # noqa
 
     :rtype: InlineResponse2002
     """
-    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    name = body[OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
     org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password, user_org_id)
@@ -35,6 +37,10 @@ def disband_org(token_info):  # noqa: E501
     return None
 
 
+def db_org_to_UserOrg(org_id, name, user_org_id, privilege):
+    return UserOrg(privilege, user_org_id, Org(org_id, name))
+
+
 def get_org(org_id):  # noqa: E501
     """Get org info
 
@@ -46,7 +52,8 @@ def get_org(org_id):  # noqa: E501
     :rtype: UserOrg
     """
     org = db.get_organization(org_id)
-    return org
+    user_org = db_org_to_UserOrg(org_id, org[1], org[3], org[2])
+    return user_org
 
 
 def get_org_list(token_info):  # noqa: E501
@@ -58,8 +65,12 @@ def get_org_list(token_info):  # noqa: E501
     :rtype: InlineResponse2001
     """
     uid = token_info[UserInfoKeys.UID]
-    org_list = db.get_organizations(uid)
-    return org_list
+    org_list = db.get_user_org_list(uid)
+    user_org_list = []
+    for org in org_list:
+        user_org_list.append(db_org_to_UserOrg(org[0], org[1], org[3], org[2]))
+    org_list_model = InlineResponse2001(user_org_list)
+    return org_list_model
 
 
 def get_verifier_password(body):  # noqa: E501
@@ -87,7 +98,7 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    name = body[OrgInfoKeys.NAME]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
     org_id = body[OrgInfoKeys.ORG_ID]
     db.update_organization(org_id, name, verifier_password)

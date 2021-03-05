@@ -9,7 +9,7 @@ CREATE TABLE Users (
     email               VARCHAR(40)     NOT NULL	UNIQUE,
     dob                 DATE            NOT NULL,
     password	        VARCHAR(72)     NOT NULL,
-    voting_token		VARCHAR(36) 	NOT NULL,
+    voting_token		VARCHAR(36) 	NOT NULL	UNIQUE,
     deactivated			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)
 );
@@ -36,7 +36,7 @@ CREATE TABLE Enrollment (
     enrollment_id 		INT 			NOT NULL 	AUTO_INCREMENT,
     user_id 			INT 			NOT NULL,
     org_id 				INT 			NOT NULL,
-    privilege 	        INT 			NOT NULL 	DEFAULT(0), /* Lowest privilege level is 0. */
+    privilege 	        INT 			NOT NULL 	DEFAULT(0), /* 0 to 4 = Removed, Invited, Member, Admin, Owner */
     user_org_id 		VARCHAR(40)     NOT NULL,
     PRIMARY KEY (enrollment_id),
     FOREIGN KEY (user_id)
@@ -46,7 +46,7 @@ CREATE TABLE Enrollment (
         REFERENCES Organization (org_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE KEY (user_id, org_id),
-    CHECK (privilege BETWEEN -1 AND 3)
+    CHECK (privilege BETWEEN 0 AND 4)
 );
 
 CREATE TABLE Election (

@@ -29,3 +29,7 @@ class JwtTokenKeys:
     TIMESTAMP = "iat"
     EXPIRATION = "exp"
     UID = UserInfoKeys.UID
+
+
+class ElectionKeys:
+    ELECTION_ID = "election_id"

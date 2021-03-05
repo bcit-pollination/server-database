@@ -9,6 +9,7 @@ DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS UpdateUser;
 
 DROP PROCEDURE IF EXISTS DisbandOrg;
+DROP PROCEDURE IF EXISTS GetUserOrgInfo;
 DROP PROCEDURE IF EXISTS GetOwnerOrgInfo;
 DROP PROCEDURE IF EXISTS CreateOrg;
 DROP PROCEDURE IF EXISTS UpdateOrg;
@@ -53,12 +54,6 @@ DROP PROCEDURE IF EXISTS GetPublicElections;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
-SET @privilege_kicked = -1;
-SET @privilege_invited = 0;
-SET @privilege_member = 1;
-SET @privilege_admin = 2;
-SET @privilege_owner = 3;
-
 DELIMITER //
 //
 
@@ -85,7 +80,7 @@ BEGIN
     WHERE u.user_id = user_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 0
     WHERE e.user_id = user_id;
 END; //
 
@@ -152,7 +147,7 @@ END; //
  */
 CREATE PROCEDURE DisbandOrg(
     IN user_id INT)
-BEGIN
+proc: BEGIN
     DECLARE org_id INT;
     
     SELECT o.org_id
@@ -161,14 +156,18 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 4;
+
+    IF (org_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     UPDATE Organization o
     SET o.disabled = TRUE
     WHERE o.org_id = org_id;
 
     UPDATE Enrollment e
-    SET e.privilege = @privilege_kicked
+    SET e.privilege = 0
     WHERE e.org_id = org_id;
 END; //
 
@@ -185,7 +184,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege = @privilege_owner;
+    AND e.privilege = 4;
 END; //
 
 /**
@@ -202,18 +201,20 @@ BEGIN
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
     INSERT INTO Enrollment(user_id, org_id, user_org_id, privilege)
-    VALUES(user_id, LAST_INSERT_ID(), user_org_id, @privilege_owner);
+    VALUES(user_id, LAST_INSERT_ID(), user_org_id, 4);
 END; //
 
 /** 
- * Updates an organization's name. 
+ * Updates an organization's name and verifier_password. 
  */
 CREATE PROCEDURE UpdateOrg(
     IN org_id INT, 
-    IN org_name VARCHAR(40))
+    IN org_name VARCHAR(40),
+    IN verifier_password VARCHAR(72))
 BEGIN
     UPDATE Organization o
-    SET o.org_name = org_name
+    SET o.org_name = org_name,
+    o.verifier_password = verifier_password
     WHERE o.org_id = org_id;
 END; //
 
@@ -245,12 +246,17 @@ END; //
 
 
 /** 
- * Gets an organization's id and name.
+ * Gets an organization's id and name, 
+ * as well as all of the users' privileges and user_org_ids.
  */
 CREATE PROCEDURE GetOrg(
     IN org_id INT)
 BEGIN
-    SELECT o.org_id, o.org_name FROM Organization o
+    SELECT o.org_id, o.org_name, e.privilege, e.user_org_id FROM Users u
+        INNER JOIN Enrollment e
+            ON u.user_id = e.user_id
+        INNER JOIN Organization o
+            ON e.org_id = o.org_id
     WHERE o.org_id = org_id;
 END; //
 
@@ -289,7 +295,7 @@ BEGIN
         INNER JOIN Organization o
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 1;
 END; //
  
 
@@ -308,7 +314,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > @privilege_invited;
+    AND e.privilege > 1;
 END; //
 
 /**
@@ -318,13 +324,17 @@ CREATE PROCEDURE InviteUser(
     IN email VARCHAR(40), 
     IN user_org_id VARCHAR(40),
     IN org_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     
     SELECT u.user_id
     INTO user_id
     FROM Users u
     WHERE u.email = email;
+    
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     INSERT INTO Enrollment(user_id, org_id, user_org_id)
     VALUES(user_id, org_id, user_org_id);
@@ -472,10 +482,12 @@ END; //
  */
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
-    IN question_description VARCHAR(40))
+    IN question_description VARCHAR(40),
+    IN max_selection_count INT)
 BEGIN
     UPDATE Question q
-        SET q.question_description = question_description
+        SET q.question_description = question_description,
+        q.max_selection_count = max_selection_count
         WHERE q.question_id = question_id;
 END; //
     
@@ -597,7 +609,7 @@ CREATE PROCEDURE AddVote(
     IN voting_token VARCHAR(36),
     IN time_stamp TIMESTAMP,
     IN election_id INT)
-BEGIN
+proc: BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
     DECLARE vote_id INT;
@@ -606,6 +618,10 @@ BEGIN
     INTO user_id
     FROM Users u
     WHERE u.voting_token = voting_token;
+
+    IF (user_id IS NULL) THEN
+        LEAVE proc;
+    END IF;
 
     SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id

@@ -14,24 +14,24 @@ class Org(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, name: str=None):  # noqa: E501
+    def __init__(self, org_id: int=None, name: str=None):  # noqa: E501
         """Org - a model defined in Swagger
 
-        :param id: The id of this Org.  # noqa: E501
-        :type id: int
+        :param org_id: The org_id of this Org.  # noqa: E501
+        :type org_id: int
         :param name: The name of this Org.  # noqa: E501
         :type name: str
         """
         self.swagger_types = {
-            'id': int,
+            'org_id': int,
             'name': str
         }
 
         self.attribute_map = {
-            'id': 'id',
+            'org_id': 'org_id',
             'name': 'name'
         }
-        self._id = id
+        self._org_id = org_id
         self._name = name
 
     @classmethod
@@ -46,27 +46,27 @@ class Org(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this Org.
+    def org_id(self) -> int:
+        """Gets the org_id of this Org.
 
         A unique identifier  # noqa: E501
 
-        :return: The id of this Org.
+        :return: The org_id of this Org.
         :rtype: int
         """
-        return self._id
+        return self._org_id
 
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this Org.
+    @org_id.setter
+    def org_id(self, org_id: int):
+        """Sets the org_id of this Org.
 
         A unique identifier  # noqa: E501
 
-        :param id: The id of this Org.
-        :type id: int
+        :param org_id: The org_id of this Org.
+        :type org_id: int
         """
 
-        self._id = id
+        self._org_id = org_id
 
     @property
     def name(self) -> str:

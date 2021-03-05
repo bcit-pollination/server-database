@@ -4,12 +4,13 @@ info:
   description: |
     All values in this API are required and not nullable unless specifically stated.
 
-    Org user privileges are:<br> -1 := removed<br>
-     0 := invited<br>
-     1 := member<br>
-     2 := admin<br>
-     3 := owner
-  version: "1.12"
+    Org user privileges are:<br>
+     0 := removed<br>
+     1 := invited<br>
+     2 := member<br>
+     3 := admin<br>
+     4 := owner
+  version: "1.14"
 servers:
 - url: https://pollination.live/api
 tags:
@@ -21,8 +22,6 @@ tags:
   description: An org aggregates users who can vote, administrate, or verify elections
 - name: org.users
   description: Related to the users of an org
-- name: org.locations
-  description: Related to the management of election locations
 - name: org.elections
   description: Related to the management of org elections
 - name: org.election.results
@@ -335,8 +334,8 @@ paths:
     post:
       tags:
       - org.users
-      summary: Remove user from org
-      operationId: remove_org_user
+      summary: Kick user from org
+      operationId: kick_org_user
       requestBody:
         $ref: '#/components/requestBodies/org_user'
       responses:
@@ -357,12 +356,7 @@ paths:
       - org.users
       summary: Change user privileges
       description: |
-        user privileges are:<br>
-         -1 := removed<br>
-          0 := invited<br>
-          1 := member<br>
-          2 := admin<br>
-          3 := owner
+        user privileges are:<br> 0 := removed<br> 1 := invited<br> 2 := member<br> 3 := admin<br> 4 := owner
       operationId: change_user_privilege
       requestBody:
         $ref: '#/components/requestBodies/change_user_privileges'
@@ -734,7 +728,6 @@ components:
         password:
           type: string
           description: Will be null except when creating user
-      additionalProperties: false
       description: A user. user can be voters, and admins or verifiers
       example:
         password: password
@@ -771,18 +764,17 @@ components:
       - name
       type: object
       properties:
-        id:
+        org_id:
           type: integer
           description: A unique identifier
           format: int64
         name:
           type: string
           description: The name of the org
-      additionalProperties: false
       description: An organization
       example:
+        org_id: 6
         name: name
-        id: 6
     verifier_password:
       required:
       - verifier_password
@@ -850,7 +842,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/question'
-      additionalProperties: false
       description: |
         Models an election.
         The election has voter list, id verifiers, voting stations, and locations associated with it.
@@ -904,8 +895,8 @@ components:
       example:
         user_org_id: user_org_id
         org:
+          org_id: 6
           name: name
-          id: 6
         privilege: 0
     org_user:
       type: object
@@ -1075,6 +1066,22 @@ components:
             $ref: '#/components/schemas/org'
           election_info:
             $ref: '#/components/schemas/election'
+    other_post_org_props:
+      type: object
+      description: Other annoying stuff
+    new_org:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/org'
+      - type: object
+        properties:
+          user_org_id:
+            type: string
+            description: The id of the user within the organization (driver license,
+              passport number, etc...)
+          verifier_password:
+            type: string
+            description: The Password used by id verifiers to log in to RPI
     inline_response_200:
       type: object
       properties:
@@ -1097,13 +1104,13 @@ components:
         orgs:
         - user_org_id: user_org_id
           org:
+            org_id: 6
             name: name
-            id: 6
           privilege: 0
         - user_org_id: user_org_id
           org:
+            org_id: 6
             name: name
-            id: 6
           privilege: 0
     inline_response_200_2:
       type: object
@@ -1473,26 +1480,11 @@ components:
             additionalProperties: false
       required: true
     post_org:
-      description: Org id is optional
+      description: Org id is optional when creating org, else required
       content:
         application/json:
           schema:
-            required:
-            - org_info
-            - user_org_id
-            - verifier_password
-            type: object
-            properties:
-              org_info:
-                $ref: '#/components/schemas/org'
-              user_org_id:
-                type: string
-                description: The id of the user within the organization (driver license,
-                  passport number, etc...)
-              verifier_password:
-                type: string
-                description: The Password used by id verifiers to log in to RPI
-            additionalProperties: false
+            $ref: '#/components/schemas/new_org'
       required: true
     org:
       content:
@@ -1500,20 +1492,20 @@ components:
           schema:
             $ref: '#/components/schemas/org'
       required: true
-    kick_user:
+    remove_user:
       description: Information about user to be kicked
       content:
         application/json:
           schema:
             required:
-            - orgId
+            - org_id
             - uid
             type: object
             properties:
               uid:
                 type: integer
                 description: user id of user to be kicked
-              orgId:
+              org_id:
                 type: integer
                 description: The id of the org in which to change the privileges
             additionalProperties: false
@@ -1555,6 +1547,8 @@ components:
             - votes_cast
             type: object
             properties:
+              election_id:
+                type: integer
               votes_cast:
                 type: array
                 items:

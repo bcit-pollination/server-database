@@ -5,39 +5,55 @@ import connexion
 import src.db.mysql_interface as db
 from src.constants_enums.obj_keys import *
 from src.constants_enums.privileges import *
+
 """
 controller generated to handled auth operation described at:
 https://connexion.readthedocs.io/en/latest/security.html
 """
 
 
+def check_privilege(uid, org_id, required_privilege):
+    privilege = db.get_privilege(org_id, uid)[0]
+    return required_privilege <= privilege
+
+
+def check_org_auth(token, body, required_privilege, unauth_msg):
+    org_id = None
+    if body is None:
+        org_info = db.get_owner_org_info(token[JwtTokenKeys.UID])
+        if org_info is None:
+            raise Unauthorized(unauth_msg)
+        org_id = org_info[0]
+    elif OrgInfoKeys.ORG_ID not in body:
+        if ElectionKeys.ELECTION_ID not in body:
+            raise BadRequest("Must include org_id or election_id in the body")
+        else:
+            org_id = db.get_election(body[ElectionKeys.ELECTION_ID])
+    else:
+        org_id = body[OrgInfoKeys.ORG_ID]
+    if not check_privilege(int(token[JwtTokenKeys.UID]), org_id, required_privilege):
+        raise Unauthorized(unauth_msg)
+
+
 def check_member(token):
     token = check_user(token)
     body = connexion.request.get_json()
-    if OrgInfoKeys.ORG_ID not in body:
-        raise BadRequest("Must include org_id in the body")
-    if db.get_privilege(token[JwtTokenKeys.UID], body[OrgInfoKeys.ORG_ID]) < PrivilegeLevels.MEMBER:
-        raise Unauthorized("You must be an organization member to access this endpoint")
+    check_org_auth(token, body, PrivilegeLevels.MEMBER, "You must be an organization member to access this endpoint")
     return token
 
 
 def check_admin(token):
     token = check_user(token)
     body = connexion.request.get_json()
-    if OrgInfoKeys.ORG_ID not in body:
-        raise BadRequest("Must include org_id in the body")
-    if db.get_privilege(token[JwtTokenKeys.UID], body[OrgInfoKeys.ORG_ID]) < PrivilegeLevels.ADMIN:
-        raise Unauthorized("You must be an organization administrator to access this endpoint")
+    check_org_auth(token, body, PrivilegeLevels.ADMIN,
+                   "You must be an organization administrator to access this endpoint")
     return token
 
 
 def check_owner(token):
     token = check_user(token)
     body = connexion.request.get_json()
-    if OrgInfoKeys.ORG_ID not in body:
-        raise BadRequest("Must include org_id in the body")
-    if db.get_privilege(token[JwtTokenKeys.UID], body[OrgInfoKeys.ORG_ID]) < PrivilegeLevels.OWNER:
-        raise Unauthorized("You must be the organization owner to access this endpoint")
+    check_org_auth(token, body, PrivilegeLevels.OWNER, "You must be the organization owner to access this endpoint")
     return token
 
 

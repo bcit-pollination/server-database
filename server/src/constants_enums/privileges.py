@@ -1,10 +1,9 @@
-
 class PrivilegeLevels:
     """
     Privilege levels for a user
     """
-    REMOVED = -1
-    INVITEE = 0
-    MEMBER    = 1
-    ADMIN   = 2
-    OWNER   = 3
+    REMOVED = 0
+    INVITEE = 1
+    MEMBER = 2
+    ADMIN = 3
+    OWNER = 4

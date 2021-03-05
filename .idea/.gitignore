@@ -6,11 +6,11 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/dataSources.xml
 /misc.xml
 /modules.xml
 /inspectionProfiles/profiles_settings.xml
 /inspectionProfiles/Project_Default.xml
 /server-database.iml
-/vcs.xml
-/dataSources.xml
 /sqldialects.xml
+/vcs.xml
