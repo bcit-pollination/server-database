@@ -334,8 +334,8 @@ paths:
     post:
       tags:
       - org.users
-      summary: Kick user from org
-      operationId: kick_org_user
+      summary: Remove user from org
+      operationId: remove_org_user
       requestBody:
         $ref: '#/components/requestBodies/org_user'
       responses:
@@ -1066,9 +1066,6 @@ components:
             $ref: '#/components/schemas/org'
           election_info:
             $ref: '#/components/schemas/election'
-    other_post_org_props:
-      type: object
-      description: Other annoying stuff
     new_org:
       type: object
       allOf:

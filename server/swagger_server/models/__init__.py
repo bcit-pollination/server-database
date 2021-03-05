@@ -21,7 +21,6 @@ from swagger_server.models.option_results import OptionResults
 from swagger_server.models.org import Org
 from swagger_server.models.org_user import OrgUser
 from swagger_server.models.org_user_invite import OrgUserInvite
-from swagger_server.models.other_post_org_props import OtherPostOrgProps
 from swagger_server.models.private_election_results import PrivateElectionResults
 from swagger_server.models.question import Question
 from swagger_server.models.question_results import QuestionResults

@@ -14,7 +14,7 @@ JWT_LIFETIME_SECONDS = 600
 JWT_ALGORITHM = 'HS256'
 
 
-def _encrypt_user_info(org_id, user_org_id, user_email):
+def _encrypt_user_info(org_id, user_email):
     """
     Generate a JWT from a given user_id.
     """
