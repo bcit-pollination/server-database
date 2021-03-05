@@ -212,3 +212,7 @@ def add_vote(voting_token, time_stamp, election_id):
 
 def add_choice(vote_id, opt_id):
     return call_proc(PROCEDURE.ADDCHOICE, (vote_id, opt_id))
+
+
+def get_owner_org_info(uid):
+    return call_proc(PROCEDURE.GETOWNERORGINFO, (uid, ))

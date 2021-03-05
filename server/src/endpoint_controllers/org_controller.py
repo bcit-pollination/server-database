@@ -17,7 +17,7 @@ def create_org(body, token_info):  # noqa
 
     :rtype: InlineResponse2002
     """
-    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    name = body[OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
     org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password, user_org_id)
@@ -98,7 +98,7 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    name = body[OrgInfoKeys.ORG_INFO][OrgInfoKeys.NAME]
+    name = body[OrgInfoKeys.NAME]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
     org_id = body[OrgInfoKeys.ORG_ID]
     db.update_organization(org_id, name, verifier_password)

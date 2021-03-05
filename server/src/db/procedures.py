@@ -47,4 +47,4 @@ class PROCEDURE:
     GETIDVT                   = 'GetIdVt'                   # election_id
     ADDVOTE                   = 'AddVote'                   # voting_token, time_stamp, election_id
     ADDCHOICE                 = 'AddChoice'                 # vote_id, opt_id
-
+    GETOWNERORGINFO           = 'GetOwnerOrgInfo'           # uid

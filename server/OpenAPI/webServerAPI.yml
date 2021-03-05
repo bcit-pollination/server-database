@@ -633,7 +633,6 @@ components:
     user:
       type: object
       description: A user. user can be voters, and admins or verifiers
-      additionalProperties: false
       required:
         - first_name
         - last_name
@@ -683,12 +682,11 @@ components:
 
     org:
       type: object
-      additionalProperties: false
       description: An organization
       required:
         - name
       properties:
-        id:
+        org_id:
           type: integer
           format: int64
           description: A unique identifier
@@ -734,7 +732,6 @@ components:
 
         Times must be provided in UTC.
       type: object
-      additionalProperties: false
       required:
         - election_description
         - verified
@@ -971,6 +968,25 @@ components:
                 $ref: "#/components/schemas/org"
               election_info:
                 $ref: "#/components/schemas/election"
+
+    other_post_org_props:
+      type: object
+      description: Other annoying stuff
+
+
+
+    new_org:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/org'
+        - type: object
+          properties:
+            user_org_id:
+              type: string
+              description: The id of the user within the organization (driver license, passport number, etc...)
+            verifier_password:
+              type: string
+              description: The Password used by id verifiers to log in to RPI
 
 
   responses:
@@ -1238,24 +1254,12 @@ components:
 
     post_org:
       required: true
-      description: Org id is optional
+      description: Org id is optional when creating org, else required
       content:
         application/json:
           schema:
-            required:
-              - org_info
-              - user_org_id
-              - verifier_password
-            additionalProperties: false
-            properties:
-              org_info:
-                $ref: '#/components/schemas/org'
-              user_org_id:
-                type: string
-                description: The id of the user within the organization (driver license, passport number, etc...)
-              verifier_password:
-                type: string
-                description: The Password used by id verifiers to log in to RPI
+            $ref: "#/components/schemas/new_org"
+
 
 
     org:
@@ -1265,7 +1269,7 @@ components:
           schema:
             $ref: '#/components/schemas/org'
 
-    kick_user:
+    remove_user:
       required: true
       description: Information about user to be kicked
       content:
@@ -1274,12 +1278,12 @@ components:
             additionalProperties: false
             required:
               - uid
-              - orgId
+              - org_id
             properties:
               uid:
                 type: integer
                 description: user id of user to be kicked
-              orgId:
+              org_id:
                 type:
                   integer
                 description: The id of the org in which to change the privileges
@@ -1328,6 +1332,8 @@ components:
             required:
               - votes_cast
             properties:
+              election_id:
+                type: integer
               votes_cast:
                 type: array
                 items:
