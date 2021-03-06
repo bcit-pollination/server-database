@@ -5,6 +5,7 @@ from swagger_server.models.election import Election  # noqa: E501
 from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
 from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
 from swagger_server import util
+from src.endpoint_controllers import org_elections_controller
 
 
 def create_election(body):  # noqa: E501
@@ -17,9 +18,7 @@ def create_election(body):  # noqa: E501
 
     :rtype: InlineResponse2005
     """
-    if connexion.request.is_json:
-        body = Election.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return org_elections_controller.create_election(body)
 
 
 def delete_election(election_id):  # noqa: E501

@@ -33,3 +33,19 @@ class JwtTokenKeys:
 
 class ElectionKeys:
     ELECTION_ID = "election_id"
+    ELECTION_DESCRIPTION = "election_description"
+    END_TIME = "end_time"
+    START_TIME = "start_time"
+    ANONYMOUS = "anonymous"
+    VERIFIED = "verified"
+    PUBLIC_RESULTS = "public_results"
+    QUESTIONS = "questions"
+
+
+class QuestionKeys:
+    MAX_SELECTION_COUNT = "max_selection_count"
+    OPTIONS = "options"
+    OPTION_DESCRIPTION = "option_description"
+    QUESTION_ID = "question_id"
+    OPTION_ID = "option_id"
+    QUESTION_DESCRIPTION = "question_description"
