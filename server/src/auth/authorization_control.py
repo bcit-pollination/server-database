@@ -13,7 +13,12 @@ https://connexion.readthedocs.io/en/latest/security.html
 
 
 def check_privilege(uid, org_id, required_privilege):
-    privilege = db.get_privilege(org_id, uid)[0]
+    if org_id is None:
+        raise Unauthorized("No organization associated with uid")
+    privilege_tuple = db.get_privilege(org_id, uid)
+    if privilege_tuple is None or len(privilege_tuple) == 0:
+        raise Unauthorized("You are not authorized")
+    privilege = privilege_tuple[0]
     return required_privilege <= privilege
 
 
