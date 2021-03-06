@@ -15,9 +15,11 @@ class Question(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_description: str=None, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
+    def __init__(self, question_id: int=None, question_description: str=None, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
         """Question - a model defined in Swagger
 
+        :param question_id: The question_id of this Question.  # noqa: E501
+        :type question_id: int
         :param question_description: The question_description of this Question.  # noqa: E501
         :type question_description: str
         :param election_id: The election_id of this Question.  # noqa: E501
@@ -28,6 +30,7 @@ class Question(Model):
         :type options: List[Option]
         """
         self.swagger_types = {
+            'question_id': int,
             'question_description': str,
             'election_id': int,
             'max_selection_count': int,
@@ -35,11 +38,13 @@ class Question(Model):
         }
 
         self.attribute_map = {
+            'question_id': 'question_id',
             'question_description': 'question_description',
             'election_id': 'election_id',
             'max_selection_count': 'max_selection_count',
             'options': 'options'
         }
+        self._question_id = question_id
         self._question_description = question_description
         self._election_id = election_id
         self._max_selection_count = max_selection_count
@@ -55,6 +60,27 @@ class Question(Model):
         :rtype: Question
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def question_id(self) -> int:
+        """Gets the question_id of this Question.
+
+
+        :return: The question_id of this Question.
+        :rtype: int
+        """
+        return self._question_id
+
+    @question_id.setter
+    def question_id(self, question_id: int):
+        """Sets the question_id of this Question.
+
+
+        :param question_id: The question_id of this Question.
+        :type question_id: int
+        """
+
+        self._question_id = question_id
 
     @property
     def question_description(self) -> str:

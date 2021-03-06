@@ -858,20 +858,22 @@ components:
         public_results: true
         questions:
         - question_description: question_description
-          election_id: 1
+          election_id: 5
           options:
           - option_description: option_description
-            option_id: 5
+            option_id: 2
           - option_description: option_description
-            option_id: 5
+            option_id: 2
+          question_id: 1
           max_selection_count: 5
         - question_description: question_description
-          election_id: 1
+          election_id: 5
           options:
           - option_description: option_description
-            option_id: 5
+            option_id: 2
           - option_description: option_description
-            option_id: 5
+            option_id: 2
+          question_id: 1
           max_selection_count: 5
         anonymous: true
         election_description: election_description
@@ -928,13 +930,15 @@ components:
       description: An option given for a question
       example:
         option_description: option_description
-        option_id: 5
+        option_id: 2
     question:
       required:
       - max_selection_count
       - question_description
       type: object
       properties:
+        question_id:
+          type: integer
         question_description:
           type: string
           description: The text of the question posed
@@ -953,12 +957,13 @@ components:
       description: An election question
       example:
         question_description: question_description
-        election_id: 1
+        election_id: 5
         options:
         - option_description: option_description
-          option_id: 5
+          option_id: 2
         - option_description: option_description
-          option_id: 5
+          option_id: 2
+        question_id: 1
         max_selection_count: 5
     choice:
       required:
@@ -1157,20 +1162,22 @@ components:
           public_results: true
           questions:
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           anonymous: true
           election_description: election_description
@@ -1182,20 +1189,22 @@ components:
           public_results: true
           questions:
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           anonymous: true
           election_description: election_description
@@ -1250,20 +1259,22 @@ components:
           public_results: true
           questions:
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           - question_description: question_description
-            election_id: 1
+            election_id: 5
             options:
             - option_description: option_description
-              option_id: 5
+              option_id: 2
             - option_description: option_description
-              option_id: 5
+              option_id: 2
+            question_id: 1
             max_selection_count: 5
           anonymous: true
           election_description: election_description

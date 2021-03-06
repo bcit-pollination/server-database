@@ -70,7 +70,6 @@ def get_user(uid):
     return user
 
 
-# SQL process failed: (1048, "Column 'privilege' cannot be null")
 def create_org(user_id, org_name, verifier_password, user_org_id):
     return call_proc(PROCEDURE.CREATEORG, (user_id, org_name, verifier_password, user_org_id))
 
@@ -95,7 +94,6 @@ def update_user(user_id, password):
     return call_proc(PROCEDURE.UPDATEUSER, (user_id, password))
 
 
-# SQL process failed: (1048, "Column 'privilege' cannot be null")
 def deactivate_user(user_id):
     return call_proc(PROCEDURE.DEACTIVATEUSER, (user_id,))
 
@@ -131,9 +129,10 @@ def get_users_from_org(org_id):
 def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
     return call_proc(PROCEDURE.UPDATEPRIVILEGE, (user_id, org_id, privilege_level))
 
+
 # SQL process failed: (1048, "Column 'user_id' cannot be null")
 def invite_user(email, user_org_id, org_id):
-    return call_proc(PROCEDURE.INVITEUSER, (email, user_org_id, user_org_id))
+    return call_proc(PROCEDURE.INVITEUSER, (email, user_org_id, org_id))
 
 
 def create_election(org_id, description, start_time, end_time, anonymous, is_public, verified):
@@ -146,7 +145,7 @@ def update_election(election_id, description, start_time, end_time, anonymous, i
                      (election_id, description, start_time, end_time, anonymous, is_public, verified))
 
 
-def delete_election(election_id):
+def remove_election(election_id):
     return call_proc(PROCEDURE.DELETEELECTION, (election_id,))
 
 
@@ -179,10 +178,10 @@ def get_public_elections():
 
 
 def add_questions(election_id, description, max_selection_count):
-    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description, max_selection_count), resp_many=True)
+    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description, max_selection_count))
 
 
-def drop_question(question_id):
+def remove_question(question_id):
     return call_proc(PROCEDURE.DROPQUESTION, (question_id,))
 
 

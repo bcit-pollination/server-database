@@ -834,6 +834,8 @@ components:
         - question_description
         - max_selection_count
       properties:
+        question_id:
+          type: integer
         question_description:
           type: string
           description: The text of the question posed
