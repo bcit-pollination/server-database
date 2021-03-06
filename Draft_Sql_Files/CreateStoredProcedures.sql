@@ -465,6 +465,7 @@ CREATE PROCEDURE AddQuestion(
 BEGIN
     INSERT INTO Question (election_id, question_description, max_selection_count)
         VALUES (election_id, question_description, max_selection_count);
+	SELECT LAST_INSERT_ID() AS `question_id`;
 END; //
 
 /**
