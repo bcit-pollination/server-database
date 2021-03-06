@@ -28,3 +28,4 @@ swagger_server/controllers/org_controller.py
 swagger_server/controllers/user_auth_controller.py
 swagger_server/controllers/org_users_controller.py
 swagger_server/controllers/org_elections_controller.py
+swagger_server/models/option_results.py

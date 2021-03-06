@@ -905,19 +905,20 @@ components:
     option_results:
       type: object
       description: The voting result for this option
-      required:
-        - total_votes_for
-        - vote_proportion_percent
-        - option
-      properties:
-        option:
-          $ref: "#/components/schemas/option"
-        total_votes_for:
-          description: The total number of votes cast for this option. A float
-          type: number
-        vote_proportion_percent:
-          description: The voting proportion for this option, in percents. A float
-          type: number
+      allOf:
+        - $ref: "#/components/schemas/option"
+        - type: object
+          required:
+            - total_votes_for
+            - vote_proportion_percent
+          properties:
+            total_votes_for:
+              description: The total number of votes cast for this option. A float
+              type: number
+            vote_proportion_percent:
+              description: The voting proportion for this option, in percents. A float
+              type: number
+
 
     question_results:
       type: object
@@ -970,11 +971,6 @@ components:
                 $ref: "#/components/schemas/org"
               election_info:
                 $ref: "#/components/schemas/election"
-
-    other_post_org_props:
-      type: object
-      description: Other annoying stuff
-
 
 
     new_org:
@@ -1380,7 +1376,7 @@ components:
 
     election_p:
       name: election_id
-      in: header
+      in: query
       description: The id of the election
       required: true
       schema:

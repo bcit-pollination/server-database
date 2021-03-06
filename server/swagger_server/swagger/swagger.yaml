@@ -437,11 +437,11 @@ paths:
       operationId: get_election
       parameters:
       - name: election_id
-        in: header
+        in: query
         description: The id of the election
         required: true
-        style: simple
-        explode: false
+        style: form
+        explode: true
         schema:
           type: integer
       responses:
@@ -515,11 +515,11 @@ paths:
       operationId: delete_election
       parameters:
       - name: election_id
-        in: header
+        in: query
         description: The id of the election
         required: true
-        style: simple
-        explode: false
+        style: form
+        explode: true
         schema:
           type: integer
       responses:
@@ -618,11 +618,11 @@ paths:
       operationId: get_election_results
       parameters:
       - name: election_id
-        in: header
+        in: query
         description: The id of the election
         required: true
-        style: simple
-        explode: false
+        style: form
+        explode: true
         schema:
           type: integer
       responses:
@@ -679,11 +679,11 @@ paths:
       operationId: download_voting_package
       parameters:
       - name: election_id
-        in: header
+        in: query
         description: The id of the election
         required: true
-        style: simple
-        explode: false
+        style: form
+        explode: true
         schema:
           type: integer
       responses:
@@ -1010,21 +1010,21 @@ components:
         A vote cast.
         If the election is anonymous, first_name and last_name will be null. Else, they are required.
     option_results:
-      required:
-      - option
-      - total_votes_for
-      - vote_proportion_percent
       type: object
-      properties:
-        option:
-          $ref: '#/components/schemas/option'
-        total_votes_for:
-          type: number
-          description: The total number of votes cast for this option. A float
-        vote_proportion_percent:
-          type: number
-          description: The voting proportion for this option, in percents. A float
       description: The voting result for this option
+      allOf:
+      - $ref: '#/components/schemas/option'
+      - required:
+        - total_votes_for
+        - vote_proportion_percent
+        type: object
+        properties:
+          total_votes_for:
+            type: number
+            description: The total number of votes cast for this option. A float
+          vote_proportion_percent:
+            type: number
+            description: The voting proportion for this option, in percents. A float
     question_results:
       required:
       - options_posed
@@ -1071,9 +1071,6 @@ components:
             $ref: '#/components/schemas/org'
           election_info:
             $ref: '#/components/schemas/election'
-    other_post_org_props:
-      type: object
-      description: Other annoying stuff
     new_org:
       type: object
       allOf:
@@ -1386,11 +1383,11 @@ components:
         type: integer
     election_p:
       name: election_id
-      in: header
+      in: query
       description: The id of the election
       required: true
-      style: simple
-      explode: false
+      style: form
+      explode: true
       schema:
         type: integer
   requestBodies:
