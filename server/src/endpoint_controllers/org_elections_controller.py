@@ -44,8 +44,11 @@ def create_election(body):  # noqa: E501
         if max_selection_count < 1:
             rollback_create_election(election_id, question_id_list, option_id_list)
             raise BadRequest("You must be able to choose at least one option in every question: max_selection_count < 1")
-
-        question_id = db.add_questions(election_id, question_description, max_selection_count)
+        try:
+            question_id = db.add_questions(election_id, question_description, max_selection_count)
+        except Exception as e:
+            rollback_create_election(election_id, question_id_list, option_id_list)
+            raise e
         question_id_list.append(question_id)
         if len(question[QuestionKeys.OPTIONS]) < 2:
             rollback_create_election(election_id, question_id_list, option_id_list)
@@ -53,7 +56,11 @@ def create_election(body):  # noqa: E501
 
         for option in question[QuestionKeys.OPTIONS]:
             option_description = option[QuestionKeys.OPTION_DESCRIPTION]
-            option_id = db.add_question_opt(question_id, option_description)
+            try:
+                option_id = db.add_question_opt(question_id, option_description)
+            except Exception as e:
+                rollback_create_election(election_id, question_id_list, option_id_list)
+                raise e
             option_id_list.append(option_id)
     return election_id
 
