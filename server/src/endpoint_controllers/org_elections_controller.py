@@ -62,7 +62,7 @@ def create_election(body):  # noqa: E501
                 rollback_create_election(election_id, question_id_list, option_id_list)
                 raise e
             option_id_list.append(option_id)
-    return InlineResponse2005(election_id)
+    return InlineResponse2005(election_id[0])
 
 
 def delete_election(election_id):  # noqa: E501
