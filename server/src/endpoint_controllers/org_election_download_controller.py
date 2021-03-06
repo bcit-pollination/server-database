@@ -1,8 +1,22 @@
 import connexion
 import six
 
+from src.constants_enums.obj_keys import OrgInfoKeys, UserInfoKeys
+from swagger_server.models import VotingUser
 from swagger_server.models.inline_response2007 import InlineResponse2007  # noqa: E501
 from swagger_server import util
+from src.endpoint_controllers.org_users_controller import get_org_users
+from src.endpoint_controllers.org_controller import get_verifier_password
+from src.endpoint_controllers.org_elections_controller import get_election
+from src.endpoint_controllers.user_controller import get_voting_token
+
+
+def prepare_VotingUsers(user_list):
+    voting_users = []
+    for user in user_list:
+        voting_token = get_voting_token({UserInfoKeys.UID: user.uid})
+        voting_users.append(VotingUser(voting_token.voting_token, user.user_org_id))
+    return voting_users
 
 
 def download_voting_package(election_id):  # noqa: E501
@@ -15,4 +29,9 @@ def download_voting_package(election_id):  # noqa: E501
 
     :rtype: InlineResponse2007
     """
-    return 'do some magic!'
+    election = get_election(election_id)
+    verifier_password = get_verifier_password({OrgInfoKeys.ORG_ID: election.org_id})
+    voter_list = get_org_users(election.org_id)
+    voting_users = prepare_VotingUsers(voter_list.users)
+    election_package = InlineResponse2007(verifier_password.verifier_password, voting_users, election)
+    return election_package

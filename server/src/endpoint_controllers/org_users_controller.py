@@ -1,4 +1,5 @@
 from src.email.sendgrid_email import send_registration_email
+from swagger_server.models import OrgUser
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from src.auth.jwt import decode_token
 import src.db.mysql_interface as db
@@ -54,7 +55,18 @@ def get_org_users(org_id):  # noqa: E501
     :rtype: InlineResponse2003
     """
     org_users = db.get_users_from_org(org_id)
-    return org_users
+    org_user_models = []
+    for org_user in org_users:
+        uid = org_user[0]
+        first_name = org_user[1]
+        last_name = org_user[2]
+        email = org_user[3]
+        dob = org_user[4]
+        privilege = org_user[5]
+        user_org_id = org_user[6]
+        org_user_models.append(OrgUser(uid, first_name, last_name, email, dob, privilege=privilege,
+                                       user_org_id=user_org_id))
+    return InlineResponse2003(org_user_models)
 
 
 def remove_org_user(body):  # noqa: E501

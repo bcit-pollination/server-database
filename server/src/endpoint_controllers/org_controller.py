@@ -85,7 +85,7 @@ def get_verifier_password(body):  # noqa: E501
     """
     org_id = body[OrgInfoKeys.ORG_ID]
     verifier_password = db.get_verifier_password(org_id)
-    return verifier_password
+    return VerifierPassword(verifier_password[0])
 
 
 def update_org(body):  # noqa: E501

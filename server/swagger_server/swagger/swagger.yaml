@@ -713,7 +713,7 @@ components:
       - last_name
       type: object
       properties:
-        id:
+        uid:
           type: integer
           format: int64
         first_name:
@@ -730,10 +730,10 @@ components:
           description: Will be null except when creating user
       description: A user. user can be voters, and admins or verifiers
       example:
+        uid: 0
         password: password
         dob: 2000-01-23
         last_name: last_name
-        id: 0
         first_name: first_name
         email: email
     voting_token:

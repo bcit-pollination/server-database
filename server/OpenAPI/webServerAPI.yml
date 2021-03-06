@@ -300,9 +300,9 @@ paths:
     post:
       tags:
         - org.users
-      summary: Kick user from org
+      summary: Remove user from org
       operationId:
-        kick_org_user
+        remove_org_user
       security:
         - admin: [ ]
       requestBody:
@@ -639,7 +639,7 @@ components:
         - email
         - dob
       properties:
-        id:
+        uid:
           type: integer
           format: int64
         first_name:

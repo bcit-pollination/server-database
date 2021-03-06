@@ -15,11 +15,11 @@ class OrgUser(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
+    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
         """OrgUser - a model defined in Swagger
 
-        :param id: The id of this OrgUser.  # noqa: E501
-        :type id: int
+        :param uid: The uid of this OrgUser.  # noqa: E501
+        :type uid: int
         :param first_name: The first_name of this OrgUser.  # noqa: E501
         :type first_name: str
         :param last_name: The last_name of this OrgUser.  # noqa: E501
@@ -36,7 +36,7 @@ class OrgUser(Model):
         :type user_org_id: str
         """
         self.swagger_types = {
-            'id': int,
+            'uid': int,
             'first_name': str,
             'last_name': str,
             'email': str,
@@ -47,7 +47,7 @@ class OrgUser(Model):
         }
 
         self.attribute_map = {
-            'id': 'id',
+            'uid': 'uid',
             'first_name': 'first_name',
             'last_name': 'last_name',
             'email': 'email',
@@ -56,7 +56,7 @@ class OrgUser(Model):
             'privilege': 'privilege',
             'user_org_id': 'user_org_id'
         }
-        self._id = id
+        self._uid = uid
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
@@ -77,25 +77,25 @@ class OrgUser(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this OrgUser.
+    def uid(self) -> int:
+        """Gets the uid of this OrgUser.
 
 
-        :return: The id of this OrgUser.
+        :return: The uid of this OrgUser.
         :rtype: int
         """
-        return self._id
+        return self._uid
 
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this OrgUser.
+    @uid.setter
+    def uid(self, uid: int):
+        """Sets the uid of this OrgUser.
 
 
-        :param id: The id of this OrgUser.
-        :type id: int
+        :param uid: The uid of this OrgUser.
+        :type uid: int
         """
 
-        self._id = id
+        self._uid = uid
 
     @property
     def first_name(self) -> str:

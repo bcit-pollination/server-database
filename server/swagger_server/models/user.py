@@ -14,11 +14,11 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None):  # noqa: E501
+    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
-        :param id: The id of this User.  # noqa: E501
-        :type id: int
+        :param uid: The uid of this User.  # noqa: E501
+        :type uid: int
         :param first_name: The first_name of this User.  # noqa: E501
         :type first_name: str
         :param last_name: The last_name of this User.  # noqa: E501
@@ -31,7 +31,7 @@ class User(Model):
         :type password: str
         """
         self.swagger_types = {
-            'id': int,
+            'uid': int,
             'first_name': str,
             'last_name': str,
             'email': str,
@@ -40,14 +40,14 @@ class User(Model):
         }
 
         self.attribute_map = {
-            'id': 'id',
+            'uid': 'uid',
             'first_name': 'first_name',
             'last_name': 'last_name',
             'email': 'email',
             'dob': 'dob',
             'password': 'password'
         }
-        self._id = id
+        self._uid = uid
         self._first_name = first_name
         self._last_name = last_name
         self._email = email
@@ -66,25 +66,25 @@ class User(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
-        """Gets the id of this User.
+    def uid(self) -> int:
+        """Gets the uid of this User.
 
 
-        :return: The id of this User.
+        :return: The uid of this User.
         :rtype: int
         """
-        return self._id
+        return self._uid
 
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this User.
+    @uid.setter
+    def uid(self, uid: int):
+        """Sets the uid of this User.
 
 
-        :param id: The id of this User.
-        :type id: int
+        :param uid: The uid of this User.
+        :type uid: int
         """
 
-        self._id = id
+        self._uid = uid
 
     @property
     def first_name(self) -> str:
