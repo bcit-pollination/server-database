@@ -166,11 +166,11 @@ def get_questions(election_id):
 
 
 def get_question_opt(question_id):
-    return call_proc(PROCEDURE.GETQUESTIONOPT, (question_id,))
+    return call_proc(PROCEDURE.GETQUESTIONOPT, (question_id,), resp_many=True)
 
 
 def get_election_questions(election_id):
-    return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,))
+    return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,), resp_many=True)
 
 
 def get_public_elections():

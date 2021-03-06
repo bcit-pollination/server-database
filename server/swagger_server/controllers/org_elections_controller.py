@@ -31,7 +31,7 @@ def delete_election(election_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return org_elections_controller.delete_election(election_id)
 
 
 def get_election(election_id):  # noqa: E501
@@ -44,7 +44,7 @@ def get_election(election_id):  # noqa: E501
 
     :rtype: Election
     """
-    return 'do some magic!'
+    return org_elections_controller.get_election(election_id)
 
 
 def get_election_list(org_id):  # noqa: E501

@@ -1,6 +1,6 @@
 import connexion
 import six
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 
 from src.constants_enums.obj_keys import *
 from swagger_server.models.election import Election  # noqa: E501
@@ -9,6 +9,7 @@ from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa
 from swagger_server import util
 import src.db.mysql_interface as db
 from src.db.rollbacks import rollback_create_election
+from src.db.org_election_query_helper import *
 
 
 def create_election(body):  # noqa: E501
@@ -21,6 +22,8 @@ def create_election(body):  # noqa: E501
 
     :rtype: InlineResponse2005
     """
+
+    # TODO start time must be earlier than endtime
     start_time = body[ElectionKeys.START_TIME]
     end_time = body[ElectionKeys.END_TIME]
     anonymous = body[ElectionKeys.ANONYMOUS]
@@ -88,7 +91,11 @@ def get_election(election_id):  # noqa: E501
 
     :rtype: Election
     """
-    return 'do some magic!'
+    election = get_election_with_results(election_id)
+    for question in election.questions:
+        for option in question.options:
+            question.options = Option(option.option_id, option.option_description)
+    return election
 
 
 def get_election_list(org_id):  # noqa: E501
