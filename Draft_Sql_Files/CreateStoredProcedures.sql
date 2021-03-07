@@ -52,6 +52,7 @@ DROP PROCEDURE IF EXISTS AddChoice;
 DROP PROCEDURE IF EXISTS GetVoterList;
 
 DROP PROCEDURE IF EXISTS GetPublicElections;
+DROP PROCEDURE IF EXISTS IsEligible;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
@@ -467,7 +468,7 @@ CREATE PROCEDURE AddQuestion(
 BEGIN
     INSERT INTO Question (election_id, question_description, min_selection_count, max_selection_count)
         VALUES (election_id, question_description, min_selection_count, max_selection_count);
-	SELECT LAST_INSERT_ID() AS `question_id`;
+    SELECT LAST_INSERT_ID() AS `question_id`;
 END; //
 
 /**
@@ -700,6 +701,26 @@ CREATE PROCEDURE GetPublicElections()
 BEGIN
     SELECT e.* FROM Election e
     WHERE e.public_results = TRUE;
+END; //
+
+/**
+ * Checks if a voting_token is part of the voter list for an election.
+ */
+CREATE PROCEDURE IsEligible(
+    IN voting_token INT,
+    IN election_id INT)
+BEGIN
+    SELECT EXISTS(SELECT u.user_id
+    FROM Election el
+        INNER JOIN Organization o
+            ON o.org_id = el.org_id
+        INNER JOIN Enrollment e
+            ON e.org_id = o.org_id
+        INNER JOIN Users u
+            ON u.user_id = e.user_id
+        WHERE u.voting_token = voting_token 
+        AND el.election_id = election_id) 
+    AS `is_eligible`;
 END; //
 
 
