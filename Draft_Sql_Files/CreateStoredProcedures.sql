@@ -45,6 +45,7 @@ DROP PROCEDURE IF EXISTS GetQuestionsAndOptions;
 
 DROP PROCEDURE IF EXISTS GetUserVotes;
 
+DROP PROCEDURE IF EXISTS DeleteVote;
 DROP PROCEDURE IF EXISTS AddVote;
 DROP PROCEDURE IF EXISTS AddChoice;
 
@@ -544,7 +545,7 @@ END; //
 CREATE PROCEDURE GetQuestionOptions(
     IN question_id INT)
 BEGIN
-    SELECT o.* FROM Opt o
+    SELECT o.option_id, o.question_description, o.total_votes_for FROM Opt o
         WHERE o.question_id = question_id;
 END; //
 
@@ -554,7 +555,7 @@ END; //
 CREATE PROCEDURE GetQuestions(
     IN election_id INT)
 BEGIN
-    SELECT q.* FROM Question q
+    SELECT q.question_id, q.question_description, q.max_selection_count FROM Question q
         INNER JOIN Election e
         ON e.election_id = q.election_id
         WHERE q.election_id = election_id;
@@ -600,6 +601,15 @@ BEGIN
 END; //
 
 
+/**
+ * Deletes a vote.
+ */ 
+CREATE PROCEDURE DeleteVote(
+    IN vote_id INT)
+BEGIN 
+    DELETE FROM Vote v
+    WHERE v.vote_id = vote_id;
+END; //
 
 /** 
  * Adds a vote, getting the ID if successfully added or updated.
@@ -699,7 +709,6 @@ BEGIN
     SELECT e.* FROM Election e
     WHERE e.public_results = TRUE;
 END; //
-
 
 
 /** A combined version of the first three functions,
