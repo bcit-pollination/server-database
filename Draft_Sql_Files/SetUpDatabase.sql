@@ -68,12 +68,15 @@ CREATE TABLE Question (
     question_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
     election_id 		        INT 			NOT NULL,
     question_description 		VARCHAR(40) 	NOT NULL,
+    min_selection_count         INT 			NOT NULL	DEFAULT 1,
     max_selection_count         INT 			NOT NULL,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	CHECK (max_selection_count > 0)
+    CHECK (max_selection_count > 0),
+    CHECK (max_selection_count > 0),
+    CHECK (max_selection_count >= min_selection_count)
 );
 
 CREATE TABLE Opt (

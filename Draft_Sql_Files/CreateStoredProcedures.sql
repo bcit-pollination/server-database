@@ -462,10 +462,11 @@ END; //
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
     IN question_description VARCHAR(40),
+    IN min_selection_count INT,
     IN max_selection_count INT)
 BEGIN
-    INSERT INTO Question (election_id, question_description, max_selection_count)
-        VALUES (election_id, question_description, max_selection_count);
+    INSERT INTO Question (election_id, question_description, min_selection_count, max_selection_count)
+        VALUES (election_id, question_description, min_selection_count, max_selection_count);
 	SELECT LAST_INSERT_ID() AS `question_id`;
 END; //
 
@@ -485,10 +486,12 @@ END; //
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
     IN question_description VARCHAR(40),
+    IN min_selection_count INT,
     IN max_selection_count INT)
 BEGIN
     UPDATE Question q
         SET q.question_description = question_description,
+        q.min_selection_count = min_selection_count,
         q.max_selection_count = max_selection_count
         WHERE q.question_id = question_id;
 END; //
@@ -546,7 +549,7 @@ END; //
 CREATE PROCEDURE GetQuestions(
     IN election_id INT)
 BEGIN
-    SELECT q.question_id, q.question_description, q.max_selection_count FROM Question q
+    SELECT q.question_id, q.question_description, q.min_selection_count, q.max_selection_count FROM Question q
         WHERE q.election_id = election_id;
 END; //
 
@@ -557,7 +560,8 @@ END; //
 CREATE PROCEDURE GetQuestionsAndOptions(
     IN election_id INT)
 BEGIN
-    SELECT q.question_id, q.question_description, q.max_selection_count, o.option_id, o.option_description, o.total_votes_for FROM Question q
+    SELECT q.question_id, q.question_description, q.min_selection_count, q.max_selection_count,
+        o.option_id, o.option_description, o.total_votes_for FROM Question q
         INNER JOIN Opt o
         ON o.question_id = q.question_id
         WHERE q.election_id = election_id;
