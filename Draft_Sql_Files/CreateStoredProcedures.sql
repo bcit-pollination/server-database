@@ -45,12 +45,14 @@ DROP PROCEDURE IF EXISTS GetQuestionsAndOptions;
 
 DROP PROCEDURE IF EXISTS GetUserVotes;
 
+DROP PROCEDURE IF EXISTS DeleteVote;
 DROP PROCEDURE IF EXISTS AddVote;
 DROP PROCEDURE IF EXISTS AddChoice;
 
 DROP PROCEDURE IF EXISTS GetVoterList;
 
 DROP PROCEDURE IF EXISTS GetPublicElections;
+DROP PROCEDURE IF EXISTS IsEligible;
 
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
@@ -395,8 +397,8 @@ END; //
 CREATE PROCEDURE CreateElection(
     IN org_id INT, 
     IN election_description VARCHAR(40),
-    IN start_time TIMESTAMP,
-    IN end_time TIMESTAMP,
+    IN start_time VARCHAR(40),
+    IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
@@ -412,8 +414,8 @@ END;//
 CREATE PROCEDURE UpdateElection(
     IN id INT,
     IN election_description VARCHAR(40),
-    IN start_time TIMESTAMP,
-    IN end_time TIMESTAMP,
+    IN start_time VARCHAR(40),
+    IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
@@ -461,11 +463,12 @@ END; //
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
     IN question_description VARCHAR(40),
+    IN min_selection_count INT,
     IN max_selection_count INT)
 BEGIN
-    INSERT INTO Question (election_id, question_description, max_selection_count)
-        VALUES (election_id, question_description, max_selection_count);
-	SELECT LAST_INSERT_ID() AS `question_id`;
+    INSERT INTO Question (election_id, question_description, min_selection_count, max_selection_count)
+        VALUES (election_id, question_description, min_selection_count, max_selection_count);
+    SELECT LAST_INSERT_ID() AS `question_id`;
 END; //
 
 /**
@@ -484,10 +487,12 @@ END; //
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
     IN question_description VARCHAR(40),
+    IN min_selection_count INT,
     IN max_selection_count INT)
 BEGIN
     UPDATE Question q
         SET q.question_description = question_description,
+        q.min_selection_count = min_selection_count,
         q.max_selection_count = max_selection_count
         WHERE q.question_id = question_id;
 END; //
@@ -502,10 +507,6 @@ CREATE PROCEDURE AddOption(
 BEGIN
     INSERT INTO Opt (question_id, option_description) 
     VALUES(question_id, option_description);
-    
-    UPDATE Question q
-        SET max_selection_count = max_selection_count + 1
-        WHERE q.question_id = question_id;
 END; //
 
 /** 
@@ -513,12 +514,7 @@ END; //
  */
 CREATE PROCEDURE DeleteOption(
     IN option_id INT)
-BEGIN
-    UPDATE Question q
-    INNER JOIN Opt o ON q.question_id = o.question_id
-    SET q.max_selection_count = q.max_selection_count - 1
-    WHERE o.option_id = option_id;
-    
+BEGIN   
     DELETE FROM Opt o
     WHERE o.option_id = option_id; 
 END; //
@@ -544,7 +540,7 @@ END; //
 CREATE PROCEDURE GetQuestionOptions(
     IN question_id INT)
 BEGIN
-    SELECT o.* FROM Opt o
+    SELECT o.option_id, o.option_description, o.total_votes_for FROM Opt o
         WHERE o.question_id = question_id;
 END; //
 
@@ -554,9 +550,7 @@ END; //
 CREATE PROCEDURE GetQuestions(
     IN election_id INT)
 BEGIN
-    SELECT q.* FROM Question q
-        INNER JOIN Election e
-        ON e.election_id = q.election_id
+    SELECT q.question_id, q.question_description, q.min_selection_count, q.max_selection_count FROM Question q
         WHERE q.election_id = election_id;
 END; //
 
@@ -567,13 +561,13 @@ END; //
 CREATE PROCEDURE GetQuestionsAndOptions(
     IN election_id INT)
 BEGIN
-    SELECT q.*, o.* FROM Question q
-        INNER JOIN Election e
-        ON e.election_id = q.election_id
+    SELECT q.question_id, q.question_description, q.min_selection_count, q.max_selection_count,
+        o.option_id, o.option_description, o.total_votes_for FROM Question q
         INNER JOIN Opt o
         ON o.question_id = q.question_id
         WHERE q.election_id = election_id;
 END; //
+
 
 
 
@@ -600,6 +594,15 @@ BEGIN
 END; //
 
 
+/**
+ * Deletes a vote.
+ */ 
+CREATE PROCEDURE DeleteVote(
+    IN vote_id INT)
+BEGIN 
+    DELETE FROM Vote v
+    WHERE v.vote_id = vote_id;
+END; //
 
 /** 
  * Adds a vote, getting the ID if successfully added or updated.
@@ -700,6 +703,25 @@ BEGIN
     WHERE e.public_results = TRUE;
 END; //
 
+/**
+ * Checks if a voting_token is part of the voter list for an election.
+ */
+CREATE PROCEDURE IsEligible(
+    IN voting_token INT,
+    IN election_id INT)
+BEGIN
+    SELECT EXISTS(SELECT u.user_id
+    FROM Election el
+        INNER JOIN Organization o
+            ON o.org_id = el.org_id
+        INNER JOIN Enrollment e
+            ON e.org_id = o.org_id
+        INNER JOIN Users u
+            ON u.user_id = e.user_id
+        WHERE u.voting_token = voting_token 
+        AND el.election_id = election_id) 
+    AS `is_eligible`;
+END; //
 
 
 /** A combined version of the first three functions,

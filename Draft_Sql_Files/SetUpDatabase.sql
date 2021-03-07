@@ -53,8 +53,8 @@ CREATE TABLE Election (
     election_id 	            INT 		NOT NULL 	AUTO_INCREMENT,
     org_id 			            INT 		NOT NULL,
     election_description		VARCHAR(40)	NOT NULL,
-    start_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(CURRENT_TIMESTAMP),
-    end_time 		            TIMESTAMP 	NOT NULL 	DEFAULT(TIMESTAMPADD(day, 30, CURRENT_TIMESTAMP)),
+    start_time 		            VARCHAR(40) NOT NULL,
+    end_time 		            VARCHAR(40) NOT NULL,
     anonymous 	                BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
     public_results              BOOLEAN     NOT NULL    DEFAULT(FALSE),
     verified                    BOOLEAN     NOT NULL	DEFAULT(FALSE),
@@ -68,12 +68,15 @@ CREATE TABLE Question (
     question_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
     election_id 		        INT 			NOT NULL,
     question_description 		VARCHAR(40) 	NOT NULL,
+    min_selection_count         INT 			NOT NULL	DEFAULT 1,
     max_selection_count         INT 			NOT NULL,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	CHECK (max_selection_count > 0)
+    CHECK (min_selection_count > 0),
+    CHECK (max_selection_count > 0),
+    CHECK (max_selection_count >= min_selection_count)
 );
 
 CREATE TABLE Opt (
