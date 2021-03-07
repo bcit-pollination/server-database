@@ -396,8 +396,8 @@ END; //
 CREATE PROCEDURE CreateElection(
     IN org_id INT, 
     IN election_description VARCHAR(40),
-    IN start_time TIMESTAMP,
-    IN end_time TIMESTAMP,
+    IN start_time VARCHAR(40),
+    IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
@@ -413,8 +413,8 @@ END;//
 CREATE PROCEDURE UpdateElection(
     IN id INT,
     IN election_description VARCHAR(40),
-    IN start_time TIMESTAMP,
-    IN end_time TIMESTAMP,
+    IN start_time VARCHAR(40),
+    IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
     IN public_results BOOLEAN,
     IN verified BOOLEAN)
@@ -503,10 +503,6 @@ CREATE PROCEDURE AddOption(
 BEGIN
     INSERT INTO Opt (question_id, option_description) 
     VALUES(question_id, option_description);
-    
-    UPDATE Question q
-        SET max_selection_count = max_selection_count + 1
-        WHERE q.question_id = question_id;
 END; //
 
 /** 
@@ -514,12 +510,7 @@ END; //
  */
 CREATE PROCEDURE DeleteOption(
     IN option_id INT)
-BEGIN
-    UPDATE Question q
-    INNER JOIN Opt o ON q.question_id = o.question_id
-    SET q.max_selection_count = q.max_selection_count - 1
-    WHERE o.option_id = option_id;
-    
+BEGIN   
     DELETE FROM Opt o
     WHERE o.option_id = option_id; 
 END; //
@@ -545,7 +536,7 @@ END; //
 CREATE PROCEDURE GetQuestionOptions(
     IN question_id INT)
 BEGIN
-    SELECT o.option_id, o.question_description, o.total_votes_for FROM Opt o
+    SELECT o.option_id, o.option_description, o.total_votes_for FROM Opt o
         WHERE o.question_id = question_id;
 END; //
 
@@ -556,8 +547,6 @@ CREATE PROCEDURE GetQuestions(
     IN election_id INT)
 BEGIN
     SELECT q.question_id, q.question_description, q.max_selection_count FROM Question q
-        INNER JOIN Election e
-        ON e.election_id = q.election_id
         WHERE q.election_id = election_id;
 END; //
 
@@ -568,13 +557,12 @@ END; //
 CREATE PROCEDURE GetQuestionsAndOptions(
     IN election_id INT)
 BEGIN
-    SELECT q.*, o.* FROM Question q
-        INNER JOIN Election e
-        ON e.election_id = q.election_id
+    SELECT q.question_id, q.question_description, q.max_selection_count, o.option_id, o.option_description, o.total_votes_for FROM Question q
         INNER JOIN Opt o
         ON o.question_id = q.question_id
         WHERE q.election_id = election_id;
 END; //
+
 
 
 
