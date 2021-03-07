@@ -74,7 +74,7 @@ CREATE TABLE Question (
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    CHECK (max_selection_count > 0),
+    CHECK (min_selection_count > 0),
     CHECK (max_selection_count > 0),
     CHECK (max_selection_count >= min_selection_count)
 );
