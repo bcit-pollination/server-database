@@ -4,7 +4,7 @@ from werkzeug.exceptions import Conflict, NotFound, InternalServerError
 from swagger_server.models.user import User
 from src.constants_enums.privileges import PrivilegeLevels
 from src.db.procedures import PROCEDURE
-from src.constants_enums.datetime_format import *
+from src.constants_enums.datetime_format import DateFormats
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -66,7 +66,7 @@ def get_user(uid):
                                    last_name=user[1],
                                    first_name=user[2],
                                    email=user[3],
-                                   dob=user[4].strftime(DOB_TIME_FORMAT)))
+                                   dob=user[4].strftime(DateFormats.DOB_TIME_FORMAT)))
     return user
 
 
@@ -215,3 +215,8 @@ def add_choice(vote_id, opt_id):
 
 def get_owner_org_info(uid):
     return call_proc(PROCEDURE.GETOWNERORGINFO, (uid, ))
+
+
+def get_questions_and_options(election_id):
+    return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id, ), resp_many=True)
+

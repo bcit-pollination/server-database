@@ -3,7 +3,7 @@ import six
 
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server import util
-from src.endpoint_controllers import user_auth_controller
+from src.endpoint_controllers import user_auth_controller as ctl
 
 def login(body):  # noqa: E501
     """Login user
@@ -15,4 +15,4 @@ def login(body):  # noqa: E501
 
     :rtype: InlineResponse200
     """
-    return user_auth_controller.login(body)
+    return ctl.login(body)

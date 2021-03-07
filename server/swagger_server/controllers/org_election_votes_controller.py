@@ -2,6 +2,7 @@ import connexion
 import six
 
 from swagger_server import util
+from src.endpoint_controllers import org_election_votes_controller as ctrl
 
 
 def upload_election_votes(body):  # noqa: E501
@@ -14,6 +15,5 @@ def upload_election_votes(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return ctrl.upload_election_votes(body)

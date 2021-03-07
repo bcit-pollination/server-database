@@ -3,6 +3,7 @@ import six
 from werkzeug.exceptions import BadRequest, NotFound
 
 from src.constants_enums.obj_keys import *
+from src.utils.date_utils import compare_date_strings, TimeRelations
 from swagger_server.models.election import Election  # noqa: E501
 from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
 from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
@@ -10,6 +11,7 @@ from swagger_server import util
 import src.db.mysql_interface as db
 from src.db.rollbacks import rollback_create_election
 from src.db.org_election_query_helper import *
+from src.constants_enums.datetime_format import DateFormats
 
 
 def create_election(body):  # noqa: E501
@@ -23,7 +25,6 @@ def create_election(body):  # noqa: E501
     :rtype: InlineResponse2005
     """
 
-    # TODO start time must be earlier than endtime
     start_time = body[ElectionKeys.START_TIME]
     end_time = body[ElectionKeys.END_TIME]
     anonymous = body[ElectionKeys.ANONYMOUS]
@@ -33,11 +34,25 @@ def create_election(body):  # noqa: E501
     election_description = body[ElectionKeys.ELECTION_DESCRIPTION]
     org_id = body[OrgInfoKeys.ORG_ID]
 
+    try:
+        start_end_delta = compare_date_strings(start_time, end_time, DateFormats.ELECTION_TIME_FORMAT)
+    except ValueError:
+        raise BadRequest("Incorrect date format")
+
+    if not start_end_delta == TimeRelations.LFT_EARLIER:
+        raise BadRequest("End time must strictly be later than start time")
+
     if len(questions) < 1:
         raise BadRequest("Elections must have at least one question")
 
     election_id = db.create_election(org_id, election_description, start_time, end_time, anonymous, public_results,
                                      verified)
+
+    add_questions(election_id, questions)
+    return InlineResponse2005(election_id[0])
+
+
+def add_questions(election_id, questions):
     question_id_list = []
     option_id_list = []
     for question in questions:
@@ -46,7 +61,8 @@ def create_election(body):  # noqa: E501
 
         if max_selection_count < 1:
             rollback_create_election(election_id, question_id_list, option_id_list)
-            raise BadRequest("You must be able to choose at least one option in every question: max_selection_count < 1")
+            raise BadRequest(
+                "You must be able to choose at least one option in every question: max_selection_count < 1")
         try:
             question_id = db.add_questions(election_id, question_description, max_selection_count)
         except Exception as e:
@@ -56,16 +72,18 @@ def create_election(body):  # noqa: E501
         if len(question[QuestionKeys.OPTIONS]) < 2:
             rollback_create_election(election_id, question_id_list, option_id_list)
             raise BadRequest("Every question must contain at least 2 options")
+        add_options(election_id, question, question_id, question_id_list, option_id_list)
 
-        for option in question[QuestionKeys.OPTIONS]:
-            option_description = option[QuestionKeys.OPTION_DESCRIPTION]
-            try:
-                option_id = db.add_question_opt(question_id, option_description)
-            except Exception as e:
-                rollback_create_election(election_id, question_id_list, option_id_list)
-                raise e
-            option_id_list.append(option_id)
-    return InlineResponse2005(election_id[0])
+
+def add_options(election_id, question, question_id, question_id_list, option_id_list):
+    for option in question[QuestionKeys.OPTIONS]:
+        option_description = option[QuestionKeys.OPTION_DESCRIPTION]
+        try:
+            option_id = db.add_question_opt(question_id, option_description)
+        except Exception as e:
+            rollback_create_election(election_id, question_id_list, option_id_list)
+            raise e
+        option_id_list.append(option_id)
 
 
 def delete_election(election_id):  # noqa: E501

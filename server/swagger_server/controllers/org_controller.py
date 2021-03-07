@@ -6,7 +6,7 @@ from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa
 from swagger_server.models.user_org import UserOrg  # noqa: E501
 from swagger_server.models.verifier_password import VerifierPassword  # noqa: E501
 from swagger_server import util
-from src.endpoint_controllers import org_controller
+from src.endpoint_controllers import org_controller as ctl
 
 
 def create_org(body, token_info):  # noqa
@@ -19,7 +19,7 @@ def create_org(body, token_info):  # noqa
 
     :rtype: InlineResponse2002
     """
-    return org_controller.create_org(body, token_info)
+    return ctl.create_org(body, token_info)
 
 
 def disband_org(token_info):  # noqa: E501
@@ -30,7 +30,7 @@ def disband_org(token_info):  # noqa: E501
 
     :rtype: None
     """
-    return org_controller.disband_org(token_info)
+    return ctl.disband_org(token_info)
 
 
 def get_org(org_id):  # noqa: E501
@@ -43,7 +43,7 @@ def get_org(org_id):  # noqa: E501
 
     :rtype: UserOrg
     """
-    return org_controller.get_org(org_id)
+    return ctl.get_org(org_id)
 
 
 def get_org_list(token_info):  # noqa: E501
@@ -54,7 +54,7 @@ def get_org_list(token_info):  # noqa: E501
 
     :rtype: InlineResponse2001
     """
-    return org_controller.get_org_list(token_info)
+    return ctl.get_org_list(token_info)
 
 
 def get_verifier_password(body):  # noqa: E501
@@ -67,7 +67,7 @@ def get_verifier_password(body):  # noqa: E501
 
     :rtype: VerifierPassword
     """
-    return org_controller.get_verifier_password(body)
+    return ctl.get_verifier_password(body)
 
 
 def update_org(body):  # noqa: E501
@@ -80,4 +80,4 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    return org_controller.update_org(body)
+    return ctl.update_org(body)

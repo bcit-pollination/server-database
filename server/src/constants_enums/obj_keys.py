@@ -7,6 +7,7 @@ class UserInfoKeys:
     FIRST_NAME = "first_name"
     LAST_NAME = "last_name"
     PASSWORD = "password"
+    VOTING_TOKEN = "voting_token"
 
 
 class OrgInfoKeys:
@@ -49,3 +50,12 @@ class QuestionKeys:
     QUESTION_ID = "question_id"
     OPTION_ID = "option_id"
     QUESTION_DESCRIPTION = "question_description"
+
+
+class VoteKeys:
+    TIME_STAMP = "time_stamp"
+    VOTES_CAST = "votes_cast"
+    CHOICES = "choices"
+    LOCATION = "location"
+    VOTER_FIRST_NAME = "voter_first_name"
+    VOTER_LAST_NAME = "voter_last_name"

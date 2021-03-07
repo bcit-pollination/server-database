@@ -753,12 +753,12 @@ components:
         start_time:
           type: string
           format: date-time
-          example: YYYY-MM-DDTHH-mm-ss
+          example: "2021-01-30T08:30:00+07:30"
           description: The time and date that an election will be open for polling
         end_time:
           type: string
           format: date-time
-          example: YYYY-MM-DDTHH-mm-ss
+          example: "2021-01-30T08:30:00+07:30"
           description: The time and date that an election will be closed for polling
         anonymous:
           type: boolean
@@ -896,7 +896,7 @@ components:
           description: The time at which the vote was cast
           type: string
           format: date-time
-          example: YYYY-MM-DDTHH-mm-ss
+          example: "2021-01-30T08:30:00+07:30"
         location:
           description: The id of the location where the vote was cast
           type: string

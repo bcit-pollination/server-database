@@ -48,3 +48,4 @@ class PROCEDURE:
     ADDVOTE                   = 'AddVote'                   # voting_token, time_stamp, election_id
     ADDCHOICE                 = 'AddChoice'                 # vote_id, opt_id
     GETOWNERORGINFO           = 'GetOwnerOrgInfo'           # uid
+    GETQUESTIONSANDOPTIONS    = 'GetQuestionsAndOptions'    # election_id

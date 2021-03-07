@@ -19,10 +19,10 @@ def app_create_user(body):  # noqa: E501
 
     :rtype: InlineResponse200
     """
-    userModel = User.from_dict(body)
+    user_model = User.from_dict(body)
     random_number = random() * 10000000000000000000
     fake_voting_token = f"fake_token{random_number}"
-    uid = db.create_user(userModel, fake_voting_token)
+    uid = db.create_user(user_model, fake_voting_token)
     token = generate_token(uid)
     return InlineResponse200(token)
 

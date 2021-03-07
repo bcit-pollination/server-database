@@ -4,7 +4,7 @@ import six
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server import util
-from src.endpoint_controllers import org_users_controller
+from src.endpoint_controllers import org_users_controller as ctl
 
 
 def accept_org_invite(encrypted_data):  # noqa: E501
@@ -17,7 +17,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
     :rtype: None
     """
-    return org_users_controller.accept_org_invite(encrypted_data)
+    return ctl.accept_org_invite(encrypted_data)
 
 
 def change_user_privilege(body):  # noqa: E501
@@ -30,7 +30,7 @@ def change_user_privilege(body):  # noqa: E501
 
     :rtype: None
     """
-    return org_users_controller.change_user_privilege(body)
+    return ctl.change_user_privilege(body)
 
 
 def get_org_users(org_id):  # noqa: E501
@@ -43,7 +43,7 @@ def get_org_users(org_id):  # noqa: E501
 
     :rtype: InlineResponse2003
     """
-    return org_users_controller.get_org_users(org_id)
+    return ctl.get_org_users(org_id)
 
 
 def org_invite_user(body):  # noqa: E501
@@ -56,7 +56,7 @@ def org_invite_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return org_users_controller.remove_org_user(body)
+    return ctl.remove_org_user(body)
 
 
 def remove_org_user(body):  # noqa: E501
@@ -69,4 +69,4 @@ def remove_org_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return org_users_controller.org_invite_user(body)
+    return ctl.org_invite_user(body)

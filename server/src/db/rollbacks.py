@@ -8,3 +8,6 @@ def rollback_create_election(election_id, question_id_list, option_id_list):
         db.remove_question(question_id)
     db.remove_election(election_id)
 
+
+def rollback_add_votes(vote_ids):
+    pass

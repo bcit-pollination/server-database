@@ -1,4 +1,4 @@
-from src.endpoint_controllers import user_controller
+from src.endpoint_controllers import user_controller as ctl
 
 
 def app_create_user(body):  # noqa: E501
@@ -12,7 +12,7 @@ def app_create_user(body):  # noqa: E501
     :rtype: InlineResponse200
     """
 
-    return user_controller.app_create_user(body)
+    return ctl.app_create_user(body)
 
 
 def get_user(token_info):  # noqa: E501
@@ -23,7 +23,7 @@ def get_user(token_info):  # noqa: E501
 
     :rtype: User
     """
-    return user_controller.get_user(token_info)
+    return ctl.get_user(token_info)
 
 
 def get_voting_token(token_info):  # noqa: E501
@@ -34,7 +34,7 @@ def get_voting_token(token_info):  # noqa: E501
 
     :rtype: VotingToken
     """
-    return user_controller.get_voting_token(token_info)
+    return ctl.get_voting_token(token_info)
 
 
 def remove_user(token_info):  # noqa: E501
@@ -45,4 +45,4 @@ def remove_user(token_info):  # noqa: E501
 
     :rtype: None
     """
-    return user_controller.remove_user(token_info)
+    return ctl.remove_user(token_info)
