@@ -1,3 +1,5 @@
+from werkzeug.exceptions import NotFound
+
 from swagger_server.models import Org
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
@@ -52,6 +54,8 @@ def get_org(org_id):  # noqa: E501
     :rtype: UserOrg
     """
     org = db.get_organization(org_id)
+    if org is None:
+        raise NotFound("No such org")
     user_org = db_org_to_UserOrg(org_id, org[1], org[3], org[2])
     return user_org
 
