@@ -620,29 +620,41 @@ proc: BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
     DECLARE vote_id INT;
+    DECLARE valid_election BOOLEAN;
     
-    SELECT u.user_id
-    INTO user_id
+    SELECT u.user_id, el.election_id
+    INTO user_id, valid_election
     FROM Users u
-    WHERE u.voting_token = voting_token;
+		INNER JOIN Enrollment e
+            ON e.user_id = u.user_id
+		INNER JOIN Organization o
+			ON o.org_id = e.org_id
+		INNER JOIN Election el
+            ON el.org_id = o.org_id
+    WHERE u.voting_token = voting_token
+    AND el.election_id = election_id;
 
-    IF (user_id IS NULL) THEN
+    IF (user_id IS NULL OR valid_election IS NULL) THEN
         LEAVE proc;
     END IF;
 
     SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
-    FROM Users u
-        INNER JOIN Vote v
-            ON v.user_id = u.user_id
-        INNER JOIN Enrollment e
-            ON e.user_id = u.user_id
-        INNER JOIN Organization o
-            ON o.org_id = e.org_id
+    FROM Vote v
+        INNER JOIN Choice c
+            ON v.vote_id = c.vote_id
+        INNER JOIN Opt o
+            ON o.option_id = c.option_id
+        INNER JOIN Question q
+            ON q.question_id = o.question_id
         INNER JOIN Election el
-            ON el.org_id = o.org_id
-    WHERE el.election_id = election_id;
-
+            ON el.election_id = q.election_id
+		INNER JOIN Users u
+			ON u.user_id = v.user_id
+    WHERE u.voting_token = voting_token
+    AND el.election_id = election_id
+    LIMIT 1;
+   
     IF (prev_time_stamp IS NULL) THEN
         INSERT INTO Vote(user_id, time_stamp)
         VALUES(user_id, time_stamp);
