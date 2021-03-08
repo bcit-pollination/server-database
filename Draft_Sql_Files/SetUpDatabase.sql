@@ -69,7 +69,7 @@ CREATE TABLE Question (
     election_id 		        INT 			NOT NULL,
     question_description 		VARCHAR(40) 	NOT NULL,
     min_selection_count         INT 			NOT NULL	DEFAULT 1,
-    max_selection_count         INT 			NOT NULL,
+    max_selection_count         INT 			NOT NULL	DEFAULT 1,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)

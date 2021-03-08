@@ -707,7 +707,7 @@ END; //
  * Checks if a voting_token is part of the voter list for an election.
  */
 CREATE PROCEDURE IsEligible(
-    IN voting_token INT,
+    IN voting_token VARCHAR(36),
     IN election_id INT)
 BEGIN
     SELECT EXISTS(SELECT u.user_id
