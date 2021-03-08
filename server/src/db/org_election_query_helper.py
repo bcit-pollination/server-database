@@ -75,10 +75,10 @@ def get_questions_and_options(election_id):
             questions_info[question_id] = {}
         questions_info[question_id][QuestionKeys.MIN_SELECTION_COUNT] = question_and_option[2]
         questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT] = question_and_option[3]
-        questions_info[question_id][QuestionKeys.ORDERED_CHOICES] = questions_and_options[8]
+        questions_info[question_id][QuestionKeys.ORDERED_CHOICES] = question_and_option[4] == 1
         if QuestionKeys.OPTIONS not in questions_info[question_id]:
             questions_info[question_id][QuestionKeys.OPTIONS] = set()
-        questions_info[question_id][QuestionKeys.OPTIONS].add(question_and_option[4])
+        questions_info[question_id][QuestionKeys.OPTIONS].add(question_and_option[5])
     return questions_info
 
 

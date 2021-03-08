@@ -86,7 +86,7 @@ def within_election_timeframe_discriminator(vote, **kwargs):
         and election_end_time_relation != TimeRelations.LFT_LATER
 
 
-def priorities_straight(vote, **kwargs):
+def correct_order_discriminator(vote, **kwargs):
     questions_info = kwargs["questions_info"]
     questions_choices = {}
     for choice in vote.choices:
@@ -102,6 +102,7 @@ def priorities_straight(vote, **kwargs):
         for position in choices:
             if position - 1 != last_position:
                 return False
+            last_position = position
     return True
 
 
@@ -140,8 +141,8 @@ def get_within_election_timeframe_discriminator(logger):
                                               "Vote was not cast within election time frame", logger)
 
 
-def get_priorities_straight(logger):
-    return decorate_discriminator_with_logger(priorities_straight,
+def get_correct_order_discriminator(logger):
+    return decorate_discriminator_with_logger(correct_order_discriminator,
                                               "Priorities did not start from 0 or are not consecutive integers", logger)
 
 
@@ -183,7 +184,7 @@ def add_election_votes(vote_list, election_id):
     votes_added_ids = []
     for vote in vote_list:
         try:
-            add_vote(vote, election_id)
+            votes_added_ids.append(add_vote(vote, election_id))
         except Exception as e:
             rollback_add_votes(votes_added_ids)
             raise e
@@ -194,7 +195,8 @@ def build_vote_models(vote_dicts):
     for vote in vote_dicts:
         choices = []
         for choice in vote[VoteKeys.CHOICES]:
-            choices.append(Choice(choice[QuestionKeys.QUESTION_ID], choice[QuestionKeys.OPTION_ID]))
+            choices.append(Choice(choice[QuestionKeys.QUESTION_ID], choice[QuestionKeys.OPTION_ID],
+                                  choice[QuestionKeys.ORDER_POSITION]))
         votes.append(Vote(vote[VoteKeys.VOTER_FIRST_NAME], vote[VoteKeys.VOTER_LAST_NAME],
                           vote[UserInfoKeys.VOTING_TOKEN], choices, vote[VoteKeys.TIME_STAMP],
                           vote[VoteKeys.LOCATION]))
@@ -216,16 +218,16 @@ def upload_election_votes(body):  # noqa: E501
     election_start_end = get_election_start_end(election_id)
     unfiltered_votes = build_vote_models(vote_dicts)
     questions_info = get_questions_and_options(election_id)
-    logger = Logger(f"election_{election_id}_voting_log")
+    logger = Logger(f"logs/voting/election_{election_id}_voting_log")
     filtered_votes = filter_votes(unfiltered_votes, [get_latest_pass_discriminator(logger),
                                                      get_possible_options_discriminator(logger),
                                                      get_selection_count_discriminator(logger),
                                                      get_valid_voting_token_discriminator(logger),
                                                      get_within_election_timeframe_discriminator(logger),
-                                                     get_priorities_straight(logger)],
+                                                     get_correct_order_discriminator(logger)],
                                   questions_info=questions_info,
                                   election_id=election_id,
                                   election_start_end=election_start_end)
-    # add_election_votes(filtered_votes, election_id)
+    add_election_votes(filtered_votes, election_id)
     print(filtered_votes)
     return None

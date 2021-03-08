@@ -14,25 +14,30 @@ class Choice(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_id: int=None, option_id: int=None):  # noqa: E501
+    def __init__(self, question_id: int=None, option_id: int=None, order_position: int=None):  # noqa: E501
         """Choice - a model defined in Swagger
 
         :param question_id: The question_id of this Choice.  # noqa: E501
         :type question_id: int
         :param option_id: The option_id of this Choice.  # noqa: E501
         :type option_id: int
+        :param order_position: The order_position of this Choice.  # noqa: E501
+        :type order_position: int
         """
         self.swagger_types = {
             'question_id': int,
-            'option_id': int
+            'option_id': int,
+            'order_position': int
         }
 
         self.attribute_map = {
             'question_id': 'question_id',
-            'option_id': 'option_id'
+            'option_id': 'option_id',
+            'order_position': 'order_position'
         }
         self._question_id = question_id
         self._option_id = option_id
+        self._order_position = order_position
 
     @classmethod
     def from_dict(cls, dikt) -> 'Choice':
@@ -94,3 +99,28 @@ class Choice(Model):
             raise ValueError("Invalid value for `option_id`, must not be `None`")  # noqa: E501
 
         self._option_id = option_id
+
+    @property
+    def order_position(self) -> int:
+        """Gets the order_position of this Choice.
+
+        If question has ordered_choices, this is the position. Else should be 0.  # noqa: E501
+
+        :return: The order_position of this Choice.
+        :rtype: int
+        """
+        return self._order_position
+
+    @order_position.setter
+    def order_position(self, order_position: int):
+        """Sets the order_position of this Choice.
+
+        If question has ordered_choices, this is the position. Else should be 0.  # noqa: E501
+
+        :param order_position: The order_position of this Choice.
+        :type order_position: int
+        """
+        if order_position is None:
+            raise ValueError("Invalid value for `order_position`, must not be `None`")  # noqa: E501
+
+        self._order_position = order_position

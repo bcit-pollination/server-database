@@ -869,7 +869,7 @@ components:
           - option_description: option_description
             option_id: 7
           question_id: 1
-          max_selection_count: 2
+          max_selection_count: 1
         - min_selection_count: 1
           ordered_choices: true
           question_description: question_description
@@ -880,7 +880,7 @@ components:
           - option_description: option_description
             option_id: 7
           question_id: 1
-          max_selection_count: 2
+          max_selection_count: 1
         anonymous: true
         election_description: election_description
     user_org:
@@ -959,7 +959,7 @@ components:
           type: integer
           description: The minimun amount of options a user must select
         max_selection_count:
-          minimum: 2
+          minimum: 1
           type: integer
           description: How many of the given question options can the user select.
             Must be >= 1
@@ -983,10 +983,11 @@ components:
         - option_description: option_description
           option_id: 7
         question_id: 1
-        max_selection_count: 2
+        max_selection_count: 1
     choice:
       required:
       - option_id
+      - order_position
       - question_id
       type: object
       properties:
@@ -996,6 +997,11 @@ components:
         option_id:
           type: integer
           description: The id of the option chosen by the user
+        order_position:
+          minimum: 0
+          type: integer
+          description: If question has ordered_choices, this is the position. Else
+            should be 0.
       description: A vote choice
     vote:
       required:
@@ -1026,10 +1032,6 @@ components:
         location:
           type: string
           description: The id of the location where the vote was cast
-        order_position:
-          type: boolean
-          description: If question has ordered_choices, this is the position. Else
-            should be 0.
       description: |
         A vote cast.
         If the election is anonymous, first_name and last_name will be null. Else, they are required.
@@ -1195,7 +1197,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           - min_selection_count: 1
             ordered_choices: true
             question_description: question_description
@@ -1206,7 +1208,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           anonymous: true
           election_description: election_description
         - start_time: 2021-01-30T08:30:00+07:30
@@ -1226,7 +1228,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           - min_selection_count: 1
             ordered_choices: true
             question_description: question_description
@@ -1237,7 +1239,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           anonymous: true
           election_description: election_description
     inline_response_200_5:
@@ -1300,7 +1302,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           - min_selection_count: 1
             ordered_choices: true
             question_description: question_description
@@ -1311,7 +1313,7 @@ components:
             - option_description: option_description
               option_id: 7
             question_id: 1
-            max_selection_count: 2
+            max_selection_count: 1
           anonymous: true
           election_description: election_description
         voter_list:

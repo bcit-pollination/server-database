@@ -852,7 +852,7 @@ components:
         max_selection_count:
           description: How many of the given question options can the user select. Must be >= 1
           type: integer
-          minimum: 2
+          minimum: 1
         ordered_choices:
           description: True if the choices made in this question are ordered
           type: boolean
@@ -869,6 +869,7 @@ components:
       required:
         - option_id
         - question_id
+        - order_position
       properties:
         question_id:
           description: The id of the question
@@ -876,6 +877,10 @@ components:
         option_id:
           description: The id of the option chosen by the user
           type: integer
+        order_position:
+          description: If question has ordered_choices, this is the position. Else should be 0.
+          type: integer
+          minimum: 0
 
     vote:
       type: object
@@ -911,9 +916,7 @@ components:
         location:
           description: The id of the location where the vote was cast
           type: string
-        order_position:
-          description: If question has ordered_choices, this is the position. Else should be 0.
-          type: boolean
+
 
 
     option_results:

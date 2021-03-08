@@ -2,7 +2,7 @@ import connexion
 import six
 
 from swagger_server import util
-from src.endpoint_controllers import org_election_votes_controller as ctrl
+from src.endpoint_controllers import org_election_votes_controller as ctl
 
 
 def upload_election_votes(body):  # noqa: E501
@@ -15,5 +15,4 @@ def upload_election_votes(body):  # noqa: E501
 
     :rtype: None
     """
-
-    return ctrl.upload_election_votes(body)
+    return ctl.upload_election_votes(body)

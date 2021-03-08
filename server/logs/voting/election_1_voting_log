@@ -1,0 +1,169 @@
+2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Option chosen not a possible option
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 3, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'invalid option',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Option chosen not a possible option
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 4},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'invalid question',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Vote was not cast within election time frame
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2221-04-01T09:00:00+00:00',
+ 'voter_first_name': 'after election end',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Vote was not cast within election time frame
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '1921-04-01T09:00:00+00:00',
+ 'voter_first_name': 'before election start',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Too many/few selections for option or no selection for question
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 3, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'too many choices for question',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Too many/few selections for option or no selection for question
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'too few choices for question',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Too many/few selections for option or no selection for question
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'question not answered',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Invalid voting_token or voting_token has no right to vote in this election
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': '',
+ 'voter_last_name': '',
+ 'voting_token': 'bad token'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: voting_token_conflict
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'second vote for voting token',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.936693722261751e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Invalid voting_token or voting_token has no right to vote in this election
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'not enrolled',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.092146426020271e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Invalid voting_token or voting_token has no right to vote in this election
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 2, 'question_id': 3},
+             {'option_id': 8, 'order_position': 3, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'cannot vote, invited',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.19062634788448e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Priorities did not start from 0 or are not consecutive integers
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 2, 'question_id': 3},
+             {'option_id': 7, 'order_position': 3, 'question_id': 3},
+             {'option_id': 8, 'order_position': 4, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'vote order does not start from 1',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.172666035032308e+18'}2021-03-08T00:57:48: 
+REJECTED VOTE: 
+Reason: Priorities did not start from 0 or are not consecutive integers
+Vote: {'choices': [{'option_id': 1, 'order_position': 0, 'question_id': 1},
+             {'option_id': 2, 'order_position': 0, 'question_id': 1},
+             {'option_id': 4, 'order_position': 0, 'question_id': 2},
+             {'option_id': 6, 'order_position': 1, 'question_id': 3},
+             {'option_id': 7, 'order_position': 3, 'question_id': 3},
+             {'option_id': 8, 'order_position': 4, 'question_id': 3}],
+ 'location': '',
+ 'time_stamp': '2021-04-01T09:00:00+00:00',
+ 'voter_first_name': 'vote order does not start from 1',
+ 'voter_last_name': '',
+ 'voting_token': 'fake_token5.172666035032308e+18'}
