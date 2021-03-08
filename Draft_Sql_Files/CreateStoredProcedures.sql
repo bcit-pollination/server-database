@@ -662,7 +662,8 @@ proc: BEGIN
     ELSEIF (time_stamp < prev_time_stamp) THEN
         UPDATE Vote v
             SET v.time_stamp = time_stamp
-            WHERE v.user_id = user_id;
+            WHERE v.user_id = user_id
+            AND v.vote_id = vote_id;
         SET SQL_SAFE_UPDATES = 0;
         UPDATE Opt op
             INNER JOIN Choice c ON op.option_id = c.option_id
