@@ -65,11 +65,12 @@ CREATE TABLE Election (
 );
 
 CREATE TABLE Question (
-    question_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
-    election_id 		        INT 			NOT NULL,
-    question_description 		VARCHAR(40) 	NOT NULL,
-    min_selection_count         INT 			NOT NULL	DEFAULT 1,
-    max_selection_count         INT 			NOT NULL	DEFAULT 1,
+    question_id                 INT             NOT NULL    AUTO_INCREMENT,
+    election_id                 INT             NOT NULL,
+    question_description        VARCHAR(40)     NOT NULL,
+    min_selection_count         INT             NOT NULL    DEFAULT 1,
+    max_selection_count         INT             NOT NULL    DEFAULT 1,
+    priority_selections         BOOLEAN	        NOT NULL    DEFAULT FALSE,
     PRIMARY KEY (question_id),
     FOREIGN KEY (election_id)
         REFERENCES Election (election_id)
@@ -94,6 +95,7 @@ CREATE TABLE Choice (
     choice_id 	INT 	NOT NULL 	AUTO_INCREMENT,
     vote_id     INT 	NOT NULL,
     option_id 	INT 	NOT NULL,
+    priority	INT		NOT NULL	DEFAULT 0, /* 0 is a non-priority vote, 1 is the highest priority, 2 is lower, etc. */
     PRIMARY KEY (choice_id),
     FOREIGN KEY (vote_id)
         REFERENCES Vote (vote_id)
@@ -101,6 +103,7 @@ CREATE TABLE Choice (
     FOREIGN KEY (option_id)
         REFERENCES Opt (option_id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    UNIQUE KEY (vote_id, option_id)
+    UNIQUE KEY (vote_id, option_id),
+    CHECK (priority >= 0)
 );
 
