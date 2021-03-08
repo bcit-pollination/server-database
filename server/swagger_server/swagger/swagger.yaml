@@ -822,10 +822,12 @@ components:
           type: string
           description: The time and date that an election will be open for polling
           format: date-time
+          example: 2021-01-30T08:30:00+07:30
         end_time:
           type: string
           description: The time and date that an election will be closed for polling
           format: date-time
+          example: 2021-01-30T08:30:00+07:30
         anonymous:
           type: boolean
           description: Whether this election is anonymous. True for anonymous, else
@@ -850,31 +852,35 @@ components:
 
         Times must be provided in UTC.
       example:
-        start_time: 2000-01-23T04:56:07.000+00:00
+        start_time: 2021-01-30T08:30:00+07:30
         org_id: 6
         election_id: 0
-        end_time: 2000-01-23T04:56:07.000+00:00
+        end_time: 2021-01-30T08:30:00+07:30
         verified: true
         public_results: true
         questions:
-        - question_description: question_description
+        - min_selection_count: 1
+          ordered_choices: true
+          question_description: question_description
           election_id: 5
           options:
           - option_description: option_description
-            option_id: 2
+            option_id: 7
           - option_description: option_description
-            option_id: 2
+            option_id: 7
           question_id: 1
-          max_selection_count: 5
-        - question_description: question_description
+          max_selection_count: 2
+        - min_selection_count: 1
+          ordered_choices: true
+          question_description: question_description
           election_id: 5
           options:
           - option_description: option_description
-            option_id: 2
+            option_id: 7
           - option_description: option_description
-            option_id: 2
+            option_id: 7
           question_id: 1
-          max_selection_count: 5
+          max_selection_count: 2
         anonymous: true
         election_description: election_description
     user_org:
@@ -930,10 +936,13 @@ components:
       description: An option given for a question
       example:
         option_description: option_description
-        option_id: 2
+        option_id: 7
     question:
       required:
       - max_selection_count
+      - min_selection_count
+      - options
+      - ordered_choices
       - question_description
       type: object
       properties:
@@ -945,10 +954,18 @@ components:
         election_id:
           type: integer
           description: The id of the parent election
+        min_selection_count:
+          minimum: 1
+          type: integer
+          description: The minimun amount of options a user must select
         max_selection_count:
+          minimum: 2
           type: integer
           description: How many of the given question options can the user select.
             Must be >= 1
+        ordered_choices:
+          type: boolean
+          description: True if the choices made in this question are ordered
         options:
           type: array
           description: The options given
@@ -956,15 +973,17 @@ components:
             $ref: '#/components/schemas/option'
       description: An election question
       example:
+        min_selection_count: 1
+        ordered_choices: true
         question_description: question_description
         election_id: 5
         options:
         - option_description: option_description
-          option_id: 2
+          option_id: 7
         - option_description: option_description
-          option_id: 2
+          option_id: 7
         question_id: 1
-        max_selection_count: 5
+        max_selection_count: 2
     choice:
       required:
       - option_id
@@ -1003,9 +1022,14 @@ components:
           type: string
           description: The time at which the vote was cast
           format: date-time
+          example: 2021-01-30T08:30:00+07:30
         location:
           type: string
           description: The id of the location where the vote was cast
+        order_position:
+          type: boolean
+          description: If question has ordered_choices, this is the position. Else
+            should be 0.
       description: |
         A vote cast.
         If the election is anonymous, first_name and last_name will be null. Else, they are required.
@@ -1154,58 +1178,66 @@ components:
       additionalProperties: false
       example:
         elections:
-        - start_time: 2000-01-23T04:56:07.000+00:00
+        - start_time: 2021-01-30T08:30:00+07:30
           org_id: 6
           election_id: 0
-          end_time: 2000-01-23T04:56:07.000+00:00
+          end_time: 2021-01-30T08:30:00+07:30
           verified: true
           public_results: true
           questions:
-          - question_description: question_description
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
-          - question_description: question_description
+            max_selection_count: 2
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
+            max_selection_count: 2
           anonymous: true
           election_description: election_description
-        - start_time: 2000-01-23T04:56:07.000+00:00
+        - start_time: 2021-01-30T08:30:00+07:30
           org_id: 6
           election_id: 0
-          end_time: 2000-01-23T04:56:07.000+00:00
+          end_time: 2021-01-30T08:30:00+07:30
           verified: true
           public_results: true
           questions:
-          - question_description: question_description
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
-          - question_description: question_description
+            max_selection_count: 2
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
+            max_selection_count: 2
           anonymous: true
           election_description: election_description
     inline_response_200_5:
@@ -1251,31 +1283,35 @@ components:
       example:
         verifier_password: verifier_password
         election_info:
-          start_time: 2000-01-23T04:56:07.000+00:00
+          start_time: 2021-01-30T08:30:00+07:30
           org_id: 6
           election_id: 0
-          end_time: 2000-01-23T04:56:07.000+00:00
+          end_time: 2021-01-30T08:30:00+07:30
           verified: true
           public_results: true
           questions:
-          - question_description: question_description
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
-          - question_description: question_description
+            max_selection_count: 2
+          - min_selection_count: 1
+            ordered_choices: true
+            question_description: question_description
             election_id: 5
             options:
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             - option_description: option_description
-              option_id: 2
+              option_id: 7
             question_id: 1
-            max_selection_count: 5
+            max_selection_count: 2
           anonymous: true
           election_description: election_description
         voter_list:

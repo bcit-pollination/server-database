@@ -15,7 +15,7 @@ class Vote(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: datetime=None, location: str=None):  # noqa: E501
+    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: datetime=None, location: str=None, order_position: bool=None):  # noqa: E501
         """Vote - a model defined in Swagger
 
         :param voter_first_name: The voter_first_name of this Vote.  # noqa: E501
@@ -30,6 +30,8 @@ class Vote(Model):
         :type time_stamp: datetime
         :param location: The location of this Vote.  # noqa: E501
         :type location: str
+        :param order_position: The order_position of this Vote.  # noqa: E501
+        :type order_position: bool
         """
         self.swagger_types = {
             'voter_first_name': str,
@@ -37,7 +39,8 @@ class Vote(Model):
             'voting_token': str,
             'choices': List[Choice],
             'time_stamp': datetime,
-            'location': str
+            'location': str,
+            'order_position': bool
         }
 
         self.attribute_map = {
@@ -46,7 +49,8 @@ class Vote(Model):
             'voting_token': 'voting_token',
             'choices': 'choices',
             'time_stamp': 'time_stamp',
-            'location': 'location'
+            'location': 'location',
+            'order_position': 'order_position'
         }
         self._voter_first_name = voter_first_name
         self._voter_last_name = voter_last_name
@@ -54,6 +58,7 @@ class Vote(Model):
         self._choices = choices
         self._time_stamp = time_stamp
         self._location = location
+        self._order_position = order_position
 
     @classmethod
     def from_dict(cls, dikt) -> 'Vote':
@@ -209,3 +214,26 @@ class Vote(Model):
         """
 
         self._location = location
+
+    @property
+    def order_position(self) -> bool:
+        """Gets the order_position of this Vote.
+
+        If question has ordered_choices, this is the position. Else should be 0.  # noqa: E501
+
+        :return: The order_position of this Vote.
+        :rtype: bool
+        """
+        return self._order_position
+
+    @order_position.setter
+    def order_position(self, order_position: bool):
+        """Sets the order_position of this Vote.
+
+        If question has ordered_choices, this is the position. Else should be 0.  # noqa: E501
+
+        :param order_position: The order_position of this Vote.
+        :type order_position: bool
+        """
+
+        self._order_position = order_position

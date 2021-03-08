@@ -15,7 +15,7 @@ class Question(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_id: int=None, question_description: str=None, election_id: int=None, max_selection_count: int=None, options: List[Option]=None):  # noqa: E501
+    def __init__(self, question_id: int=None, question_description: str=None, election_id: int=None, min_selection_count: int=None, max_selection_count: int=None, ordered_choices: bool=None, options: List[Option]=None):  # noqa: E501
         """Question - a model defined in Swagger
 
         :param question_id: The question_id of this Question.  # noqa: E501
@@ -24,8 +24,12 @@ class Question(Model):
         :type question_description: str
         :param election_id: The election_id of this Question.  # noqa: E501
         :type election_id: int
+        :param min_selection_count: The min_selection_count of this Question.  # noqa: E501
+        :type min_selection_count: int
         :param max_selection_count: The max_selection_count of this Question.  # noqa: E501
         :type max_selection_count: int
+        :param ordered_choices: The ordered_choices of this Question.  # noqa: E501
+        :type ordered_choices: bool
         :param options: The options of this Question.  # noqa: E501
         :type options: List[Option]
         """
@@ -33,7 +37,9 @@ class Question(Model):
             'question_id': int,
             'question_description': str,
             'election_id': int,
+            'min_selection_count': int,
             'max_selection_count': int,
+            'ordered_choices': bool,
             'options': List[Option]
         }
 
@@ -41,13 +47,17 @@ class Question(Model):
             'question_id': 'question_id',
             'question_description': 'question_description',
             'election_id': 'election_id',
+            'min_selection_count': 'min_selection_count',
             'max_selection_count': 'max_selection_count',
+            'ordered_choices': 'ordered_choices',
             'options': 'options'
         }
         self._question_id = question_id
         self._question_description = question_description
         self._election_id = election_id
+        self._min_selection_count = min_selection_count
         self._max_selection_count = max_selection_count
+        self._ordered_choices = ordered_choices
         self._options = options
 
     @classmethod
@@ -131,6 +141,31 @@ class Question(Model):
         self._election_id = election_id
 
     @property
+    def min_selection_count(self) -> int:
+        """Gets the min_selection_count of this Question.
+
+        The minimun amount of options a user must select  # noqa: E501
+
+        :return: The min_selection_count of this Question.
+        :rtype: int
+        """
+        return self._min_selection_count
+
+    @min_selection_count.setter
+    def min_selection_count(self, min_selection_count: int):
+        """Sets the min_selection_count of this Question.
+
+        The minimun amount of options a user must select  # noqa: E501
+
+        :param min_selection_count: The min_selection_count of this Question.
+        :type min_selection_count: int
+        """
+        if min_selection_count is None:
+            raise ValueError("Invalid value for `min_selection_count`, must not be `None`")  # noqa: E501
+
+        self._min_selection_count = min_selection_count
+
+    @property
     def max_selection_count(self) -> int:
         """Gets the max_selection_count of this Question.
 
@@ -156,6 +191,31 @@ class Question(Model):
         self._max_selection_count = max_selection_count
 
     @property
+    def ordered_choices(self) -> bool:
+        """Gets the ordered_choices of this Question.
+
+        True if the choices made in this question are ordered  # noqa: E501
+
+        :return: The ordered_choices of this Question.
+        :rtype: bool
+        """
+        return self._ordered_choices
+
+    @ordered_choices.setter
+    def ordered_choices(self, ordered_choices: bool):
+        """Sets the ordered_choices of this Question.
+
+        True if the choices made in this question are ordered  # noqa: E501
+
+        :param ordered_choices: The ordered_choices of this Question.
+        :type ordered_choices: bool
+        """
+        if ordered_choices is None:
+            raise ValueError("Invalid value for `ordered_choices`, must not be `None`")  # noqa: E501
+
+        self._ordered_choices = ordered_choices
+
+    @property
     def options(self) -> List[Option]:
         """Gets the options of this Question.
 
@@ -175,5 +235,7 @@ class Question(Model):
         :param options: The options of this Question.
         :type options: List[Option]
         """
+        if options is None:
+            raise ValueError("Invalid value for `options`, must not be `None`")  # noqa: E501
 
         self._options = options

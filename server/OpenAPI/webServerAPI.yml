@@ -833,6 +833,9 @@ components:
       required:
         - question_description
         - max_selection_count
+        - min_selection_count
+        - ordered_choices
+        - options
       properties:
         question_id:
           type: integer
@@ -852,6 +855,7 @@ components:
           minimum: 2
         ordered_choices:
           description: True if the choices made in this question are ordered
+          type: boolean
         options:
           description: The options given
           type: array
@@ -909,6 +913,7 @@ components:
           type: string
         order_position:
           description: If question has ordered_choices, this is the position. Else should be 0.
+          type: boolean
 
 
     option_results:
