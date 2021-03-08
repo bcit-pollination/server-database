@@ -58,13 +58,14 @@ def add_questions(election_id, questions):
     for question in questions:
         question_description = question[QuestionKeys.QUESTION_DESCRIPTION]
         max_selection_count = question[QuestionKeys.MAX_SELECTION_COUNT]
+        min_selection_count = question[QuestionKeys.MIN_SELECTION_COUNT]
 
         if max_selection_count < 1:
             rollback_create_election(election_id, question_id_list, option_id_list)
             raise BadRequest(
                 "You must be able to choose at least one option in every question: max_selection_count < 1")
         try:
-            question_id = db.add_questions(election_id, question_description, max_selection_count)
+            question_id = db.add_questions(election_id, question_description, min_selection_count, max_selection_count)
         except Exception as e:
             rollback_create_election(election_id, question_id_list, option_id_list)
             raise e

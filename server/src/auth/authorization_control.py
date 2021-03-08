@@ -64,7 +64,10 @@ def check_org_auth(token, body, required_privilege, unauth_msg):
         if ElectionKeys.ELECTION_ID not in body:
             raise BadRequest("Must include org_id or election_id in the body")
         else:
-            org_id = db.get_election(body[ElectionKeys.ELECTION_ID])[1]
+            election_info = db.get_election(body[ElectionKeys.ELECTION_ID])
+            if election_info is None:
+                raise NotFound("Election was not found")
+            org_id = election_info[1]
     else:
         org_id = body[OrgInfoKeys.ORG_ID]
     if not check_privilege(int(token[JwtTokenKeys.UID]), org_id, required_privilege):

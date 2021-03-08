@@ -49,3 +49,4 @@ class PROCEDURE:
     ADDCHOICE                 = 'AddChoice'                 # vote_id, opt_id
     GETOWNERORGINFO           = 'GetOwnerOrgInfo'           # uid
     GETQUESTIONSANDOPTIONS    = 'GetQuestionsAndOptions'    # election_id
+    ISELIGIBLE                = 'IsEligible'                # voting_token, election_id

@@ -45,6 +45,7 @@ class ElectionKeys:
 
 class QuestionKeys:
     MAX_SELECTION_COUNT = "max_selection_count"
+    MIN_SELECTION_COUNT = "min_selection_count"
     OPTIONS = "options"
     OPTION_DESCRIPTION = "option_description"
     QUESTION_ID = "question_id"

@@ -46,9 +46,13 @@ def selection_count_discriminator(vote, **kwargs):
         if choice.question_id not in choices_per_question:
             choices_per_question[choice.question_id] = []
         choices_per_question[choice.question_id].append(choice.option_id)
+    if len(choices_per_question) != len(questions_info):
+        return False
     for question_id, choices_made in choices_per_question.items():
-        # TODO questions_info[question_id][QuestionKeys.MIN_SELECTION_COUNT]
-        if not (1 <= len(choices_made) <= questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT]):
+        min_selection_count = questions_info[question_id][QuestionKeys.MIN_SELECTION_COUNT]
+        max_selection_count = questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT]
+        selections_made = len(choices_made)
+        if not (min_selection_count <= selections_made <= max_selection_count):
             return False
     return True
 
@@ -66,7 +70,8 @@ def possible_options_discriminator(vote, **kwargs):
 
 def valid_voting_token_discriminator(vote, **kwargs):
     election_id = kwargs["election_id"]
-    return True
+    is_eligible_tuple = db.is_eligible(vote.voting_token, election_id)  # TODO what if is none
+    return is_eligible_tuple[0] == 1
 
 
 def within_election_timeframe_discriminator(vote, **kwargs):
@@ -87,7 +92,6 @@ def decorate_discriminator_with_logger(discriminator, msg, logger):
         if not passed:
             log_vote(vote, msg, logger)
         return passed
-
     return _
 
 
@@ -114,7 +118,6 @@ def get_valid_voting_token_discriminator(logger):
 def get_within_election_timeframe_discriminator(logger):
     return decorate_discriminator_with_logger(within_election_timeframe_discriminator,
                                               "Vote was not cast within election time frame", logger)
-
 
 
 def discriminate_vote(vote, discriminator_list, **kwargs):

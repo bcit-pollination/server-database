@@ -71,11 +71,11 @@ def get_questions_and_options(election_id):
         question_id = question_and_option[0]
         if question_id not in questions_info:
             questions_info[question_id] = {}
-        questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT] = question_and_option[2]
+        questions_info[question_id][QuestionKeys.MIN_SELECTION_COUNT] = question_and_option[2]
+        questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT] = question_and_option[3]
         if QuestionKeys.OPTIONS not in questions_info[question_id]:
             questions_info[question_id][QuestionKeys.OPTIONS] = set()
-        questions_info[question_id][QuestionKeys.OPTIONS].add(question_and_option[3])
-        # TODO add min_selection_count eventually
+        questions_info[question_id][QuestionKeys.OPTIONS].add(question_and_option[4])
     return questions_info
 
 

@@ -177,8 +177,8 @@ def get_public_elections():
     return call_proc(PROCEDURE.GETPUBLICELECTIONS, None, resp_many=True)
 
 
-def add_questions(election_id, description, max_selection_count):
-    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description, max_selection_count))
+def add_questions(election_id, description, min_selection_count, max_selection_count):
+    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description,min_selection_count, max_selection_count))
 
 
 def remove_question(question_id):
@@ -220,3 +220,6 @@ def get_owner_org_info(uid):
 def get_questions_and_options(election_id):
     return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id, ), resp_many=True)
 
+
+def is_eligible(voting_token, election_id):
+    return call_proc(PROCEDURE.ISELIGIBLE, (voting_token, election_id))
