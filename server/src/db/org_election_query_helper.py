@@ -30,9 +30,11 @@ def get_election_questions(election_id):
     for question in questions:
         question_id = question[0]
         question_description = question[1]
-        max_selection_count = question[2]
+        min_selection_count = question[2]
+        max_selection_count = question[3]
         options = get_question_options(question_id)
-        question_models.append(Question(question_id, question_description, election_id, max_selection_count, options))
+        question_models.append(Question(question_id, question_description, election_id, min_selection_count,
+                                        max_selection_count, options))
     return question_models
 
 
@@ -73,6 +75,7 @@ def get_questions_and_options(election_id):
             questions_info[question_id] = {}
         questions_info[question_id][QuestionKeys.MIN_SELECTION_COUNT] = question_and_option[2]
         questions_info[question_id][QuestionKeys.MAX_SELECTION_COUNT] = question_and_option[3]
+        questions_info[question_id][QuestionKeys.ORDERED_CHOICES] = questions_and_options[8]
         if QuestionKeys.OPTIONS not in questions_info[question_id]:
             questions_info[question_id][QuestionKeys.OPTIONS] = set()
         questions_info[question_id][QuestionKeys.OPTIONS].add(question_and_option[4])

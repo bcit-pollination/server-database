@@ -51,6 +51,7 @@ class QuestionKeys:
     QUESTION_ID = "question_id"
     OPTION_ID = "option_id"
     QUESTION_DESCRIPTION = "question_description"
+    ORDERED_CHOICES = "prioritized_choice"
 
 
 class VoteKeys:
@@ -60,3 +61,4 @@ class VoteKeys:
     LOCATION = "location"
     VOTER_FIRST_NAME = "voter_first_name"
     VOTER_LAST_NAME = "voter_last_name"
+    ORDER_POSITION = "ordered_position"

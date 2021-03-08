@@ -86,6 +86,25 @@ def within_election_timeframe_discriminator(vote, **kwargs):
         and election_end_time_relation != TimeRelations.LFT_LATER
 
 
+def priorities_straight(vote, **kwargs):
+    questions_info = kwargs["questions_info"]
+    questions_choices = {}
+    for choice in vote.choices:
+        if choice.question_id not in questions_choices:
+            questions_choices[choice.question_id] = []
+        questions_choices[choice.question_id].append(choice.order_position)
+
+    for question_id, choices in questions_choices.items():
+        if not questions_info[question_id][QuestionKeys.ORDERED_CHOICES]:
+            continue
+        choices.sort()
+        last_position = 0
+        for position in choices:
+            if position - 1 != last_position:
+                return False
+    return True
+
+
 def decorate_discriminator_with_logger(discriminator, msg, logger):
     def _(vote, **kwargs):
         passed = discriminator(vote, **kwargs)
@@ -100,7 +119,8 @@ def get_latest_pass_discriminator(logger):
 
 
 def get_selection_count_discriminator(logger):
-    return decorate_discriminator_with_logger(selection_count_discriminator, "selection count conflict", logger)
+    return decorate_discriminator_with_logger(selection_count_discriminator,
+                                              "Too many/few selections for option or no selection for question", logger)
 
 
 def get_possible_options_discriminator(logger):
@@ -118,6 +138,11 @@ def get_valid_voting_token_discriminator(logger):
 def get_within_election_timeframe_discriminator(logger):
     return decorate_discriminator_with_logger(within_election_timeframe_discriminator,
                                               "Vote was not cast within election time frame", logger)
+
+
+def get_priorities_straight(logger):
+    return decorate_discriminator_with_logger(priorities_straight,
+                                              "Priorities did not start from 0 or are not consecutive integers", logger)
 
 
 def discriminate_vote(vote, discriminator_list, **kwargs):
@@ -148,7 +173,7 @@ def add_vote(vote, election_id):
     vote_id = vote_id_tuple[0]
     for choice in vote.choices:
         option_id = choice.option_id
-        choice_id_tuple = db.add_choice(vote_id, option_id)
+        choice_id_tuple = db.add_choice(vote_id, option_id, choice.order_position)
         if choice_id_tuple is None:
             raise InternalServerError("DB error adding vote. Rolling back")
     return vote_id
@@ -196,7 +221,8 @@ def upload_election_votes(body):  # noqa: E501
                                                      get_possible_options_discriminator(logger),
                                                      get_selection_count_discriminator(logger),
                                                      get_valid_voting_token_discriminator(logger),
-                                                     get_within_election_timeframe_discriminator(logger)],
+                                                     get_within_election_timeframe_discriminator(logger),
+                                                     get_priorities_straight(logger)],
                                   questions_info=questions_info,
                                   election_id=election_id,
                                   election_start_end=election_start_end)

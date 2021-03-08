@@ -177,16 +177,17 @@ def get_public_elections():
     return call_proc(PROCEDURE.GETPUBLICELECTIONS, None, resp_many=True)
 
 
-def add_questions(election_id, description, min_selection_count, max_selection_count):
-    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description,min_selection_count, max_selection_count))
+def add_question(election_id, description, min_selection_count, max_selection_count, ordered_choices):
+    return call_proc(PROCEDURE.ADDQUESTION, (election_id, description, min_selection_count, max_selection_count,
+                                             ordered_choices))
 
 
 def remove_question(question_id):
     return call_proc(PROCEDURE.DROPQUESTION, (question_id,))
 
 
-def update_question(question_id, description, max_selection_count):
-    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, max_selection_count))
+def update_question(question_id, description, max_selection_count, ordered_choices):
+    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, max_selection_count, ordered_choices))
 
 
 def add_question_opt(question_id, option_description):
@@ -209,8 +210,8 @@ def add_vote(voting_token, time_stamp, election_id):
     return call_proc(PROCEDURE.ADDVOTE, (voting_token, time_stamp, election_id))
 
 
-def add_choice(vote_id, opt_id):
-    return call_proc(PROCEDURE.ADDCHOICE, (vote_id, opt_id))
+def add_choice(vote_id, opt_id, order_position):
+    return call_proc(PROCEDURE.ADDCHOICE, (vote_id, opt_id, order_position))
 
 
 def get_owner_org_info(uid):

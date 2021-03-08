@@ -842,9 +842,16 @@ components:
         election_id:
           description: The id of the parent election
           type: integer
+        min_selection_count:
+          description: The minimun amount of options a user must select
+          type: integer
+          minimum: 1
         max_selection_count:
           description: How many of the given question options can the user select. Must be >= 1
           type: integer
+          minimum: 2
+        ordered_choices:
+          description: True if the choices made in this question are ordered
         options:
           description: The options given
           type: array
@@ -900,6 +907,8 @@ components:
         location:
           description: The id of the location where the vote was cast
           type: string
+        order_position:
+          description: If question has ordered_choices, this is the position. Else should be 0.
 
 
     option_results:
