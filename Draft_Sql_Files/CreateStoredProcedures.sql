@@ -723,7 +723,8 @@ BEGIN
         INNER JOIN Users u
             ON u.user_id = e.user_id
         WHERE u.voting_token = voting_token 
-        AND el.election_id = election_id) 
+        AND el.election_id = election_id
+        AND e.privilege > 1) 
     AS `is_eligible`;
 END; //
 
