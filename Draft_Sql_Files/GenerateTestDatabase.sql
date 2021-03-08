@@ -21,21 +21,21 @@ CALL UpdatePrivilege(2, 2, 1); /* Bruce is promoted to member */
 CALL CreateElection(2, "Web Dev", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, TRUE, TRUE); /** Creates an Election for COMP1537 Discord*/
 CALL CreateElection(1, "C Survey", CURRENT_TIMESTAMP(), TIMESTAMPADD(hour, 1, CURRENT_TIMESTAMP()), TRUE, FALSE, FALSE); /** Creates an Election for COMP2510 Study Group*/
 
-CALL AddQuestion(2, 'Where did you go to school?', 1, 4); /** Adds new question to our first election. */
+CALL AddQuestion(2, 'Where did you go to school?', 1, 4, TRUE); /** Adds new question to our first election. */
 
 CALL AddOption(1, 'Javascript'); /** First option is added. */
 CALL AddOption(1, 'CSS'); /** Second option is added. */
 CALL AddOption(1, 'HTML'); /** Third option is added. */
 CALL AddOption(1, 'Python'); /** Third option is added. */
 
-CALL AddQuestion(2, 'Where did you go to school?', 1, 1); /** Adds new question to our first election. */
+CALL AddQuestion(2, 'Where did you go to school?', 1, 1, FALSE); /** Adds new question to our first election. */
 
 CALL AddOption(2, 'BCIT'); /** First option is added. */
 CALL AddOption(2, 'UBC'); /** Second option is added. */
 CALL AddOption(2, 'SFU'); /** Third option is added. */
 
 CALL UpdateOption(2, 'PHP'); /** Changes option 'CSS' to 'PHP'*/
-CALL UpdateQuestion(1, 'What language do you like?', 1, 3); /** Changes the question. */
+CALL UpdateQuestion(1, 'What language do you like?', 1, 3, FALSE); /** Changes the question. */
 CALL UpdateElection(1, 'Web Dev Survey', '2021-10-05', '2021-11-09', TRUE, FALSE, FALSE); /** Updates election name to web dev survey. */
 
 CALL UpdateUser(1, "password");
@@ -45,11 +45,11 @@ CALL UpdateOrg(1, "This is an org name", "verifier password");
 CALL DisbandOrg(1);
 
 CALL AddVote('123', '2028-01-04 07:09:07', 1);
-CALL AddChoice(1, 1);
-CALL AddChoice(1, 2);
+CALL AddChoice(1, 1, 1);
+CALL AddChoice(1, 2, 2);
 
 CALL AddVote('123', '2028-01-04 05:09:07', 1);
-CALL AddChoice(1, 1);
+CALL AddChoice(1, 3, 3);
 
 CALL UpdateVerifierPassword(1, "Hello world");
 CALL UpdateUserOrgId(1, 1, "Passport");
