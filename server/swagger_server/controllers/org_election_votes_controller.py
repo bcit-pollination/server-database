@@ -2,7 +2,7 @@ import connexion
 import six
 
 from swagger_server import util
-from src.endpoint_controllers import org_election_votes_controller as ctl
+import src.endpoint_controllers.org_election_votes_controller as ctl
 
 
 def upload_election_votes(body):  # noqa: E501

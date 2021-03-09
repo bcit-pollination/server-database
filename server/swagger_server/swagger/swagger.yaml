@@ -772,9 +772,6 @@ components:
           type: string
           description: The name of the org
       description: An organization
-      example:
-        org_id: 6
-        name: name
     verifier_password:
       required:
       - verifier_password
@@ -885,27 +882,21 @@ components:
         election_description: election_description
     user_org:
       required:
-      - org
       - privilege
       - user_org_id
       type: object
-      properties:
-        privilege:
-          type: integer
-          description: The privilege level within the org
-        user_org_id:
-          type: string
-          description: The ID used by the user to identify himself within the org(Driver
-            License, Passport, etc...)
-        org:
-          $ref: '#/components/schemas/org'
       description: An org the user belongs to, toghether with pertinent user info
-      example:
-        user_org_id: user_org_id
-        org:
-          org_id: 6
-          name: name
-        privilege: 0
+      allOf:
+      - $ref: '#/components/schemas/org'
+      - type: object
+        properties:
+          privilege:
+            type: integer
+            description: The privilege level within the org
+          user_org_id:
+            type: string
+            description: The ID used by the user to identify himself within the org(Driver
+              License, Passport, etc...)
     org_user:
       type: object
       description: A user that belongs to an org
@@ -1130,16 +1121,8 @@ components:
       additionalProperties: false
       example:
         orgs:
-        - user_org_id: user_org_id
-          org:
-            org_id: 6
-            name: name
-          privilege: 0
-        - user_org_id: user_org_id
-          org:
-            org_id: 6
-            name: name
-          privilege: 0
+        - ""
+        - ""
     inline_response_200_2:
       type: object
       properties:

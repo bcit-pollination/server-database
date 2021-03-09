@@ -40,7 +40,7 @@ def disband_org(token_info):  # noqa: E501
 
 
 def db_org_to_UserOrg(org_id, name, user_org_id, privilege):
-    return UserOrg(privilege, user_org_id, Org(org_id, name))
+    return UserOrg(org_id, name, privilege, user_org_id)
 
 
 def get_org(org_id):  # noqa: E501
