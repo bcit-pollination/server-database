@@ -778,12 +778,12 @@ components:
     user_org:
       type: object
       description: An org the user belongs to, toghether with pertinent user info
-      required:
-        - user_org_id
-        - privilege
       allOf:
         - $ref: "#/components/schemas/org"
         - type: object
+          required:
+            - privilege
+            - user_org_id
           properties:
             privilege:
               type: integer

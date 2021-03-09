@@ -881,14 +881,14 @@ components:
         anonymous: true
         election_description: election_description
     user_org:
-      required:
-      - privilege
-      - user_org_id
       type: object
       description: An org the user belongs to, toghether with pertinent user info
       allOf:
       - $ref: '#/components/schemas/org'
-      - type: object
+      - required:
+        - privilege
+        - user_org_id
+        type: object
         properties:
           privilege:
             type: integer
