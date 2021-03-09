@@ -98,6 +98,7 @@ def delete_election(election_id):  # noqa: E501
 
     :rtype: None
     """
+    # db.remove_election(election_id)
     return 'do some magic!'
 
 
@@ -128,7 +129,21 @@ def get_election_list(org_id):  # noqa: E501
 
     :rtype: InlineResponse2004
     """
-    return 'do some magic!'
+    election_list_tuple = db.get_org_elections(org_id)
+    parsed_elections = []
+    for election in election_list_tuple:
+        election_id = election[0]
+        org_id = org_id
+        description = election[1]
+        start_time = election[2]
+        end_time = election[3]
+        anonymous = election[4] == 1
+        verified = election[5] == 1
+        public_results = election[6] == 1
+        parsed_election = Election(description, election_id, org_id, start_time, end_time, anonymous, verified,
+                                   public_results, [])
+        parsed_elections.append(parsed_election)
+    return InlineResponse2004(parsed_elections)
 
 
 def update_election(body):  # noqa: E501

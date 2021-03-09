@@ -20,4 +20,4 @@ def login(body):  # noqa: E501
     uid_tuple = db.get_uid_with_credentials(body[LoginKeys.EMAIL], body[LoginKeys.PASSWORD])
     if uid_tuple is None:
         raise Unauthorized("Incorrect credentials")
-    return generate_token(uid_tuple[0])
+    return InlineResponse200(generate_token(uid_tuple[0]))

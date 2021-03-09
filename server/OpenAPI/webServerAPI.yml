@@ -780,17 +780,18 @@ components:
       description: An org the user belongs to, toghether with pertinent user info
       required:
         - user_org_id
-        - org
         - privilege
-      properties:
-        privilege:
-          type: integer
-          description: The privilege level within the org
-        user_org_id:
-          type: string
-          description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
-        org:
-          $ref: "#/components/schemas/org"
+      allOf:
+        - $ref: "#/components/schemas/org"
+        - type: object
+          properties:
+            privilege:
+              type: integer
+              description: The privilege level within the org
+            user_org_id:
+              type: string
+              description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
+
 
 
     org_user:

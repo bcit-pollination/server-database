@@ -57,8 +57,7 @@ def get_election_list(org_id):  # noqa: E501
 
     :rtype: InlineResponse2004
     """
-    # TODO get election list
-    return 'do some magic!'
+    return ctl.get_election_list(org_id)
 
 
 def update_election(body):  # noqa: E501
