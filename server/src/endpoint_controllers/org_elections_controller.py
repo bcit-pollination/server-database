@@ -134,12 +134,12 @@ def get_election_list(org_id):  # noqa: E501
     for election in election_list_tuple:
         election_id = election[0]
         org_id = org_id
-        description = election[1]
-        start_time = election[2]
-        end_time = election[3]
-        anonymous = election[4] == 1
-        verified = election[5] == 1
-        public_results = election[6] == 1
+        description = election[2]
+        start_time = election[3]
+        end_time = election[4]
+        anonymous = election[5] == 1
+        verified = election[6] == 1
+        public_results = election[7] == 1
         parsed_election = Election(description, election_id, org_id, start_time, end_time, anonymous, verified,
                                    public_results, [])
         parsed_elections.append(parsed_election)
