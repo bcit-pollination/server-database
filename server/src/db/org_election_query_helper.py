@@ -13,7 +13,7 @@ def get_question_options(question_id):
     option_model_list = []
     total_votes_cast = 0
     for option in options:
-        total_votes_cast += option[3]
+        total_votes_cast += option[2]
         option_model_list.append(OptionResults(option[0], option[1], option[2], 0))
     if total_votes_cast == 0:
         return option_model_list
@@ -32,7 +32,7 @@ def get_election_questions(election_id):
         question_description = question[1]
         min_selection_count = question[2]
         max_selection_count = question[3]
-        ordered_choices = question[4]
+        ordered_choices = question[4] == 1
         options = get_question_options(question_id)
         question_models.append(Question(question_id, question_description, election_id, min_selection_count,
                                         max_selection_count, ordered_choices, options))
