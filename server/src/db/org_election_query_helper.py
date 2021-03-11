@@ -32,9 +32,10 @@ def get_election_questions(election_id):
         question_description = question[1]
         min_selection_count = question[2]
         max_selection_count = question[3]
+        ordered_choices = question[4]
         options = get_question_options(question_id)
         question_models.append(Question(question_id, question_description, election_id, min_selection_count,
-                                        max_selection_count, options))
+                                        max_selection_count, ordered_choices, options))
     return question_models
 
 
