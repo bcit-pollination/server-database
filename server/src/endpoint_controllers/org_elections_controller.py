@@ -114,8 +114,10 @@ def get_election(election_id):  # noqa: E501
     """
     election = get_election_with_results(election_id)
     for question in election.questions:
+        new_options = []
         for option in question.options:
-            question.options = Option(option.option_id, option.option_description)
+            new_options.append(Option(option.option_id, option.option_description))
+        question.options = new_options
     return election
 
 
