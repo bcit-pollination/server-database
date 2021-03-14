@@ -70,7 +70,5 @@ def update_election(body):  # noqa: E501
 
     :rtype: None
     """
-    # TODO update election
-    if connexion.request.is_json:
-        body = Election.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return ctl.update_election(body)

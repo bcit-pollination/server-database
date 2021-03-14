@@ -186,8 +186,8 @@ def remove_question(question_id):
     return call_proc(PROCEDURE.DROPQUESTION, (question_id,))
 
 
-def update_question(question_id, description, max_selection_count, ordered_choices):
-    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, max_selection_count, ordered_choices))
+def update_question(question_id, description, min_selection_count, max_selection_count, ordered_choices):
+    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, min_selection_count, max_selection_count, ordered_choices))
 
 
 def add_question_opt(question_id, option_description):

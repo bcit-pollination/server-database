@@ -1,4 +1,6 @@
-from src.email.sendgrid_email import send_registration_email
+from werkzeug.exceptions import NotFound
+
+from src.email.sendgrid_email import send_registration_email, decode_user_info
 from swagger_server.models import OrgUser
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from src.auth.jwt import decode_token
@@ -17,9 +19,10 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
     :rtype: None
     """
-    new_user = decode_token(encrypted_data)
+    new_user = decode_user_info(encrypted_data)
+    # uid_tuple =
     change_user_privilege({
-        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.INVITEE,
+        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.MEMBER,
         OrgInfoKeys.ORG_ID: new_user[OrgInfoKeys.ORG_ID],
         UserInfoKeys.UID: new_user[UserInfoKeys.UID]
     })
@@ -36,7 +39,6 @@ def change_user_privilege(body):  # noqa: E501
 
     :rtype: None
     """
-    # TODO change user priv
     uid = body[UserInfoKeys.UID]
     privilege = body[OrgInfoKeys.PRIVILEGE]
     org_id = body[OrgInfoKeys.ORG_ID]
@@ -55,6 +57,8 @@ def get_org_users(org_id):  # noqa: E501
     :rtype: InlineResponse2003
     """
     org_users = db.get_users_from_org(org_id)
+    if org_users is None:
+        raise NotFound("No such organization")
     org_user_models = []
     for org_user in org_users:
         uid = org_user[0]
@@ -99,7 +103,8 @@ def org_invite_user(body):  # noqa: E501
     """
     users_to_invite = body[OrgInfoKeys.INVITES]
     org_id = body[OrgInfoKeys.ORG_ID]
-    org_name = db.get_organization(org_id)[OrgInfoKeys.NAME]
+    org_name_tuple = db.get_organization(org_id)
+    org_name = org_name_tuple[1]
     for user in users_to_invite:
         email = user[UserInfoKeys.EMAIL]
         user_org_id = user[OrgInfoKeys.USER_ORG_ID]

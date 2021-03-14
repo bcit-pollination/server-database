@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta, timezone
+
 import connexion
 import six
-from werkzeug.exceptions import BadRequest, NotFound
+from werkzeug.exceptions import BadRequest, NotFound, Conflict, Unauthorized
 
 from src.constants_enums.obj_keys import *
 from src.utils.date_utils import compare_date_strings, TimeRelations
@@ -98,8 +100,14 @@ def delete_election(election_id):  # noqa: E501
 
     :rtype: None
     """
-    # db.remove_election(election_id)
-    return 'do some magic!'
+    election = get_election(election_id)
+    now_date = datetime.now(timezone(timedelta(0)))
+    now_string = now_date.strftime(DateFormats.ELECTION_TIME_FORMAT)
+    if compare_date_strings(election.start_time, now_string, DateFormats.ELECTION_TIME_FORMAT) \
+            != TimeRelations.LFT_EARLIER:
+        Conflict("Cannot delete election after it has started")
+    db.remove_election(election_id)
+    return None
 
 
 def get_election(election_id):  # noqa: E501
@@ -148,6 +156,57 @@ def get_election_list(org_id):  # noqa: E501
     return InlineResponse2004(parsed_elections)
 
 
+def update_options(option_list):
+    for option in option_list:
+        option_id = option[QuestionKeys.OPTION_ID]
+        option_description = option[QuestionKeys.OPTION_DESCRIPTION]
+        db.update_question_opt(option_id, option_description)
+
+
+def update_questions(question_list):
+    for question in question_list:
+        options = question[QuestionKeys.OPTIONS]
+        question_id = question[QuestionKeys.QUESTION_ID]
+        min_selection_count = question[QuestionKeys.MIN_SELECTION_COUNT]
+        max_selection_count = question[QuestionKeys.MAX_SELECTION_COUNT]
+        ordered_choices = question[QuestionKeys.ORDERED_CHOICES]
+        description = question[QuestionKeys.QUESTION_DESCRIPTION]
+        db.update_question(question_id, description, min_selection_count, max_selection_count, ordered_choices)
+        update_options(options)
+
+
+def delete_questions(question_id_list):
+    for question_id in question_id_list:
+        db.remove_question(question_id)
+
+
+def validate_with_set(id_set, expected_id_set):
+    for _id in id_set:
+        if _id not in id_set:
+            return False
+    return True
+
+
+def get_question_option_id_set(questions):
+    question_id_set = set()
+    option_id_set = set()
+    for question in questions:
+        question_id_set.add(question.question_id)
+        for option in question.options:
+            option_id_set.add(option.option_id)
+    return question_id_set, option_id_set
+
+
+def get_question_option_id_set_from_question_dict(questions):
+    question_id_set = set()
+    option_id_set = set()
+    for question in questions:
+        question_id_set.add(question[QuestionKeys.QUESTION_ID])
+        for option in question[QuestionKeys.OPTIONS]:
+            option_id_set.add(option[QuestionKeys.OPTION_ID])
+    return question_id_set, option_id_set
+
+
 def update_election(body):  # noqa: E501
     """update election
 
@@ -158,6 +217,46 @@ def update_election(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = Election.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    election_id = body[ElectionKeys.ELECTION_ID]
+    start_time = body[ElectionKeys.START_TIME]
+    end_time = body[ElectionKeys.END_TIME]
+    anonymous = body[ElectionKeys.ANONYMOUS]
+    verified = body[ElectionKeys.VERIFIED]
+    public_results = body[ElectionKeys.PUBLIC_RESULTS]
+    questions = body[ElectionKeys.QUESTIONS]
+    election_description = body[ElectionKeys.ELECTION_DESCRIPTION]
+    org_id = body[OrgInfoKeys.ORG_ID]
+
+    now_date = datetime.now(timezone(timedelta(0)))
+    now_string = now_date.strftime(DateFormats.ELECTION_TIME_FORMAT)
+    try:
+        actual_given_delta = compare_date_strings(start_time, now_string, DateFormats.ELECTION_TIME_FORMAT)
+    except ValueError:
+        raise BadRequest("Incorrect date format")
+    if actual_given_delta != TimeRelations.LFT_EARLIER:
+        Conflict("Cannot update election after it has started")
+
+    try:
+        start_end_delta = compare_date_strings(start_time, end_time, DateFormats.ELECTION_TIME_FORMAT)
+    except ValueError:
+        raise BadRequest("Incorrect date format")
+    if not start_end_delta == TimeRelations.LFT_EARLIER:
+        raise BadRequest("End time must strictly be later than start time")
+
+    actual_election = get_election(election_id)
+
+    actual_question_ids, actual_option_ids = get_question_option_id_set(actual_election.questions)
+    sent_question_ids, sent_option_ids = get_question_option_id_set_from_question_dict(questions)
+    if not validate_with_set(sent_question_ids, actual_question_ids):
+        Unauthorized("Attempting to edit question that does not belong to this election")
+    if not validate_with_set(sent_option_ids, actual_option_ids):
+        Unauthorized("Attempting to edit option that does not belong to this election")
+
+    questions_to_delete = actual_question_ids.difference(sent_question_ids)
+    db.update_election(election_id, election_description, start_time, end_time, anonymous, public_results, verified)
+
+    update_questions(questions)
+
+    delete_questions(questions_to_delete)
+    return None

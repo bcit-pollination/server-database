@@ -56,7 +56,7 @@ def org_invite_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.remove_org_user(body)
+    return ctl.org_invite_user(body)
 
 
 def remove_org_user(body):  # noqa: E501
@@ -69,4 +69,4 @@ def remove_org_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.org_invite_user(body)
+    return ctl.remove_org_user(body)

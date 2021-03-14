@@ -64,7 +64,9 @@ def send_registration_email(org_name, org_id, user_email):
         <h1>You have been invited to join: {org_name}</h1>
         To accept follow the link below:<br>
         https://pollination.live/api/org/users/invite/accept?encrypted_data={encrypted_data}''')
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+    # api_key = os.environ.get('SENDGRID_API_KEY')
+    api_key = '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'
+    sg = SendGridAPIClient(api_key)
     response = sg.send(message)
     if response.status_code < 200 or 299 < response.status_code:
         raise RuntimeError
