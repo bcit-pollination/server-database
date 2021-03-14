@@ -592,7 +592,7 @@ CREATE PROCEDURE GetUserVotes(
     IN election_id INT)
 BEGIN   
     SELECT u.first_name, u.last_name, q.question_id, q.question_description, 
-        o.option_id, o.option_description, c.priority FROM Election el
+        o.option_id, o.option_description, c.priority, v.time_stamp, u.voting_token FROM Election el
         INNER JOIN Question q
             ON el.election_id = q.election_id
         INNER JOIN Opt o
@@ -603,7 +603,8 @@ BEGIN
             ON c.vote_id = v.vote_id
         INNER JOIN Users u
             ON v.user_id = u.user_id
-		WHERE el.election_id = election_id;
+		WHERE el.election_id = election_id
+		ORDER BY u.voting_token;
 END; //
 
 
