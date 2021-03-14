@@ -61,5 +61,7 @@ CALL AddChoice(4, 6, 2);
 
 CALL UpdateVerifierPassword(1, "Hello world");
 CALL UpdateUserOrgId(1, 1, "Passport");
+
+CALL GetUserVotes(1);
 /* CALL DeleteQuestion(1); */
 /* CALL DeleteOption(1); */

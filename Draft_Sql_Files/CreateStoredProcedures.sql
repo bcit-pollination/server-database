@@ -1,6 +1,7 @@
 USE voting_system;
 
 DROP PROCEDURE IF EXISTS LoginUser;
+DROP PROCEDURE IF EXISTS GetUserId;
 
 DROP PROCEDURE IF EXISTS DeactivateUser;
 DROP PROCEDURE IF EXISTS GetUser;
@@ -69,6 +70,13 @@ BEGIN
     SELECT user_id FROM Users u
     WHERE u.email = email 
     AND u.password = password;
+END; //
+
+CREATE PROCEDURE GetUserId(
+    IN email VARCHAR(40))
+BEGIN
+    SELECT user_id FROM Users u
+    WHERE u.email = email;
 END; //
 
 /**
@@ -307,7 +315,8 @@ END; //
  * email, dob, privilege, and user_org_id from an organization.
  */
 CREATE PROCEDURE GetUsersFromOrg(
-    IN org_id INT)
+    IN org_id INT,
+    IN privilege INT)
 BEGIN
     SELECT u.user_id, u.first_name, u.last_name, u.email, u.dob, e.privilege, e.user_org_id 
     FROM Users u
@@ -316,7 +325,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > 1;
+    AND e.privilege >= privilege;
 END; //
 
 /**
@@ -338,8 +347,8 @@ proc: BEGIN
         LEAVE proc;
     END IF;
 
-    INSERT INTO Enrollment(user_id, org_id, user_org_id)
-    VALUES(user_id, org_id, user_org_id);
+    INSERT INTO Enrollment(user_id, org_id, privilege, user_org_id)
+    VALUES(user_id, org_id, 1, user_org_id);
     SELECT user_id;
 END; //
 
@@ -593,7 +602,8 @@ BEGIN
         INNER JOIN Vote v
             ON c.vote_id = v.vote_id
         INNER JOIN Users u
-            ON v.user_id = u.user_id;
+            ON v.user_id = u.user_id
+		WHERE el.election_id = election_id;
 END; //
 
 
