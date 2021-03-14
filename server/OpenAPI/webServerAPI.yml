@@ -238,6 +238,11 @@ paths:
         - admin: [ ]
       parameters:
         - $ref: "#/components/parameters/org_p"
+        - in: query
+          name: min_privilege_level
+          schema:
+            type: integer
+          description: The minimum privilege level a user must have in order to be fetched
       responses:
         '200':
           $ref: '#/components/responses/org_users'
@@ -511,7 +516,7 @@ paths:
             type: integer
       responses:
         "200":
-          $ref: "#/components/responses/election_result_list"
+          $ref: "#/components/responses/public_election_info_list"
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -522,7 +527,7 @@ paths:
   /org/elections/public/get:
     get:
       description: >
-        Get a list of elections with results open to the public
+        Get the results of an election elections with results open to the public
       tags:
         - elections.results.public
       summary: Get public elections
@@ -554,7 +559,7 @@ paths:
         If the election is private, and the user is not a member
         of the org, then will respond 401: Unauthorized
 
-        If there are several results for the same election, the latest version will be
+        Note that the options in questions may take the shape of Option or option_results
       tags:
         - org.election.results
       summary: Get election voting results
@@ -717,20 +722,8 @@ components:
           description: The id of the user within the organization
           type: string
 
-    election:
-      description: >
-        Models an election.
-
-        The election has voter list, id verifiers, voting stations, and locations associated with it.
-
-        Elections can be anonymous or non-anonymous
-
-        The election has a predetermined window of time during which it is active.
-        Before the active window begins, the election can be edited.
-        However, it cannot be edited once it has begun.
-
-
-        Times must be provided in UTC.
+    election_info:
+      description: General information about an election, not including questions
       type: object
       required:
         - election_description
@@ -769,11 +762,33 @@ components:
         public_results:
           description: Whether the results of the election are open to the general public, or just within the org
           type: boolean
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/question"
 
+
+    election:
+      description: >
+        Models an election.
+
+        The election has voter list, id verifiers, voting stations, and locations associated with it.
+
+        Elections can be anonymous or non-anonymous
+
+        The election has a predetermined window of time during which it is active.
+        Before the active window begins, the election can be edited.
+        However, it cannot be edited once it has begun.
+
+
+        Times must be provided in UTC.
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/election_info"
+        - type: object
+          required:
+            - questions
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: "#/components/schemas/question"
 
     user_org:
       type: object
@@ -861,7 +876,9 @@ components:
           description: The options given
           type: array
           items:
-            $ref: "#/components/schemas/option"
+            oneOf:
+              - $ref: "#/components/schemas/option"
+              - $ref: "#/components/schemas/option_results"
 
 
     choice:
@@ -965,11 +982,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/question_results"
-        user_votes:
-          description: The votes cast. Optional and dependant on whether the election was anonymous
-          type: array
-          items:
-            $ref: "#/components/schemas/vote"
+
 
 
     election_results:
@@ -978,17 +991,20 @@ components:
         The results of an election.
 
         Organization property is optional is provided for public requests purposes
-      allOf:
-        - $ref: "#/components/schemas/private_election_results"
-        - type: object
-          required:
-            - org_info
-            - election_info
-          properties:
-              org_info:
-                $ref: "#/components/schemas/org"
-              election_info:
-                $ref: "#/components/schemas/election"
+
+      required:
+        - org_info
+        - election_info
+      properties:
+        org_info:
+          $ref: "#/components/schemas/org"
+        election_info:
+          $ref: "#/components/schemas/election"
+        user_votes:
+          description: The votes cast. Optional and dependant on whether the election was anonymous
+          type: array
+          items:
+            $ref: "#/components/schemas/vote"
 
 
     new_org:
@@ -1127,7 +1143,7 @@ components:
             $ref: "#/components/schemas/election_results"
 
 
-    election_result_list:
+    public_election_info_list:
       description: A list of election results
       content:
         application/json:
@@ -1137,7 +1153,7 @@ components:
               elections:
                 type: array
                 items:
-                  $ref: "#/components/schemas/election_results"
+                  $ref: "#/components/schemas/election_info"
 
     election_package:
       description: All of the information needed to run an offline election using the Pollination voting machines

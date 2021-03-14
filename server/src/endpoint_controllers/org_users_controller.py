@@ -46,17 +46,14 @@ def change_user_privilege(body):  # noqa: E501
     return None
 
 
-def get_org_users(org_id):  # noqa: E501
+def get_org_users(org_id, privilege_level):  # noqa: E501
     """Fetch org users
 
     Get all users # noqa: E501
 
-    :param org_id: The id of the org
-    :type org_id: int
-
     :rtype: InlineResponse2003
     """
-    org_users = db.get_users_from_org(org_id)
+    org_users = db.get_users_from_org(org_id, privilege_level)
     if org_users is None:
         raise NotFound("No such organization")
     org_user_models = []

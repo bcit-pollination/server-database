@@ -122,8 +122,8 @@ def get_verifier_password(org_id):
     return call_proc(PROCEDURE.GETVERIFIERPASSWORD, (org_id,))
 
 
-def get_users_from_org(org_id):
-    return call_proc(PROCEDURE.GETUSERSFROMORG, (org_id,), resp_many=True)
+def get_users_from_org(org_id, min_privilege_level):
+    return call_proc(PROCEDURE.GETUSERSFROMORG, (org_id, min_privilege_level), resp_many=True)
 
 
 def update_privilege(user_id, org_id, privilege_level: PrivilegeLevels):
