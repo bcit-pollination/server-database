@@ -458,7 +458,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/election'
+                $ref: '#components/schemas/election'
         "400":
           description: Invalid syntax
         "401":
@@ -573,7 +573,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_6'
+                $ref: '#/components/schemas/inline_response_200_4'
         "400":
           description: Invalid syntax
         "401":
@@ -667,7 +667,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_7'
+                $ref: '#/components/schemas/inline_response_200_6'
         "400":
           description: Invalid syntax
         "401":
@@ -998,9 +998,10 @@ components:
           total_votes_for:
             type: number
             description: The total number of votes cast for this option. A float
-          vote_proportion_percent:
+          result:
             type: number
-            description: The voting proportion for this option, in percents. A float
+            description: |
+              If question is ordered, this is the order position for this option. If not ordered, The voting proportion for this option, in percents. A float
         description: |
           total_votes_for and vote_proportion_percent will only be provided when responding to get election results
     election_results:
@@ -1123,27 +1124,6 @@ components:
         elections:
           type: array
           items:
-            $ref: '#/components/schemas/election'
-      additionalProperties: false
-      example:
-        elections:
-        - ""
-        - ""
-    inline_response_200_5:
-      type: object
-      properties:
-        election_id:
-          type: integer
-          description: The id of the election just created
-      additionalProperties: false
-      example:
-        election_id: 0
-    inline_response_200_6:
-      type: object
-      properties:
-        elections:
-          type: array
-          items:
             $ref: '#/components/schemas/election_info'
       additionalProperties: false
       example:
@@ -1164,7 +1144,16 @@ components:
           public_results: true
           anonymous: true
           election_description: election_description
-    inline_response_200_7:
+    inline_response_200_5:
+      type: object
+      properties:
+        election_id:
+          type: integer
+          description: The id of the election just created
+      additionalProperties: false
+      example:
+        election_id: 0
+    inline_response_200_6:
       type: object
       properties:
         verifier_password:
@@ -1247,7 +1236,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/election'
+            $ref: '#components/schemas/election'
     election_list:
       description: Get a list of elections
       content:
@@ -1271,14 +1260,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_6'
+            $ref: '#/components/schemas/inline_response_200_4'
     election_package:
       description: All of the information needed to run an offline election using
         the Pollination voting machines
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/inline_response_200_7'
+            $ref: '#/components/schemas/inline_response_200_6'
   parameters:
     org_p:
       name: org_id

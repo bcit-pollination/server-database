@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.election import Election  # noqa: F401,E501
+from swagger_server.models.election_info import ElectionInfo  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,14 +15,14 @@ class InlineResponse2004(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, elections: List[Election]=None):  # noqa: E501
+    def __init__(self, elections: List[ElectionInfo]=None):  # noqa: E501
         """InlineResponse2004 - a model defined in Swagger
 
         :param elections: The elections of this InlineResponse2004.  # noqa: E501
-        :type elections: List[Election]
+        :type elections: List[ElectionInfo]
         """
         self.swagger_types = {
-            'elections': List[Election]
+            'elections': List[ElectionInfo]
         }
 
         self.attribute_map = {
@@ -42,22 +42,22 @@ class InlineResponse2004(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def elections(self) -> List[Election]:
+    def elections(self) -> List[ElectionInfo]:
         """Gets the elections of this InlineResponse2004.
 
 
         :return: The elections of this InlineResponse2004.
-        :rtype: List[Election]
+        :rtype: List[ElectionInfo]
         """
         return self._elections
 
     @elections.setter
-    def elections(self, elections: List[Election]):
+    def elections(self, elections: List[ElectionInfo]):
         """Sets the elections of this InlineResponse2004.
 
 
         :param elections: The elections of this InlineResponse2004.
-        :type elections: List[Election]
+        :type elections: List[ElectionInfo]
         """
 
         self._elections = elections

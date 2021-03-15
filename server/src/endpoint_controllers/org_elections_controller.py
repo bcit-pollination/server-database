@@ -6,6 +6,7 @@ from werkzeug.exceptions import BadRequest, NotFound, Conflict, Unauthorized
 
 from src.constants_enums.obj_keys import *
 from src.utils.date_utils import compare_date_strings, TimeRelations
+from src.utils.election_parsing import parse_election_tuples
 from swagger_server.models.election import Election  # noqa: E501
 from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
 from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
@@ -140,19 +141,7 @@ def get_election_list(org_id):  # noqa: E501
     :rtype: InlineResponse2004
     """
     election_list_tuple = db.get_org_elections(org_id)
-    parsed_elections = []
-    for election in election_list_tuple:
-        election_id = election[0]
-        org_id = org_id
-        description = election[2]
-        start_time = election[3]
-        end_time = election[4]
-        anonymous = election[5] == 1
-        verified = election[6] == 1
-        public_results = election[7] == 1
-        parsed_election = Election(description, election_id, org_id, start_time, end_time, anonymous, verified,
-                                   public_results, [])
-        parsed_elections.append(parsed_election)
+    parsed_elections = parse_election_tuples(election_list_tuple)
     return InlineResponse2004(parsed_elections)
 
 

@@ -916,8 +916,10 @@ components:
             total_votes_for:
               description: The total number of votes cast for this option. A float
               type: number
-            vote_proportion_percent:
-              description: The voting proportion for this option, in percents. A float
+            result:
+              description: >
+                If question is ordered, this is the order position for this option. If not ordered, The voting proportion
+                for this option, in percents. A float
               type: number
 
 
@@ -1048,7 +1050,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/election"
+            $ref: "#components/schemas/election"
 
     election_list:
       description: Get a list of elections
@@ -1060,7 +1062,7 @@ components:
               elections:
                 type: array
                 items:
-                  $ref: "#/components/schemas/election"
+                  $ref: "#/components/schemas/election_info"
 
     verifier_password:
       description: The password used by id verifiers to login to voting machine
