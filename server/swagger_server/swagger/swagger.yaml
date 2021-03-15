@@ -582,38 +582,6 @@ paths:
           description: Not found
       security: []
       x-openapi-router-controller: swagger_server.controllers.elections_results_public_controller
-  /org/elections/public/get:
-    get:
-      tags:
-      - elections.results.public
-      summary: Get public elections
-      description: |
-        Get the results of an election elections with results open to the public
-      operationId: get_public_election_result
-      parameters:
-      - name: election_id
-        in: query
-        description: The id of the election to get
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      responses:
-        "200":
-          description: The result of an election
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/election_results'
-        "400":
-          description: Invalid syntax
-        "401":
-          description: Not Authorized
-        "404":
-          description: Not found
-      security: []
-      x-openapi-router-controller: swagger_server.controllers.elections_results_public_controller
   /org/elections/results:
     get:
       tags:
@@ -646,8 +614,6 @@ paths:
           description: Not Authorized
         "404":
           description: Not found
-      security:
-      - member: []
       x-openapi-router-controller: swagger_server.controllers.org_election_results_controller
   /org/election/votes:
     post:

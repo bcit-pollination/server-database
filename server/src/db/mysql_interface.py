@@ -173,8 +173,8 @@ def get_election_questions(election_id):
     return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,), resp_many=True)
 
 
-def get_public_elections():
-    return call_proc(PROCEDURE.GETPUBLICELECTIONS, None, resp_many=True)
+def get_public_elections(page, elections_per_page):
+    return call_proc(PROCEDURE.GETPUBLICELECTIONS, (page, elections_per_page), resp_many=True)
 
 
 def add_question(election_id, description, min_selection_count, max_selection_count, ordered_choices):

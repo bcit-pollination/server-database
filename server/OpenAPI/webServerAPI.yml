@@ -524,33 +524,6 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /org/elections/public/get:
-    get:
-      description: >
-        Get the results of an election elections with results open to the public
-      tags:
-        - elections.results.public
-      summary: Get public elections
-      operationId:
-        get_public_election_result
-      parameters:
-        - name: election_id
-          description: The id of the election to get
-          in: query
-          required: true
-          schema:
-            type: integer
-      security: []
-      responses:
-        "200":
-          $ref: "#/components/responses/election_results"
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
-
   /org/elections/results:
     get:
       description: >
@@ -565,8 +538,6 @@ paths:
       summary: Get election voting results
       operationId:
         get_election_results
-      security:
-        - member: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
