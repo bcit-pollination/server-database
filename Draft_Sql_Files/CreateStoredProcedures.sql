@@ -1,6 +1,7 @@
 USE voting_system;
 
 DROP PROCEDURE IF EXISTS LoginUser;
+DROP PROCEDURE IF EXISTS GetUserId;
 
 DROP PROCEDURE IF EXISTS DeactivateUser;
 DROP PROCEDURE IF EXISTS GetUser;
@@ -69,6 +70,13 @@ BEGIN
     SELECT user_id FROM Users u
     WHERE u.email = email 
     AND u.password = password;
+END; //
+
+CREATE PROCEDURE GetUserId(
+    IN email VARCHAR(40))
+BEGIN
+    SELECT user_id FROM Users u
+    WHERE u.email = email;
 END; //
 
 /**
@@ -307,7 +315,8 @@ END; //
  * email, dob, privilege, and user_org_id from an organization.
  */
 CREATE PROCEDURE GetUsersFromOrg(
-    IN org_id INT)
+    IN org_id INT,
+    IN privilege INT)
 BEGIN
     SELECT u.user_id, u.first_name, u.last_name, u.email, u.dob, e.privilege, e.user_org_id 
     FROM Users u
@@ -316,7 +325,7 @@ BEGIN
         INNER JOIN Organization o
            ON o.org_id = e.org_id
     WHERE o.org_id = org_id
-    AND e.privilege > 1;
+    AND e.privilege >= privilege;
 END; //
 
 /**
@@ -338,8 +347,8 @@ proc: BEGIN
         LEAVE proc;
     END IF;
 
-    INSERT INTO Enrollment(user_id, org_id, user_org_id)
-    VALUES(user_id, org_id, user_org_id);
+    INSERT INTO Enrollment(user_id, org_id, privilege, user_org_id)
+    VALUES(user_id, org_id, 1, user_org_id);
     SELECT user_id;
 END; //
 
@@ -583,7 +592,7 @@ CREATE PROCEDURE GetUserVotes(
     IN election_id INT)
 BEGIN   
     SELECT u.first_name, u.last_name, q.question_id, q.question_description, 
-        o.option_id, o.option_description, c.priority FROM Election el
+        o.option_id, o.option_description, c.priority, v.time_stamp, u.voting_token FROM Election el
         INNER JOIN Question q
             ON el.election_id = q.election_id
         INNER JOIN Opt o
@@ -593,7 +602,9 @@ BEGIN
         INNER JOIN Vote v
             ON c.vote_id = v.vote_id
         INNER JOIN Users u
-            ON v.user_id = u.user_id;
+            ON v.user_id = u.user_id
+		WHERE el.election_id = election_id
+		ORDER BY u.voting_token;
 END; //
 
 
@@ -620,29 +631,41 @@ proc: BEGIN
     DECLARE user_id INT;
     DECLARE prev_time_stamp TIMESTAMP;
     DECLARE vote_id INT;
+    DECLARE valid_election BOOLEAN;
     
-    SELECT u.user_id
-    INTO user_id
+    SELECT u.user_id, el.election_id
+    INTO user_id, valid_election
     FROM Users u
-    WHERE u.voting_token = voting_token;
+		INNER JOIN Enrollment e
+            ON e.user_id = u.user_id
+		INNER JOIN Organization o
+			ON o.org_id = e.org_id
+		INNER JOIN Election el
+            ON el.org_id = o.org_id
+    WHERE u.voting_token = voting_token
+    AND el.election_id = election_id;
 
-    IF (user_id IS NULL) THEN
+    IF (user_id IS NULL OR valid_election IS NULL) THEN
         LEAVE proc;
     END IF;
 
     SELECT v.time_stamp, v.vote_id
     INTO prev_time_stamp, vote_id
-    FROM Users u
-        INNER JOIN Vote v
-            ON v.user_id = u.user_id
-        INNER JOIN Enrollment e
-            ON e.user_id = u.user_id
-        INNER JOIN Organization o
-            ON o.org_id = e.org_id
+    FROM Vote v
+        INNER JOIN Choice c
+            ON v.vote_id = c.vote_id
+        INNER JOIN Opt o
+            ON o.option_id = c.option_id
+        INNER JOIN Question q
+            ON q.question_id = o.question_id
         INNER JOIN Election el
-            ON el.org_id = o.org_id
-    WHERE el.election_id = election_id;
-
+            ON el.election_id = q.election_id
+		INNER JOIN Users u
+			ON u.user_id = v.user_id
+    WHERE u.voting_token = voting_token
+    AND el.election_id = election_id
+    LIMIT 1;
+   
     IF (prev_time_stamp IS NULL) THEN
         INSERT INTO Vote(user_id, time_stamp)
         VALUES(user_id, time_stamp);
@@ -650,7 +673,8 @@ proc: BEGIN
     ELSEIF (time_stamp < prev_time_stamp) THEN
         UPDATE Vote v
             SET v.time_stamp = time_stamp
-            WHERE v.user_id = user_id;
+            WHERE v.user_id = user_id
+            AND v.vote_id = vote_id;
         SET SQL_SAFE_UPDATES = 0;
         UPDATE Opt op
             INNER JOIN Choice c ON op.option_id = c.option_id
