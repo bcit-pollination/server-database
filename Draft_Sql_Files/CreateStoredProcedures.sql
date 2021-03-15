@@ -730,7 +730,7 @@ CREATE PROCEDURE GetPublicElections(
     IN page_num INT)
 BEGIN
     DECLARE page_index INT;
-    SELECT page_num - 1
+    SELECT (page_num - 1) * count
     INTO page_index;
     
     SELECT e.* FROM Election e
