@@ -725,10 +725,17 @@ END; //
 /** 
  * Gets all public elections. 
  */
-CREATE PROCEDURE GetPublicElections()
+CREATE PROCEDURE GetPublicElections(
+    IN count INT,
+    IN page_num INT)
 BEGIN
+    DECLARE page_index INT;
+    SELECT page_num - 1
+    INTO page_index;
+    
     SELECT e.* FROM Election e
-    WHERE e.public_results = TRUE;
+    WHERE e.public_results = TRUE
+    LIMIT page_index, count;
 END; //
 
 /**
