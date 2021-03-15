@@ -813,7 +813,6 @@ components:
       - end_time
       - org_id
       - public_results
-      - questions
       - start_time
       - verified
       type: object
@@ -954,10 +953,6 @@ components:
         options:
           type: array
           description: The options given
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/option'
-            - $ref: '#/components/schemas/option_results'
       description: An election question
     choice:
       required:
@@ -1032,10 +1027,7 @@ components:
       description: The voting result for this option
       allOf:
       - $ref: '#/components/schemas/option'
-      - required:
-        - total_votes_for
-        - vote_proportion_percent
-        type: object
+      - type: object
         properties:
           total_votes_for:
             type: number
@@ -1043,30 +1035,8 @@ components:
           vote_proportion_percent:
             type: number
             description: The voting proportion for this option, in percents. A float
-    question_results:
-      required:
-      - options_posed
-      type: object
-      properties:
-        options_posed:
-          type: array
-          description: The options given for this question
-          items:
-            $ref: '#/components/schemas/option_results'
-      description: The voting results for this question
-    private_election_results:
-      required:
-      - question_results
-      type: object
-      properties:
-        question_results:
-          type: array
-          description: The results for each question posed
-          items:
-            $ref: '#/components/schemas/question_results'
-      description: |
-        The results of an election.
-        Organization property is optional is provided for public requests purposes
+        description: |
+          total_votes_for and vote_proportion_percent will only be provided when responding to get election results
     election_results:
       required:
       - election_info

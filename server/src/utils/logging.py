@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from src.constants_enums.datetime_format import DateFormats
+import os
 
 
 class Logger:
@@ -10,6 +11,6 @@ class Logger:
     def add_entry(self, entry):
         now = datetime.now()
         with open(self.filename, 'a') as f:
-            f.write(f"{now.strftime(DateFormats.LOGGING_TIME_FORMAT)}: {entry}")
+            f.write(f"{now.strftime(DateFormats.LOGGING_TIME_FORMAT)}: {entry}\n\n")
 
 

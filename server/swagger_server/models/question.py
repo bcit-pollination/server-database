@@ -6,7 +6,6 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.object import Object  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,7 +14,7 @@ class Question(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_id: int=None, question_description: str=None, election_id: int=None, min_selection_count: int=None, max_selection_count: int=None, ordered_choices: bool=None, options: List[OneOfquestionOptionsItems]=None):  # noqa: E501
+    def __init__(self, question_id: int=None, question_description: str=None, election_id: int=None, min_selection_count: int=None, max_selection_count: int=None, ordered_choices: bool=None, options: List=None):  # noqa: E501
         """Question - a model defined in Swagger
 
         :param question_id: The question_id of this Question.  # noqa: E501
@@ -31,7 +30,7 @@ class Question(Model):
         :param ordered_choices: The ordered_choices of this Question.  # noqa: E501
         :type ordered_choices: bool
         :param options: The options of this Question.  # noqa: E501
-        :type options: List[OneOfquestionOptionsItems]
+        :type options: List
         """
         self.swagger_types = {
             'question_id': int,
@@ -40,7 +39,7 @@ class Question(Model):
             'min_selection_count': int,
             'max_selection_count': int,
             'ordered_choices': bool,
-            'options': List[OneOfquestionOptionsItems]
+            'options': List
         }
 
         self.attribute_map = {
@@ -216,24 +215,24 @@ class Question(Model):
         self._ordered_choices = ordered_choices
 
     @property
-    def options(self) -> List[OneOfquestionOptionsItems]:
+    def options(self) -> List:
         """Gets the options of this Question.
 
         The options given  # noqa: E501
 
         :return: The options of this Question.
-        :rtype: List[OneOfquestionOptionsItems]
+        :rtype: List
         """
         return self._options
 
     @options.setter
-    def options(self, options: List[OneOfquestionOptionsItems]):
+    def options(self, options: List):
         """Sets the options of this Question.
 
         The options given  # noqa: E501
 
         :param options: The options of this Question.
-        :type options: List[OneOfquestionOptionsItems]
+        :type options: List
         """
         if options is None:
             raise ValueError("Invalid value for `options`, must not be `None`")  # noqa: E501

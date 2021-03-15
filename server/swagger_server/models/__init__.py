@@ -17,15 +17,12 @@ from swagger_server.models.inline_response2006 import InlineResponse2006
 from swagger_server.models.inline_response2007 import InlineResponse2007
 from swagger_server.models.inline_response404 import InlineResponse404
 from swagger_server.models.new_org import NewOrg
-from swagger_server.models.one_ofquestion_options_items import OneOfquestionOptionsItems
 from swagger_server.models.option import Option
 from swagger_server.models.option_results import OptionResults
 from swagger_server.models.org import Org
 from swagger_server.models.org_user import OrgUser
 from swagger_server.models.org_user_invite import OrgUserInvite
-from swagger_server.models.private_election_results import PrivateElectionResults
 from swagger_server.models.question import Question
-from swagger_server.models.question_results import QuestionResults
 from swagger_server.models.user import User
 from swagger_server.models.user_org import UserOrg
 from swagger_server.models.verifier_password import VerifierPassword

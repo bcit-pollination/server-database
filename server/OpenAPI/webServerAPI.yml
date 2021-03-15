@@ -728,7 +728,6 @@ components:
       required:
         - election_description
         - verified
-        - questions
         - public_results
         - anonymous
         - start_time
@@ -828,8 +827,6 @@ components:
                 description: The ID used by the user to identify himself within the org(Driver License, Passport, etc...)
 
 
-
-
     option:
       type: object
       description: An option given for a question
@@ -842,6 +839,7 @@ components:
           description:
             The text describing a posible selection to be made
           type: string
+
 
     question:
       type: object
@@ -876,9 +874,7 @@ components:
           description: The options given
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/option"
-              - $ref: "#/components/schemas/option_results"
+            - $ref: '#/components/schemas/option_results'
 
 
     choice:
@@ -943,9 +939,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/option"
         - type: object
-          required:
-            - total_votes_for
-            - vote_proportion_percent
+          description: >
+            total_votes_for and vote_proportion_percent will only be provided when responding to get election results
           properties:
             total_votes_for:
               description: The total number of votes cast for this option. A float
@@ -953,36 +948,6 @@ components:
             vote_proportion_percent:
               description: The voting proportion for this option, in percents. A float
               type: number
-
-
-    question_results:
-      type: object
-      description: The voting results for this question
-      required:
-        - options_posed
-      properties:
-        options_posed:
-          description: The options given for this question
-          type: array
-          items:
-            $ref: "#/components/schemas/option_results"
-
-
-    private_election_results:
-      type: object
-      description: >
-        The results of an election.
-
-        Organization property is optional is provided for public requests purposes
-      required:
-        - question_results
-      properties:
-        question_results:
-          description: The results for each question posed
-          type: array
-          items:
-            $ref: "#/components/schemas/question_results"
-
 
 
     election_results:
