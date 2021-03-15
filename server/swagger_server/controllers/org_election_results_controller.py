@@ -3,16 +3,14 @@ import six
 
 from swagger_server.models.election_results import ElectionResults  # noqa: E501
 from swagger_server import util
+import src.endpoint_controllers.org_election_results_controller as ctl
 
 
-def get_election_results(election_id):  # noqa: E501
+def get_election_results(election_id, token_info):  # noqa: E501
     """Get election voting results
 
-    Get the voting results for an election. If the election is private, and the user is not a member of the org, then will respond 401: Unauthorized If there are several results for the same election, the latest version will be  # noqa: E501
-
-    :param election_id: The id of the election
-    :type election_id: int
+    Get the voting results for an election. If the election is private, and the user is not a member of the org, then will respond 401: Unauthorized Note that the options in questions may take the shape of Option or option_results  # noqa: E501
 
     :rtype: ElectionResults
     """
-    return 'do some magic!'
+    return ctl.get_election_results(election_id, token_info)

@@ -7,7 +7,6 @@ from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.question_results import QuestionResults  # noqa: F401,E501
-from swagger_server.models.vote import Vote  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -16,25 +15,20 @@ class PrivateElectionResults(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_results: List[QuestionResults]=None, user_votes: List[Vote]=None):  # noqa: E501
+    def __init__(self, question_results: List[QuestionResults]=None):  # noqa: E501
         """PrivateElectionResults - a model defined in Swagger
 
         :param question_results: The question_results of this PrivateElectionResults.  # noqa: E501
         :type question_results: List[QuestionResults]
-        :param user_votes: The user_votes of this PrivateElectionResults.  # noqa: E501
-        :type user_votes: List[Vote]
         """
         self.swagger_types = {
-            'question_results': List[QuestionResults],
-            'user_votes': List[Vote]
+            'question_results': List[QuestionResults]
         }
 
         self.attribute_map = {
-            'question_results': 'question_results',
-            'user_votes': 'user_votes'
+            'question_results': 'question_results'
         }
         self._question_results = question_results
-        self._user_votes = user_votes
 
     @classmethod
     def from_dict(cls, dikt) -> 'PrivateElectionResults':
@@ -71,26 +65,3 @@ class PrivateElectionResults(Model):
             raise ValueError("Invalid value for `question_results`, must not be `None`")  # noqa: E501
 
         self._question_results = question_results
-
-    @property
-    def user_votes(self) -> List[Vote]:
-        """Gets the user_votes of this PrivateElectionResults.
-
-        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
-
-        :return: The user_votes of this PrivateElectionResults.
-        :rtype: List[Vote]
-        """
-        return self._user_votes
-
-    @user_votes.setter
-    def user_votes(self, user_votes: List[Vote]):
-        """Sets the user_votes of this PrivateElectionResults.
-
-        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
-
-        :param user_votes: The user_votes of this PrivateElectionResults.
-        :type user_votes: List[Vote]
-        """
-
-        self._user_votes = user_votes

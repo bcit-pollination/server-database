@@ -263,6 +263,14 @@ paths:
         explode: true
         schema:
           type: integer
+      - name: min_privilege_level
+        in: query
+        description: The minimum privilege level a user must have in order to be fetched
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
       responses:
         "200":
           description: A list of all users in the org, together with lists of admin,
@@ -580,7 +588,7 @@ paths:
       - elections.results.public
       summary: Get public elections
       description: |
-        Get a list of elections with results open to the public
+        Get the results of an election elections with results open to the public
       operationId: get_public_election_result
       parameters:
       - name: election_id
@@ -614,7 +622,7 @@ paths:
       description: |
         Get the voting results for an election.
         If the election is private, and the user is not a member of the org, then will respond 401: Unauthorized
-        If there are several results for the same election, the latest version will be
+        Note that the options in questions may take the shape of Option or option_results
       operationId: get_election_results
       parameters:
       - name: election_id
@@ -772,6 +780,9 @@ components:
           type: string
           description: The name of the org
       description: An organization
+      example:
+        org_id: 0
+        name: name
     verifier_password:
       required:
       - verifier_password
@@ -795,7 +806,7 @@ components:
           type: string
           description: The id of the user within the organization
       description: The info needed to invite a user
-    election:
+    election_info:
       required:
       - anonymous
       - election_description
@@ -837,17 +848,7 @@ components:
           type: boolean
           description: Whether the results of the election are open to the general
             public, or just within the org
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/question'
-      description: |
-        Models an election.
-        The election has voter list, id verifiers, voting stations, and locations associated with it.
-        Elections can be anonymous or non-anonymous
-        The election has a predetermined window of time during which it is active. Before the active window begins, the election can be edited. However, it cannot be edited once it has begun.
-
-        Times must be provided in UTC.
+      description: General information about an election, not including questions
       example:
         start_time: 2021-01-30T08:30:00+07:30
         org_id: 6
@@ -855,31 +856,27 @@ components:
         end_time: 2021-01-30T08:30:00+07:30
         verified: true
         public_results: true
-        questions:
-        - min_selection_count: 1
-          ordered_choices: true
-          question_description: question_description
-          election_id: 5
-          options:
-          - option_description: option_description
-            option_id: 7
-          - option_description: option_description
-            option_id: 7
-          question_id: 1
-          max_selection_count: 1
-        - min_selection_count: 1
-          ordered_choices: true
-          question_description: question_description
-          election_id: 5
-          options:
-          - option_description: option_description
-            option_id: 7
-          - option_description: option_description
-            option_id: 7
-          question_id: 1
-          max_selection_count: 1
         anonymous: true
         election_description: election_description
+    election:
+      type: object
+      description: |
+        Models an election.
+        The election has voter list, id verifiers, voting stations, and locations associated with it.
+        Elections can be anonymous or non-anonymous
+        The election has a predetermined window of time during which it is active. Before the active window begins, the election can be edited. However, it cannot be edited once it has begun.
+
+        Times must be provided in UTC.
+      allOf:
+      - $ref: '#/components/schemas/election_info'
+      - required:
+        - questions
+        type: object
+        properties:
+          questions:
+            type: array
+            items:
+              $ref: '#/components/schemas/question'
     user_org:
       type: object
       description: An org the user belongs to, toghether with pertinent user info
@@ -925,9 +922,6 @@ components:
           type: string
           description: The text describing a posible selection to be made
       description: An option given for a question
-      example:
-        option_description: option_description
-        option_id: 7
     question:
       required:
       - max_selection_count
@@ -961,20 +955,10 @@ components:
           type: array
           description: The options given
           items:
-            $ref: '#/components/schemas/option'
+            oneOf:
+            - $ref: '#/components/schemas/option'
+            - $ref: '#/components/schemas/option_results'
       description: An election question
-      example:
-        min_selection_count: 1
-        ordered_choices: true
-        question_description: question_description
-        election_id: 5
-        options:
-        - option_description: option_description
-          option_id: 7
-        - option_description: option_description
-          option_id: 7
-        question_id: 1
-        max_selection_count: 1
     choice:
       required:
       - option_id
@@ -994,6 +978,10 @@ components:
           description: If question has ordered_choices, this is the position. Else
             should be 0.
       description: A vote choice
+      example:
+        order_position: 0
+        option_id: 1
+        question_id: 6
     vote:
       required:
       - choices
@@ -1026,6 +1014,19 @@ components:
       description: |
         A vote cast.
         If the election is anonymous, first_name and last_name will be null. Else, they are required.
+      example:
+        voter_first_name: voter_first_name
+        time_stamp: 2021-01-30T08:30:00+07:30
+        voter_last_name: voter_last_name
+        location: location
+        voting_token: voting_token
+        choices:
+        - order_position: 0
+          option_id: 1
+          question_id: 6
+        - order_position: 0
+          option_id: 1
+          question_id: 6
     option_results:
       type: object
       description: The voting result for this option
@@ -1063,6 +1064,19 @@ components:
           description: The results for each question posed
           items:
             $ref: '#/components/schemas/question_results'
+      description: |
+        The results of an election.
+        Organization property is optional is provided for public requests purposes
+    election_results:
+      required:
+      - election_info
+      - org_info
+      type: object
+      properties:
+        org_info:
+          $ref: '#/components/schemas/org'
+        election_info:
+          $ref: '#/components/schemas/election'
         user_votes:
           type: array
           description: The votes cast. Optional and dependant on whether the election
@@ -1072,22 +1086,36 @@ components:
       description: |
         The results of an election.
         Organization property is optional is provided for public requests purposes
-    election_results:
-      type: object
-      description: |
-        The results of an election.
-        Organization property is optional is provided for public requests purposes
-      allOf:
-      - $ref: '#/components/schemas/private_election_results'
-      - required:
-        - election_info
-        - org_info
-        type: object
-        properties:
-          org_info:
-            $ref: '#/components/schemas/org'
-          election_info:
-            $ref: '#/components/schemas/election'
+      example:
+        org_info:
+          org_id: 0
+          name: name
+        election_info: ""
+        user_votes:
+        - voter_first_name: voter_first_name
+          time_stamp: 2021-01-30T08:30:00+07:30
+          voter_last_name: voter_last_name
+          location: location
+          voting_token: voting_token
+          choices:
+          - order_position: 0
+            option_id: 1
+            question_id: 6
+          - order_position: 0
+            option_id: 1
+            question_id: 6
+        - voter_first_name: voter_first_name
+          time_stamp: 2021-01-30T08:30:00+07:30
+          voter_last_name: voter_last_name
+          location: location
+          voting_token: voting_token
+          choices:
+          - order_position: 0
+            option_id: 1
+            question_id: 6
+          - order_position: 0
+            option_id: 1
+            question_id: 6
     new_org:
       type: object
       allOf:
@@ -1163,68 +1191,8 @@ components:
       additionalProperties: false
       example:
         elections:
-        - start_time: 2021-01-30T08:30:00+07:30
-          org_id: 6
-          election_id: 0
-          end_time: 2021-01-30T08:30:00+07:30
-          verified: true
-          public_results: true
-          questions:
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          anonymous: true
-          election_description: election_description
-        - start_time: 2021-01-30T08:30:00+07:30
-          org_id: 6
-          election_id: 0
-          end_time: 2021-01-30T08:30:00+07:30
-          verified: true
-          public_results: true
-          questions:
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          anonymous: true
-          election_description: election_description
+        - ""
+        - ""
     inline_response_200_5:
       type: object
       properties:
@@ -1240,12 +1208,26 @@ components:
         elections:
           type: array
           items:
-            $ref: '#/components/schemas/election_results'
+            $ref: '#/components/schemas/election_info'
       additionalProperties: false
       example:
         elections:
-        - ""
-        - ""
+        - start_time: 2021-01-30T08:30:00+07:30
+          org_id: 6
+          election_id: 0
+          end_time: 2021-01-30T08:30:00+07:30
+          verified: true
+          public_results: true
+          anonymous: true
+          election_description: election_description
+        - start_time: 2021-01-30T08:30:00+07:30
+          org_id: 6
+          election_id: 0
+          end_time: 2021-01-30T08:30:00+07:30
+          verified: true
+          public_results: true
+          anonymous: true
+          election_description: election_description
     inline_response_200_7:
       type: object
       properties:
@@ -1267,38 +1249,7 @@ components:
       additionalProperties: false
       example:
         verifier_password: verifier_password
-        election_info:
-          start_time: 2021-01-30T08:30:00+07:30
-          org_id: 6
-          election_id: 0
-          end_time: 2021-01-30T08:30:00+07:30
-          verified: true
-          public_results: true
-          questions:
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          - min_selection_count: 1
-            ordered_choices: true
-            question_description: question_description
-            election_id: 5
-            options:
-            - option_description: option_description
-              option_id: 7
-            - option_description: option_description
-              option_id: 7
-            question_id: 1
-            max_selection_count: 1
-          anonymous: true
-          election_description: election_description
+        election_info: ""
         voter_list:
         - ""
         - ""
@@ -1379,7 +1330,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/election_results'
-    election_result_list:
+    public_election_info_list:
       description: A list of election results
       content:
         application/json:

@@ -23,7 +23,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 def change_user_privilege(body):  # noqa: E501
     """Change user privileges
 
-    user privileges are:&lt;br&gt;  -1 :&#x3D; removed&lt;br&gt;   0 :&#x3D; invited&lt;br&gt;   1 :&#x3D; member&lt;br&gt;   2 :&#x3D; admin&lt;br&gt;   3 :&#x3D; owner  # noqa: E501
+    user privileges are:&lt;br&gt; 0 :&#x3D; removed&lt;br&gt; 1 :&#x3D; invited&lt;br&gt; 2 :&#x3D; member&lt;br&gt; 3 :&#x3D; admin&lt;br&gt; 4 :&#x3D; owner  # noqa: E501
 
     :param body: Information about the user to have the privileges changed
     :type body: dict | bytes
@@ -33,17 +33,19 @@ def change_user_privilege(body):  # noqa: E501
     return ctl.change_user_privilege(body)
 
 
-def get_org_users(org_id):  # noqa: E501
+def get_org_users(org_id, min_privilege_level=None):  # noqa: E501
     """Fetch org users
 
     Get all users # noqa: E501
 
     :param org_id: The id of the org
     :type org_id: int
+    :param min_privilege_level: The minimum privilege level a user must have in order to be fetched
+    :type min_privilege_level: int
 
     :rtype: InlineResponse2003
     """
-    return ctl.get_org_users(org_id)
+    return ctl.get_org_users(org_id, min_privilege_level)
 
 
 def org_invite_user(body):  # noqa: E501

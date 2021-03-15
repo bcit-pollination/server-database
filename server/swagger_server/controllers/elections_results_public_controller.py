@@ -4,19 +4,20 @@ import six
 from swagger_server.models.election_results import ElectionResults  # noqa: E501
 from swagger_server.models.inline_response2006 import InlineResponse2006  # noqa: E501
 from swagger_server import util
+import src.endpoint_controllers.elections_results_public_controller as ctl
 
 
 def get_public_election_result(election_id):  # noqa: E501
     """Get public elections
 
-    Get a list of elections with results open to the public  # noqa: E501
+    Get the results of an election elections with results open to the public  # noqa: E501
 
     :param election_id: The id of the election to get
     :type election_id: int
 
     :rtype: ElectionResults
     """
-    return 'do some magic!'
+    return ctl.get_public_election_result(election_id)
 
 
 def get_public_election_result_list(page, elections_per_page):  # noqa: E501
@@ -31,4 +32,4 @@ def get_public_election_result_list(page, elections_per_page):  # noqa: E501
 
     :rtype: InlineResponse2006
     """
-    return 'do some magic!'
+    return ctl.get_public_election_result_list(page, elections_per_page)

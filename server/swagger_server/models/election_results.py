@@ -8,8 +8,6 @@ from typing import List, Dict  # noqa: F401
 from swagger_server.models.base_model_ import Model
 from swagger_server.models.election import Election  # noqa: F401,E501
 from swagger_server.models.org import Org  # noqa: F401,E501
-from swagger_server.models.private_election_results import PrivateElectionResults  # noqa: F401,E501
-from swagger_server.models.question_results import QuestionResults  # noqa: F401,E501
 from swagger_server.models.vote import Vote  # noqa: F401,E501
 from swagger_server import util
 
@@ -19,35 +17,30 @@ class ElectionResults(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, question_results: List[QuestionResults]=None, user_votes: List[Vote]=None, org_info: Org=None, election_info: Election=None):  # noqa: E501
+    def __init__(self, org_info: Org=None, election_info: Election=None, user_votes: List[Vote]=None):  # noqa: E501
         """ElectionResults - a model defined in Swagger
 
-        :param question_results: The question_results of this ElectionResults.  # noqa: E501
-        :type question_results: List[QuestionResults]
-        :param user_votes: The user_votes of this ElectionResults.  # noqa: E501
-        :type user_votes: List[Vote]
         :param org_info: The org_info of this ElectionResults.  # noqa: E501
         :type org_info: Org
         :param election_info: The election_info of this ElectionResults.  # noqa: E501
         :type election_info: Election
+        :param user_votes: The user_votes of this ElectionResults.  # noqa: E501
+        :type user_votes: List[Vote]
         """
         self.swagger_types = {
-            'question_results': List[QuestionResults],
-            'user_votes': List[Vote],
             'org_info': Org,
-            'election_info': Election
+            'election_info': Election,
+            'user_votes': List[Vote]
         }
 
         self.attribute_map = {
-            'question_results': 'question_results',
-            'user_votes': 'user_votes',
             'org_info': 'org_info',
-            'election_info': 'election_info'
+            'election_info': 'election_info',
+            'user_votes': 'user_votes'
         }
-        self._question_results = question_results
-        self._user_votes = user_votes
         self._org_info = org_info
         self._election_info = election_info
+        self._user_votes = user_votes
 
     @classmethod
     def from_dict(cls, dikt) -> 'ElectionResults':
@@ -59,54 +52,6 @@ class ElectionResults(Model):
         :rtype: ElectionResults
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def question_results(self) -> List[QuestionResults]:
-        """Gets the question_results of this ElectionResults.
-
-        The results for each question posed  # noqa: E501
-
-        :return: The question_results of this ElectionResults.
-        :rtype: List[QuestionResults]
-        """
-        return self._question_results
-
-    @question_results.setter
-    def question_results(self, question_results: List[QuestionResults]):
-        """Sets the question_results of this ElectionResults.
-
-        The results for each question posed  # noqa: E501
-
-        :param question_results: The question_results of this ElectionResults.
-        :type question_results: List[QuestionResults]
-        """
-        if question_results is None:
-            raise ValueError("Invalid value for `question_results`, must not be `None`")  # noqa: E501
-
-        self._question_results = question_results
-
-    @property
-    def user_votes(self) -> List[Vote]:
-        """Gets the user_votes of this ElectionResults.
-
-        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
-
-        :return: The user_votes of this ElectionResults.
-        :rtype: List[Vote]
-        """
-        return self._user_votes
-
-    @user_votes.setter
-    def user_votes(self, user_votes: List[Vote]):
-        """Sets the user_votes of this ElectionResults.
-
-        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
-
-        :param user_votes: The user_votes of this ElectionResults.
-        :type user_votes: List[Vote]
-        """
-
-        self._user_votes = user_votes
 
     @property
     def org_info(self) -> Org:
@@ -153,3 +98,26 @@ class ElectionResults(Model):
             raise ValueError("Invalid value for `election_info`, must not be `None`")  # noqa: E501
 
         self._election_info = election_info
+
+    @property
+    def user_votes(self) -> List[Vote]:
+        """Gets the user_votes of this ElectionResults.
+
+        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
+
+        :return: The user_votes of this ElectionResults.
+        :rtype: List[Vote]
+        """
+        return self._user_votes
+
+    @user_votes.setter
+    def user_votes(self, user_votes: List[Vote]):
+        """Sets the user_votes of this ElectionResults.
+
+        The votes cast. Optional and dependant on whether the election was anonymous  # noqa: E501
+
+        :param user_votes: The user_votes of this ElectionResults.
+        :type user_votes: List[Vote]
+        """
+
+        self._user_votes = user_votes

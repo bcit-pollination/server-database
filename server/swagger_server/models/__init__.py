@@ -5,6 +5,7 @@ from __future__ import absolute_import
 # import models into model package
 from swagger_server.models.choice import Choice
 from swagger_server.models.election import Election
+from swagger_server.models.election_info import ElectionInfo
 from swagger_server.models.election_results import ElectionResults
 from swagger_server.models.inline_response200 import InlineResponse200
 from swagger_server.models.inline_response2001 import InlineResponse2001
@@ -16,6 +17,7 @@ from swagger_server.models.inline_response2006 import InlineResponse2006
 from swagger_server.models.inline_response2007 import InlineResponse2007
 from swagger_server.models.inline_response404 import InlineResponse404
 from swagger_server.models.new_org import NewOrg
+from swagger_server.models.one_ofquestion_options_items import OneOfquestionOptionsItems
 from swagger_server.models.option import Option
 from swagger_server.models.option_results import OptionResults
 from swagger_server.models.org import Org
