@@ -22,23 +22,28 @@ def get_votes(election_id):
     current_last_name = ""
     current_choices = []
     for choice_tuple in votes_tuple_list:
-        voting_token = choice_tuple[7]
+        voting_token = choice_tuple[8]
+        if current_token == "":
+            current_token = voting_token
         if voting_token != current_token:
             vote = Vote(current_first_name, current_last_name, choices=current_choices, time_stamp=current_timestamp,
                         location=current_location)
-            votes.append(vote)
             current_token = voting_token
             current_first_name = choice_tuple[0]
             current_last_name = choice_tuple[1]
             current_location = ""
-            current_timestamp = choice_tuple[6]
+            current_timestamp = choice_tuple[7]
             current_choices = []
+            votes.append(vote)
         question_id = choice_tuple[2]
         option_id = choice_tuple[4]
-        order_position = choice_tuple[5]
+        order_position = choice_tuple[6]
         choice = Choice(question_id, option_id, order_position)
         current_choices.append(choice)
-    return votes[1:]
+    vote = Vote(current_first_name, current_last_name, choices=current_choices, time_stamp=current_timestamp,
+                location=current_location)
+    votes.append(vote)
+    return votes
 
 
 def asses_auth_for_election(org_id, uid):
@@ -63,8 +68,6 @@ def get_election_results(election_id, token_info):  # noqa: E501
     if not election.public_results:
         asses_auth_for_election(election.org_id, token_info[JwtTokenKeys.UID])
 
-    votes = get_votes(election_id)
-
     user_org = get_org(election.org_id)
     org = Org(user_org.org_id, user_org.name)
 
@@ -74,5 +77,7 @@ def get_election_results(election_id, token_info):  # noqa: E501
     if election.anonymous:
         result_model = ElectionResults(org_info=org, election_info=election)
         return result_model
+
+    votes = get_votes(election_id)
     result_model = ElectionResults(user_votes=votes, org_info=org, election_info=election)
     return result_model
