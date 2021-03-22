@@ -12,6 +12,14 @@ import src.db.mysql_interface as db
 from src.constants_enums.obj_keys import *
 
 
+def get_ordered_questions_max_weight(election):
+    ordered_questions_ids = {}
+    for question in election.questions:
+        if question.ordered_choices:
+            ordered_questions_ids[question.question_id] = question.max_selection_count
+    return ordered_questions_ids
+
+
 def get_votes(election_id):
     votes_tuple_list = db.get_election_votes(election_id)
     votes = []
@@ -53,6 +61,18 @@ def asses_auth_for_election(org_id, uid):
     privilege = privilege_tuple[0]
     if privilege < PrivilegeLevels.MEMBER:
         raise Unauthorized("You are not authorized to access the requested election")
+
+
+def evaluate_results_for_ordered_election(election, votes):
+    ordered_questions_weights = get_ordered_questions_max_weight(election)
+
+    option_weights = {}
+    for vote in votes:
+        for choice in vote.choices:
+            if choice.question_id in ordered_questions_weights:
+                if choice.question_id not in option_weights:
+                    option_weights[choice.option_id] = 0
+                choice_weight = ordered_questions_weights[choice.question_id]
 
 
 def get_election_results(election_id, token_info):  # noqa: E501

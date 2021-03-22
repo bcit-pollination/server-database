@@ -1,6 +1,8 @@
 from src.endpoint_controllers import user_controller as ctl
+from src.utils.logging import with_exception_log
 
 
+@with_exception_log
 def app_create_user(body):  # noqa: E501
     """Create user
 
@@ -15,6 +17,7 @@ def app_create_user(body):  # noqa: E501
     return ctl.app_create_user(body)
 
 
+@with_exception_log
 def get_user(token_info):  # noqa: E501
     """Get user info
 
@@ -26,6 +29,7 @@ def get_user(token_info):  # noqa: E501
     return ctl.get_user(token_info)
 
 
+@with_exception_log
 def get_voting_token(token_info):  # noqa: E501
     """Get token used to vote
 
@@ -37,6 +41,7 @@ def get_voting_token(token_info):  # noqa: E501
     return ctl.get_voting_token(token_info)
 
 
+@with_exception_log
 def remove_user(token_info):  # noqa: E501
     """Remove user from service. Only a user can remove himself, hence the user is inferred from the JWT
 

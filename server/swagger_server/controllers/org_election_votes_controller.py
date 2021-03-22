@@ -1,10 +1,12 @@
 import connexion
 import six
 
+from src.utils.logging import with_exception_log
 from swagger_server import util
 import src.endpoint_controllers.org_election_votes_controller as ctl
 
 
+@with_exception_log
 def upload_election_votes(body):  # noqa: E501
     """Create/Update election results
 

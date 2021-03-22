@@ -1,11 +1,13 @@
 import connexion
 import six
 
+from src.utils.logging import with_exception_log
 from swagger_server.models.inline_response2006 import InlineResponse2006  # noqa: E501
 from swagger_server import util
 import src.endpoint_controllers.elections_results_public_controller as ctl
 
 
+@with_exception_log
 def get_public_election_result_list(page, elections_per_page):  # noqa: E501
     """Get public elections
 

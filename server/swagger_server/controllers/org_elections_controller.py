@@ -1,6 +1,7 @@
 import connexion
 import six
 
+from src.utils.logging import with_exception_log
 from swagger_server.models.election import Election  # noqa: E501
 from swagger_server.models.inline_response2004 import InlineResponse2004  # noqa: E501
 from swagger_server.models.inline_response2005 import InlineResponse2005  # noqa: E501
@@ -8,6 +9,7 @@ from swagger_server import util
 from src.endpoint_controllers import org_elections_controller as ctl
 
 
+@with_exception_log
 def create_election(body):  # noqa: E501
     """Create election
 
@@ -21,6 +23,7 @@ def create_election(body):  # noqa: E501
     return ctl.create_election(body)
 
 
+@with_exception_log
 def delete_election(election_id):  # noqa: E501
     """Delete election
 
@@ -34,6 +37,7 @@ def delete_election(election_id):  # noqa: E501
     return ctl.delete_election(election_id)
 
 
+@with_exception_log
 def get_election(election_id):  # noqa: E501
     """Get election info
 
@@ -47,6 +51,7 @@ def get_election(election_id):  # noqa: E501
     return ctl.get_election(election_id)
 
 
+@with_exception_log
 def get_election_list(org_id):  # noqa: E501
     """Get election info list
 
@@ -60,6 +65,7 @@ def get_election_list(org_id):  # noqa: E501
     return ctl.get_election_list(org_id)
 
 
+@with_exception_log
 def update_election(body):  # noqa: E501
     """update election
 

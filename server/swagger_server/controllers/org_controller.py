@@ -1,6 +1,7 @@
 import connexion
 import six
 
+from src.utils.logging import with_exception_log
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server.models.user_org import UserOrg  # noqa: E501
@@ -9,6 +10,7 @@ from swagger_server import util
 from src.endpoint_controllers import org_controller as ctl
 
 
+@with_exception_log
 def create_org(body, token_info):  # noqa
     """Create org
 
@@ -22,6 +24,7 @@ def create_org(body, token_info):  # noqa
     return ctl.create_org(body, token_info)
 
 
+@with_exception_log
 def disband_org(token_info):  # noqa: E501
     """Disband org
 
@@ -33,6 +36,7 @@ def disband_org(token_info):  # noqa: E501
     return ctl.disband_org(token_info)
 
 
+@with_exception_log
 def get_org(org_id):  # noqa: E501
     """Get org info
 
@@ -46,6 +50,7 @@ def get_org(org_id):  # noqa: E501
     return ctl.get_org(org_id)
 
 
+@with_exception_log
 def get_org_list(token_info):  # noqa: E501
     """Get org info
 
@@ -57,6 +62,7 @@ def get_org_list(token_info):  # noqa: E501
     return ctl.get_org_list(token_info)
 
 
+@with_exception_log
 def get_verifier_password(body):  # noqa: E501
     """Get password used by ID verifiers to login into voting machine
 
@@ -70,6 +76,7 @@ def get_verifier_password(body):  # noqa: E501
     return ctl.get_verifier_password(body)
 
 
+@with_exception_log
 def update_org(body):  # noqa: E501
     """Update org info
 

@@ -1,12 +1,14 @@
 import connexion
 import six
 
+from src.utils.logging import with_exception_log
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from swagger_server.models.inline_response404 import InlineResponse404  # noqa: E501
 from swagger_server import util
 from src.endpoint_controllers import org_users_controller as ctl
 
 
+@with_exception_log
 def accept_org_invite(encrypted_data):  # noqa: E501
     """Accept invitation user to org
 
@@ -20,6 +22,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
     return ctl.accept_org_invite(encrypted_data)
 
 
+@with_exception_log
 def change_user_privilege(body):  # noqa: E501
     """Change user privileges
 
@@ -33,6 +36,7 @@ def change_user_privilege(body):  # noqa: E501
     return ctl.change_user_privilege(body)
 
 
+@with_exception_log
 def get_org_users(org_id, min_privilege_level=None):  # noqa: E501
     """Fetch org users
 
@@ -48,6 +52,7 @@ def get_org_users(org_id, min_privilege_level=None):  # noqa: E501
     return ctl.get_org_users(org_id, min_privilege_level)
 
 
+@with_exception_log
 def org_invite_user(body):  # noqa: E501
     """Add user to org
 
@@ -61,6 +66,7 @@ def org_invite_user(body):  # noqa: E501
     return ctl.org_invite_user(body)
 
 
+@with_exception_log
 def remove_org_user(body):  # noqa: E501
     """Remove user from org
 

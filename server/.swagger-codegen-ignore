@@ -33,3 +33,4 @@ swagger_server/controllers/org_election_download_controller.py
 swagger_server/controllers/org_election_votes_controller.py
 swagger_server/controllers/org_election_results_controller.py
 swagger_server/controllers/elections_results_public_controller.py
+swagger_server/__main__.py
