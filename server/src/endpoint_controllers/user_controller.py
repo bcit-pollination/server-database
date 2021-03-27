@@ -1,5 +1,7 @@
 from random import random
 
+from werkzeug.exceptions import InternalServerError
+
 from src.constants_enums.obj_keys import JwtTokenKeys
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.user import User  # noqa: E501
@@ -48,7 +50,10 @@ def get_voting_token(token_info):  # noqa: E501
     :rtype: VotingToken
     """
     voting_token = db.get_user_token(token_info[JwtTokenKeys.UID])
-    return VotingToken(voting_token)
+    if voting_token is None or len(voting_token) == 0:
+        print("Could not find token for: ", token_info)
+        raise InternalServerError("Could not retrieve the voting token for one of the voters")
+    return VotingToken(voting_token[0])
 
 
 def remove_user(token_info):  # noqa: E501
