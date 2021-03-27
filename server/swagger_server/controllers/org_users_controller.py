@@ -53,7 +53,7 @@ def get_org_users(org_id, min_privilege_level=None):  # noqa: E501
 
 
 @with_exception_log
-def org_invite_user(body):  # noqa: E501
+def org_invite_user(body, token_info):  # noqa: E501
     """Add user to org
 
     Use this to invite user to org # noqa: E501
@@ -63,7 +63,7 @@ def org_invite_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.org_invite_user(body)
+    return ctl.org_invite_user(body, token_info)
 
 
 @with_exception_log

@@ -88,7 +88,7 @@ def get_election_results(election_id, token_info):  # noqa: E501
     if not election.public_results:
         asses_auth_for_election(election.org_id, token_info[JwtTokenKeys.UID])
 
-    user_org = get_org(election.org_id)
+    user_org = get_org(election.org_id, token_info)
     org = Org(user_org.org_id, user_org.name)
 
     if org is None:
