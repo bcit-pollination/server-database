@@ -50,14 +50,14 @@ CREATE TABLE Enrollment (
 );
 
 CREATE TABLE Election (
-    election_id 	            INT 		NOT NULL 	AUTO_INCREMENT,
-    org_id 			            INT 		NOT NULL,
-    election_description		VARCHAR(40)	NOT NULL,
-    start_time 		            VARCHAR(40) NOT NULL,
-    end_time 		            VARCHAR(40) NOT NULL,
-    anonymous 	                BOOLEAN 	NOT NULL 	DEFAULT(TRUE),
-    public_results              BOOLEAN     NOT NULL    DEFAULT(FALSE),
-    verified                    BOOLEAN     NOT NULL	DEFAULT(FALSE),
+    election_id 	            INT 			NOT NULL 	AUTO_INCREMENT,
+    org_id 			            INT 			NOT NULL,
+    election_description		VARCHAR(400)	NOT NULL,
+    start_time 		            VARCHAR(40) 	NOT NULL,
+    end_time 		            VARCHAR(40) 	NOT NULL,
+    anonymous 	                BOOLEAN 		NOT NULL 	DEFAULT(TRUE),
+    public_results              BOOLEAN     	NOT NULL    DEFAULT(FALSE),
+    verified                    BOOLEAN     	NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (election_id),
     FOREIGN KEY (org_id)
         REFERENCES Organization (org_id)
@@ -67,7 +67,7 @@ CREATE TABLE Election (
 CREATE TABLE Question (
     question_id                 INT             NOT NULL    AUTO_INCREMENT,
     election_id                 INT             NOT NULL,
-    question_description        VARCHAR(40)     NOT NULL,
+    question_description        VARCHAR(400)     NOT NULL,
     min_selection_count         INT             NOT NULL    DEFAULT 1,
     max_selection_count         INT             NOT NULL    DEFAULT 1,
     priority_selections         BOOLEAN	        NOT NULL    DEFAULT FALSE,
@@ -83,7 +83,7 @@ CREATE TABLE Question (
 CREATE TABLE Opt (
     option_id 		        INT 			NOT NULL 	AUTO_INCREMENT,
     question_id 	        INT 			NOT NULL,
-    option_description      VARCHAR(40) 	NOT NULL,
+    option_description      VARCHAR(400) 	NOT NULL,
     total_votes_for         INT				NOT NULL	DEFAULT 0,
     PRIMARY KEY (option_id),
     FOREIGN KEY (question_id)
