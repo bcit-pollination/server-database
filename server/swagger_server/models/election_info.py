@@ -14,7 +14,7 @@ class ElectionInfo(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, election_description: str=None, election_id: int=None, org_id: int=None, start_time: datetime=None, end_time: datetime=None, anonymous: bool=None, verified: bool=None, public_results: bool=None):  # noqa: E501
+    def __init__(self, election_description: str=None, election_id: int=None, org_id: int=None, start_time: str=None, end_time: str=None, anonymous: bool=None, verified: bool=None, public_results: bool=None):  # noqa: E501
         """ElectionInfo - a model defined in Swagger
 
         :param election_description: The election_description of this ElectionInfo.  # noqa: E501
@@ -24,9 +24,9 @@ class ElectionInfo(Model):
         :param org_id: The org_id of this ElectionInfo.  # noqa: E501
         :type org_id: int
         :param start_time: The start_time of this ElectionInfo.  # noqa: E501
-        :type start_time: datetime
+        :type start_time: str
         :param end_time: The end_time of this ElectionInfo.  # noqa: E501
-        :type end_time: datetime
+        :type end_time: str
         :param anonymous: The anonymous of this ElectionInfo.  # noqa: E501
         :type anonymous: bool
         :param verified: The verified of this ElectionInfo.  # noqa: E501
@@ -38,8 +38,8 @@ class ElectionInfo(Model):
             'election_description': str,
             'election_id': int,
             'org_id': int,
-            'start_time': datetime,
-            'end_time': datetime,
+            'start_time': str,
+            'end_time': str,
             'anonymous': bool,
             'verified': bool,
             'public_results': bool
@@ -147,24 +147,24 @@ class ElectionInfo(Model):
         self._org_id = org_id
 
     @property
-    def start_time(self) -> datetime:
+    def start_time(self) -> str:
         """Gets the start_time of this ElectionInfo.
 
         The time and date that an election will be open for polling  # noqa: E501
 
         :return: The start_time of this ElectionInfo.
-        :rtype: datetime
+        :rtype: str
         """
         return self._start_time
 
     @start_time.setter
-    def start_time(self, start_time: datetime):
+    def start_time(self, start_time: str):
         """Sets the start_time of this ElectionInfo.
 
         The time and date that an election will be open for polling  # noqa: E501
 
         :param start_time: The start_time of this ElectionInfo.
-        :type start_time: datetime
+        :type start_time: str
         """
         if start_time is None:
             raise ValueError("Invalid value for `start_time`, must not be `None`")  # noqa: E501
@@ -172,24 +172,24 @@ class ElectionInfo(Model):
         self._start_time = start_time
 
     @property
-    def end_time(self) -> datetime:
+    def end_time(self) -> str:
         """Gets the end_time of this ElectionInfo.
 
         The time and date that an election will be closed for polling  # noqa: E501
 
         :return: The end_time of this ElectionInfo.
-        :rtype: datetime
+        :rtype: str
         """
         return self._end_time
 
     @end_time.setter
-    def end_time(self, end_time: datetime):
+    def end_time(self, end_time: str):
         """Sets the end_time of this ElectionInfo.
 
         The time and date that an election will be closed for polling  # noqa: E501
 
         :param end_time: The end_time of this ElectionInfo.
-        :type end_time: datetime
+        :type end_time: str
         """
         if end_time is None:
             raise ValueError("Invalid value for `end_time`, must not be `None`")  # noqa: E501

@@ -15,7 +15,7 @@ class OrgUser(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
+    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: str=None, password: str=None, privilege: int=None, user_org_id: str=None):  # noqa: E501
         """OrgUser - a model defined in Swagger
 
         :param uid: The uid of this OrgUser.  # noqa: E501
@@ -27,7 +27,7 @@ class OrgUser(Model):
         :param email: The email of this OrgUser.  # noqa: E501
         :type email: str
         :param dob: The dob of this OrgUser.  # noqa: E501
-        :type dob: date
+        :type dob: str
         :param password: The password of this OrgUser.  # noqa: E501
         :type password: str
         :param privilege: The privilege of this OrgUser.  # noqa: E501
@@ -40,7 +40,7 @@ class OrgUser(Model):
             'first_name': str,
             'last_name': str,
             'email': str,
-            'dob': date,
+            'dob': str,
             'password': str,
             'privilege': int,
             'user_org_id': str
@@ -167,22 +167,22 @@ class OrgUser(Model):
         self._email = email
 
     @property
-    def dob(self) -> date:
+    def dob(self) -> str:
         """Gets the dob of this OrgUser.
 
 
         :return: The dob of this OrgUser.
-        :rtype: date
+        :rtype: str
         """
         return self._dob
 
     @dob.setter
-    def dob(self, dob: date):
+    def dob(self, dob: str):
         """Sets the dob of this OrgUser.
 
 
         :param dob: The dob of this OrgUser.
-        :type dob: date
+        :type dob: str
         """
         if dob is None:
             raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501

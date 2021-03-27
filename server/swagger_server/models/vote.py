@@ -15,7 +15,7 @@ class Vote(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: datetime=None, location: str=None):  # noqa: E501
+    def __init__(self, voter_first_name: str=None, voter_last_name: str=None, voting_token: str=None, choices: List[Choice]=None, time_stamp: str=None, location: str=None):  # noqa: E501
         """Vote - a model defined in Swagger
 
         :param voter_first_name: The voter_first_name of this Vote.  # noqa: E501
@@ -27,7 +27,7 @@ class Vote(Model):
         :param choices: The choices of this Vote.  # noqa: E501
         :type choices: List[Choice]
         :param time_stamp: The time_stamp of this Vote.  # noqa: E501
-        :type time_stamp: datetime
+        :type time_stamp: str
         :param location: The location of this Vote.  # noqa: E501
         :type location: str
         """
@@ -36,7 +36,7 @@ class Vote(Model):
             'voter_last_name': str,
             'voting_token': str,
             'choices': List[Choice],
-            'time_stamp': datetime,
+            'time_stamp': str,
             'location': str
         }
 
@@ -163,24 +163,24 @@ class Vote(Model):
         self._choices = choices
 
     @property
-    def time_stamp(self) -> datetime:
+    def time_stamp(self) -> str:
         """Gets the time_stamp of this Vote.
 
         The time at which the vote was cast  # noqa: E501
 
         :return: The time_stamp of this Vote.
-        :rtype: datetime
+        :rtype: str
         """
         return self._time_stamp
 
     @time_stamp.setter
-    def time_stamp(self, time_stamp: datetime):
+    def time_stamp(self, time_stamp: str):
         """Sets the time_stamp of this Vote.
 
         The time at which the vote was cast  # noqa: E501
 
         :param time_stamp: The time_stamp of this Vote.
-        :type time_stamp: datetime
+        :type time_stamp: str
         """
         if time_stamp is None:
             raise ValueError("Invalid value for `time_stamp`, must not be `None`")  # noqa: E501
