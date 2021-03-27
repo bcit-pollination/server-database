@@ -9,8 +9,8 @@ from jose import jwt, JWTError
 from werkzeug.exceptions import Unauthorized
 
 JWT_ISSUER = 'pollination.live'
-JWT_SECRET = 'SM94J7p0UYUWfw6RgUC1uqIyg2Mith6JV9dTTCBnYW0hZnyGp0e55x1mKmr1t9S'
-JWT_LIFETIME_SECONDS = 600
+JWT_SECRET = os.getenv('EMAIL_SECRET')
+JWT_LIFETIME_SECONDS = 6000
 JWT_ALGORITHM = 'HS256'
 
 
@@ -64,8 +64,7 @@ def send_registration_email(org_name, org_id, user_email):
         <h1>You have been invited to join: {org_name}</h1>
         To accept follow the link below:<br>
         https://pollination.live/api/org/users/invite/accept?encrypted_data={encrypted_data}''')
-    # api_key = os.environ.get('SENDGRID_API_KEY')
-    api_key = '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'
+    api_key = os.environ.get('SENDGRID_API_KEY')
     sg = SendGridAPIClient(api_key)
     response = sg.send(message)
     if response.status_code < 200 or 299 < response.status_code:

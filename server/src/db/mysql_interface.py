@@ -106,8 +106,8 @@ def get_user_org_list(user_id):
     return call_proc(PROCEDURE.GETUSERORGLIST, (user_id,), resp_many=True)
 
 
-def get_organization(org_id):
-    return call_proc(PROCEDURE.GETORGANIZATION, (org_id,))
+def get_organization(org_id, uid):
+    return call_proc(PROCEDURE.GETORGANIZATION, (org_id, uid))
 
 
 def update_organization(org_id, org_name, verifier_password):
@@ -224,3 +224,7 @@ def get_questions_and_options(election_id):
 
 def is_eligible(voting_token, election_id):
     return call_proc(PROCEDURE.ISELIGIBLE, (voting_token, election_id))
+
+
+def get_user_id(email):
+    return call_proc(PROCEDURE.GETUSERID, (email,))

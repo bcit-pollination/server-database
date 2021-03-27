@@ -1,4 +1,4 @@
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, Conflict
 
 from src.email.sendgrid_email import send_registration_email, decode_user_info
 from swagger_server.models import OrgUser
@@ -19,14 +19,24 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
     :rtype: None
     """
+    print(encrypted_data)
     new_user = decode_user_info(encrypted_data)
-    # uid_tuple =
+    uid_tuple = db.get_user_id(new_user[UserInfoKeys.EMAIL])
+    if not uid_tuple or len(uid_tuple) == 0:
+        # TODO we probably want to redirect to home page
+        raise NotFound("No user associated with that email")
+    org_user_info_tuple = db.get_organization(new_user[OrgInfoKeys.ORG_ID], uid_tuple[0])
+    if org_user_info_tuple is None or len(org_user_info_tuple) == 0:
+        raise NotFound("Cannot find the organization to accept invite")
+    if PrivilegeLevels.INVITEE != org_user_info_tuple[0][2]:
+        raise Conflict("You can only accept invitations if you are invited")
     change_user_privilege({
         OrgInfoKeys.PRIVILEGE: PrivilegeLevels.MEMBER,
         OrgInfoKeys.ORG_ID: new_user[OrgInfoKeys.ORG_ID],
-        UserInfoKeys.UID: new_user[UserInfoKeys.UID]
+        UserInfoKeys.UID: uid_tuple[0]
     })
-    return None
+    # TODO redirect to login page
+    return "invitation accepted", 301, {'Location': 'https://google.com'}
 
 
 def change_user_privilege(body):  # noqa: E501
@@ -88,7 +98,7 @@ def remove_org_user(body):  # noqa: E501
     return None
 
 
-def org_invite_user(body):  # noqa: E501
+def org_invite_user(body, token_info):  # noqa
     """Add user to org
 
     Use this to invite user to org # noqa: E501
@@ -100,7 +110,7 @@ def org_invite_user(body):  # noqa: E501
     """
     users_to_invite = body[OrgInfoKeys.INVITES]
     org_id = body[OrgInfoKeys.ORG_ID]
-    org_name_tuple = db.get_organization(org_id)
+    org_name_tuple = db.get_organization(org_id, token_info[JwtTokenKeys.UID])
     org_name = org_name_tuple[1]
     for user in users_to_invite:
         email = user[UserInfoKeys.EMAIL]

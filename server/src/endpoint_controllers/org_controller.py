@@ -43,7 +43,7 @@ def db_org_to_UserOrg(org_id, name, user_org_id, privilege):
     return UserOrg(org_id, name, privilege, user_org_id)
 
 
-def get_org(org_id):  # noqa: E501
+def get_org(org_id, token_info):  # noqa
     """Get org info
 
      # noqa: E501
@@ -53,7 +53,7 @@ def get_org(org_id):  # noqa: E501
 
     :rtype: UserOrg
     """
-    org = db.get_organization(org_id)
+    org = db.get_organization(org_id, token_info[UserInfoKeys.UID])
     if org is None:
         raise NotFound("No such org")
     user_org = db_org_to_UserOrg(org_id, org[1], org[3], org[2])

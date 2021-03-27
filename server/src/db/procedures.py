@@ -50,3 +50,4 @@ class PROCEDURE:
     GETOWNERORGINFO           = 'GetOwnerOrgInfo'           # uid
     GETQUESTIONSANDOPTIONS    = 'GetQuestionsAndOptions'    # election_id
     ISELIGIBLE                = 'IsEligible'                # voting_token, election_id
+    GETUSERID                 = 'GetUserId'                 # email
