@@ -28,7 +28,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
     org_user_info_tuple = db.get_organization(new_user[OrgInfoKeys.ORG_ID], uid_tuple[0])
     if org_user_info_tuple is None or len(org_user_info_tuple) == 0:
         raise NotFound("Cannot find the organization to accept invite")
-    if PrivilegeLevels.INVITEE != org_user_info_tuple[0][2]:
+    if PrivilegeLevels.INVITEE != org_user_info_tuple[2]:
         raise Conflict("You can only accept invitations if you are invited")
     change_user_privilege({
         OrgInfoKeys.PRIVILEGE: PrivilegeLevels.MEMBER,

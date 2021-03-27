@@ -626,7 +626,6 @@ components:
           type: string
         dob:
           type: string
-          format: date
           example: "yyyy-mm-dd"
         password:
           description: Will be null except when creating user
@@ -715,12 +714,10 @@ components:
           description: The id of the organization holding the election
         start_time:
           type: string
-          format: date-time
           example: "2021-01-30T08:30:00+07:30"
           description: The time and date that an election will be open for polling
         end_time:
           type: string
-          format: date-time
           example: "2021-01-30T08:30:00+07:30"
           description: The time and date that an election will be closed for polling
         anonymous:
@@ -896,7 +893,6 @@ components:
         time_stamp:
           description: The time at which the vote was cast
           type: string
-          format: date-time
           example: "2021-01-30T08:30:00+07:30"
         location:
           description: The id of the location where the vote was cast
@@ -1160,7 +1156,6 @@ components:
                 type: string
               dob:
                 type: string
-                format: date
                 example: yyyy
               password:
                 type: string

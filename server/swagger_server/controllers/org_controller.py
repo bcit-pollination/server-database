@@ -37,7 +37,7 @@ def disband_org(token_info):  # noqa: E501
 
 
 @with_exception_log
-def get_org(org_id):  # noqa: E501
+def get_org(org_id, token_info):  # noqa:
     """Get org info
 
      # noqa: E501
@@ -47,7 +47,7 @@ def get_org(org_id):  # noqa: E501
 
     :rtype: UserOrg
     """
-    return ctl.get_org(org_id)
+    return ctl.get_org(org_id, token_info)
 
 
 @with_exception_log

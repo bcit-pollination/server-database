@@ -1,6 +1,5 @@
 import MySQLdb
-from werkzeug.exceptions import Conflict, NotFound, InternalServerError
-
+from werkzeug.exceptions import Conflict, NotFound, InternalServerError, BadRequest
 from swagger_server.models.user import User
 from src.constants_enums.privileges import PrivilegeLevels
 from src.db.procedures import PROCEDURE
@@ -36,6 +35,10 @@ def call_proc(proc_name, args=None, resp_many=False):
             raise Conflict("Already in DB")
         if err.args[0] == 1366:
             raise NotFound("Not Found")
+        if err.args[0] == 1265:
+            raise BadRequest("Argument was not the right type")
+        if err.args[0] == 1406:
+            raise BadRequest("Argument is too large")
         raise InternalServerError()
     return resp
 

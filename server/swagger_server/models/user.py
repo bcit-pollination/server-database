@@ -14,7 +14,7 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: date=None, password: str=None):  # noqa: E501
+    def __init__(self, uid: int=None, first_name: str=None, last_name: str=None, email: str=None, dob: str=None, password: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
         :param uid: The uid of this User.  # noqa: E501
@@ -26,7 +26,7 @@ class User(Model):
         :param email: The email of this User.  # noqa: E501
         :type email: str
         :param dob: The dob of this User.  # noqa: E501
-        :type dob: date
+        :type dob: str
         :param password: The password of this User.  # noqa: E501
         :type password: str
         """
@@ -35,7 +35,7 @@ class User(Model):
             'first_name': str,
             'last_name': str,
             'email': str,
-            'dob': date,
+            'dob': str,
             'password': str
         }
 
@@ -156,22 +156,22 @@ class User(Model):
         self._email = email
 
     @property
-    def dob(self) -> date:
+    def dob(self) -> str:
         """Gets the dob of this User.
 
 
         :return: The dob of this User.
-        :rtype: date
+        :rtype: str
         """
         return self._dob
 
     @dob.setter
-    def dob(self, dob: date):
+    def dob(self, dob: str):
         """Sets the dob of this User.
 
 
         :param dob: The dob of this User.
-        :type dob: date
+        :type dob: str
         """
         if dob is None:
             raise ValueError("Invalid value for `dob`, must not be `None`")  # noqa: E501
