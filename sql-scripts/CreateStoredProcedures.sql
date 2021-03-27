@@ -5,6 +5,7 @@ DROP PROCEDURE IF EXISTS GetUserId;
 
 DROP PROCEDURE IF EXISTS DeactivateUser;
 DROP PROCEDURE IF EXISTS GetUser;
+
 DROP PROCEDURE IF EXISTS CreateUser;
 DROP PROCEDURE IF EXISTS GetUserToken;
 DROP PROCEDURE IF EXISTS UpdateUser;
@@ -254,20 +255,21 @@ BEGIN
     WHERE o.org_id = org_id;
 END; //
 
-
 /** 
  * Gets an organization's id and name, 
- * as well as all of the users' privileges and user_org_ids.
+ * as well as the specified user's privilege and user_org_id.
  */
 CREATE PROCEDURE GetOrg(
-    IN org_id INT)
+    IN org_id INT,
+    IN user_id INT)
 BEGIN
     SELECT o.org_id, o.org_name, e.privilege, e.user_org_id FROM Users u
         INNER JOIN Enrollment e
             ON u.user_id = e.user_id
         INNER JOIN Organization o
             ON e.org_id = o.org_id
-    WHERE o.org_id = org_id;
+    WHERE o.org_id = org_id
+    AND u.user_id = user_id;
 END; //
 
 /**
