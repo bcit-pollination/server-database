@@ -678,8 +678,15 @@ proc: BEGIN
         SET SQL_SAFE_UPDATES = 0;
         UPDATE Opt op
             INNER JOIN Choice c ON op.option_id = c.option_id
+            INNER JOIN Question q ON op.question_id = q.question_id 
+            SET op.total_votes_for = op.total_votes_for - (q.max_selection_count - c.priority + 1)
+            WHERE c.vote_id = vote_id
+            AND c.priority > 0;
+		UPDATE Opt op
+            INNER JOIN Choice c ON op.option_id = c.option_id
             SET op.total_votes_for = op.total_votes_for - 1
-            WHERE c.vote_id = vote_id;
+            WHERE c.vote_id = vote_id
+            AND c.priority = 0;
         SET SQL_SAFE_UPDATES = 1;
         DELETE FROM Choice c 
             WHERE c.vote_id = vote_id;
@@ -699,9 +706,16 @@ BEGIN
     INSERT INTO Choice(vote_id, option_id, priority)
     VALUES(vote_id, option_id, priority);
     SELECT LAST_INSERT_ID() AS `choice_id`;
+    IF (priority > 0) THEN
+    UPDATE Opt o
+		INNER JOIN Question q ON q.question_id = o.question_id
+        SET o.total_votes_for = o.total_votes_for + (q.max_selection_count - priority + 1)
+        WHERE o.option_id = option_id;
+	ELSE
     UPDATE Opt o
         SET o.total_votes_for = o.total_votes_for + 1
         WHERE o.option_id = option_id;
+	END IF;
 END; //
 
 
@@ -730,7 +744,7 @@ CREATE PROCEDURE GetPublicElections(
     IN page_num INT)
 BEGIN
     DECLARE page_index INT;
-    SELECT page_num - 1
+    SELECT (page_num - 1) * count
     INTO page_index;
     
     SELECT e.* FROM Election e
