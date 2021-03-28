@@ -18,6 +18,7 @@ DROP PROCEDURE IF EXISTS UpdateOrg;
 DROP PROCEDURE IF EXISTS UpdateUserOrgId;
 DROP PROCEDURE IF EXISTS UpdateVerifierPassword;
 DROP PROCEDURE IF EXISTS GetOrg;
+DROP PROCEDURE IF EXISTS GetOrgName;
 DROP PROCEDURE IF EXISTS GetUserOrgId;
 DROP PROCEDURE IF EXISTS GetVerifierPassword;
 DROP PROCEDURE IF EXISTS GetUserOrgListInfo;
@@ -270,6 +271,17 @@ BEGIN
             ON e.org_id = o.org_id
     WHERE o.org_id = org_id
     AND u.user_id = user_id;
+END; //
+
+/** 
+ * Gets an organization's name.
+ */
+CREATE PROCEDURE GetOrgName(
+    IN org_id INT)
+BEGIN
+    SELECT o.org_name
+    FROM Organization o
+    WHERE o.org_id = org_id;
 END; //
 
 /**
