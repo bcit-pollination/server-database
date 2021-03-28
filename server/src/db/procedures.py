@@ -35,7 +35,7 @@ class PROCEDURE:
     GETELECTIONSATLERNATE     = 'GetElectionsAlternate'     # user_id
     GETQUESTIONOPT            = 'GetQuestionOptions'        # question_id
     GETELECTIONQUESTIONS      = 'GetQuestions'              # election_id
-    GETPUBLICELECTIONS        = 'GetPublicElections'        # NOTHING
+    GETPUBLICELECTIONS        = 'GetPublicElections'        # page, elections_per_page
     ADDQUESTION               = 'AddQuestion'               # election_id, description
     DROPQUESTION              = 'DeleteQuestion'            # question_id
     UPDATEQUESTION            = 'UpdateQuestion'            # question_id, description

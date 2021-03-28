@@ -18,6 +18,6 @@ def get_public_election_result_list(page, elections_per_page):  # noqa: E501
     :param elections_per_page: The page to get
     :type elections_per_page: int
 
-    :rtype: InlineResponse2006
+    :rtype: InlineResponse2009
     """
     return ctl.get_public_election_result_list(page, elections_per_page)
