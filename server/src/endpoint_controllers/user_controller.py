@@ -11,7 +11,7 @@ import src.db.mysql_interface as db
 from src.auth.jwt import generate_token
 
 
-def app_create_user(body):  # noqa: E501
+def create_user(body):  # noqa: E501
     """Create user
 
      # noqa: E501

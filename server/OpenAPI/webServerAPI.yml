@@ -78,7 +78,7 @@ paths:
       tags:
         - user
       summary: Create user
-      operationId: app.createUser
+      operationId: create_user
       requestBody:
         $ref: "#/components/requestBodies/new_user"
       responses:

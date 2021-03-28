@@ -80,7 +80,7 @@ paths:
       tags:
       - user
       summary: Create user
-      operationId: app_create_user
+      operationId: create_user
       requestBody:
         $ref: '#/components/requestBodies/new_user'
       responses:

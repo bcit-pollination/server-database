@@ -3,7 +3,7 @@ from src.utils.logging import with_exception_log
 
 
 @with_exception_log
-def app_create_user(body):  # noqa: E501
+def create_user(body):  # noqa: E501
     """Create user
 
      # noqa: E501
@@ -14,7 +14,7 @@ def app_create_user(body):  # noqa: E501
     :rtype: InlineResponse200
     """
 
-    return ctl.app_create_user(body)
+    return ctl.create_user(body)
 
 
 @with_exception_log
