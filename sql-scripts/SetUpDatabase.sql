@@ -8,7 +8,7 @@ CREATE TABLE Users (
     last_name 			VARCHAR(40) 	NOT NULL,
     email               VARCHAR(40)     NOT NULL	UNIQUE,
     dob                 DATE            NOT NULL,
-    password	        VARCHAR(72)     NOT NULL,
+    password	        VARBINARY(200)  NOT NULL,
     voting_token		VARCHAR(36) 	NOT NULL	UNIQUE,
     deactivated			BOOLEAN			NOT NULL	DEFAULT(FALSE),
     PRIMARY KEY (user_id)

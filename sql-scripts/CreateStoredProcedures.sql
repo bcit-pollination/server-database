@@ -1,6 +1,7 @@
 USE voting_system;
 
 DROP PROCEDURE IF EXISTS LoginUser;
+DROP PROCEDURE IF EXISTS GetPassword;
 DROP PROCEDURE IF EXISTS GetUserId;
 
 DROP PROCEDURE IF EXISTS DeactivateUser;
@@ -67,12 +68,21 @@ DELIMITER //
  */
 CREATE PROCEDURE LoginUser(
     IN email VARCHAR(40),
-    IN password VARCHAR(72))
+    IN password VARBINARY(200))
 BEGIN
     SELECT user_id FROM Users u
     WHERE u.email = email 
     AND u.password = password;
 END; //
+
+
+CREATE PROCEDURE GetPassword(
+    IN email VARCHAR(40))
+BEGIN
+    SELECT password FROM Users u
+    WHERE u.email = email;
+END; //
+
 
 CREATE PROCEDURE GetUserId(
     IN email VARCHAR(40))
@@ -116,7 +126,7 @@ CREATE PROCEDURE CreateUser(
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
     IN dob DATE,
-    IN password VARCHAR(40),
+    IN password VARBINARY(200),
     IN voting_token VARCHAR(36))
 BEGIN
     INSERT INTO Users(first_name, last_name, email, dob, 
@@ -142,7 +152,7 @@ END; //
  */
 CREATE PROCEDURE UpdateUser(
     IN user_id INT,
-    IN password VARCHAR(72))
+    IN password VARBINARY(200))
 BEGIN
     UPDATE Users u
     SET u.password = password
