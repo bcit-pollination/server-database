@@ -170,10 +170,6 @@ proc: BEGIN
     WHERE e.user_id = user_id
     AND e.privilege = 4;
 
-    IF (org_id IS NULL) THEN
-        LEAVE proc;
-    END IF;
-
     UPDATE Organization o
     SET o.disabled = TRUE
     WHERE o.org_id = org_id;
@@ -209,6 +205,13 @@ CREATE PROCEDURE CreateOrg(
     IN verifier_password VARCHAR(72),
     IN user_org_id VARCHAR(40))
 BEGIN
+    DECLARE orgOwnerCount INT;
+    SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+    IF (orgOwnerCount > 0) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+    END IF;
+    
     INSERT INTO Organization(org_name, verifier_password)
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
@@ -357,10 +360,6 @@ proc: BEGIN
     FROM Users u
     WHERE u.email = email;
     
-    IF (user_id IS NULL) THEN
-        LEAVE proc;
-    END IF;
-
     INSERT INTO Enrollment(user_id, org_id, privilege, user_org_id)
     VALUES(user_id, org_id, 1, user_org_id);
     SELECT user_id;
@@ -374,6 +373,13 @@ CREATE PROCEDURE UpdatePrivilege(
     IN org_id INT,
     IN privilege INT)
 BEGIN
+	DECLARE orgOwnerCount INT;
+	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+	IF (privilege = 4 AND orgOwnerCount > 0) THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+    END IF;
+
     UPDATE Enrollment e
     SET e.privilege = privilege
     WHERE e.user_id = user_id
@@ -657,10 +663,12 @@ proc: BEGIN
 		INNER JOIN Election el
             ON el.org_id = o.org_id
     WHERE u.voting_token = voting_token
-    AND el.election_id = election_id;
+    AND el.election_id = election_id
+    AND e.privilege >= 2; /* member and above */
 
     IF (user_id IS NULL OR valid_election IS NULL) THEN
-        LEAVE proc;
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid voting_token or voting_token has no right to vote in this election';
     END IF;
 
     SELECT v.time_stamp, v.vote_id
