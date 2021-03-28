@@ -4,6 +4,7 @@ from swagger_server.models.user import User
 from src.constants_enums.privileges import PrivilegeLevels
 from src.db.procedures import PROCEDURE
 from src.constants_enums.datetime_format import DateFormats
+from src.auth.password_hashing import get_hash
 
 
 def get_db_connection() -> MySQLdb.Connection:
@@ -52,7 +53,7 @@ def create_user(user: User, voting_token) -> int:
                                             user.last_name,
                                             user.email,
                                             user.dob,
-                                            user.password,
+                                            get_hash(user.password),
                                             voting_token))
     return user[0] if user else user
 
