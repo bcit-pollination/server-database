@@ -1,4 +1,4 @@
-from werkzeug.exceptions import NotFound, Conflict
+from werkzeug.exceptions import NotFound, Conflict, BadRequest
 
 from src.email.sendgrid_email import send_registration_email, decode_user_info
 from swagger_server.models import OrgUser
@@ -30,16 +30,12 @@ def accept_org_invite(encrypted_data):  # noqa: E501
         raise NotFound("Cannot find the organization to accept invite")
     if PrivilegeLevels.INVITEE != org_user_info_tuple[2]:
         raise Conflict("You can only accept invitations if you are invited")
-    change_user_privilege({
-        OrgInfoKeys.PRIVILEGE: PrivilegeLevels.MEMBER,
-        OrgInfoKeys.ORG_ID: new_user[OrgInfoKeys.ORG_ID],
-        UserInfoKeys.UID: uid_tuple[0]
-    })
-    # TODO redirect to login page
-    return "invitation accepted", 301, {'Location': 'https://google.com'}
+    db.update_privilege(uid_tuple[0], new_user[OrgInfoKeys.ORG_ID], PrivilegeLevels.MEMBER)
+
+    return "invitation accepted", 301, {'Location': 'https://pollination.live'}
 
 
-def change_user_privilege(body):  # noqa: E501
+def change_user_privilege(body, token_info):  # noqa
     """Change user privileges
 
     user privileges are:&lt;br&gt; - 0 :&#x3D; invited&lt;br&gt; - 1 :&#x3D; member&lt;br&gt; - 2 :&#x3D; admin&lt;br&gt; - 3 :&#x3D; owner  # noqa: E501
@@ -63,6 +59,8 @@ def get_org_users(org_id, privilege_level):  # noqa: E501
 
     :rtype: InlineResponse2003
     """
+    if org_id is None or privilege_level is None:
+        raise BadRequest("must provide org_id and privilage_level in url params")
     org_users = db.get_users_from_org(org_id, privilege_level)
     if org_users is None:
         raise NotFound("No such organization")
@@ -80,7 +78,7 @@ def get_org_users(org_id, privilege_level):  # noqa: E501
     return InlineResponse2003(org_user_models)
 
 
-def remove_org_user(body):  # noqa: E501
+def remove_org_user(body, token_info):  # noqa
     """Kick user from org
 
      # noqa: E501
@@ -92,9 +90,8 @@ def remove_org_user(body):  # noqa: E501
     """
     change_user_privilege({
         OrgInfoKeys.PRIVILEGE: PrivilegeLevels.REMOVED,
-        OrgInfoKeys.ORG_ID: body[OrgInfoKeys.ORG_ID],
         UserInfoKeys.UID: body[UserInfoKeys.UID]
-    })
+    }, token_info)
     return None
 
 

@@ -19,7 +19,7 @@ def get_public_election_result_list(page, elections_per_page):  # noqa: E501
 
     :rtype: InlineResponse2009
     """
-    election_tuples = db.get_public_elections(page, elections_per_page)
+    election_tuples = db.get_public_elections(elections_per_page, page)
     elections = parse_election_tuples(election_tuples)
     return InlineResponse2009(elections)
 

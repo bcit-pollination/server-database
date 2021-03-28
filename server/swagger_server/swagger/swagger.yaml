@@ -10,7 +10,7 @@ info:
      2 := member<br>
      3 := admin<br>
      4 := owner
-  version: "1.14"
+  version: "1.15"
 servers:
 - url: https://pollination.live/api
 tags:
@@ -194,7 +194,7 @@ paths:
       summary: Update org info
       operationId: update_org
       requestBody:
-        $ref: '#/components/requestBodies/post_org'
+        $ref: '#/components/requestBodies/update_org'
       responses:
         "200":
           description: Org updated
@@ -286,7 +286,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
   /org/users/invite:
     post:
@@ -311,7 +311,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_404'
       security:
-      - admin: []
+      - admin_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
   /org/users/invite/accept:
     get:
@@ -356,7 +356,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_users_controller
   /org/users/privileges:
     put:
@@ -402,7 +402,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_controller
   /org/elections/list:
     get:
@@ -434,7 +434,7 @@ paths:
         "404":
           description: Not found
       security:
-      - member: []
+      - member_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
   /org/elections:
     get:
@@ -466,7 +466,7 @@ paths:
         "404":
           description: Not found
       security:
-      - member: []
+      - member_with_election_id: []
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
     put:
       tags:
@@ -488,7 +488,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_election_id: []
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
     post:
       tags:
@@ -512,7 +512,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_org_id: []
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
     delete:
       tags:
@@ -540,7 +540,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_election_id: []
       x-openapi-router-controller: swagger_server.controllers.org_elections_controller
   /org/elections/public/get/list:
     get:
@@ -636,7 +636,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_election_id: []
       x-openapi-router-controller: swagger_server.controllers.org_election_votes_controller
   /org/election/download:
     get:
@@ -675,7 +675,7 @@ paths:
         "404":
           description: Not found
       security:
-      - admin: []
+      - admin_with_election_id: []
       x-openapi-router-controller: swagger_server.controllers.org_election_download_controller
 components:
   schemas:
@@ -998,7 +998,7 @@ components:
           result:
             type: number
             description: |
-              If question is ordered, this is the order position for this option. If not ordered, The voting proportion for this option, in percents. A float
+              The percentage of the proportion of voted for this option versus the total amount of votes
         description: |
           total_votes_for and vote_proportion_percent will only be provided when responding to get election results
     election_results:
@@ -1388,6 +1388,16 @@ components:
           schema:
             $ref: '#/components/schemas/new_org'
       required: true
+    update_org:
+      description: Used to update an org name
+      content:
+        application/json:
+          schema:
+            properties:
+              name:
+                type: string
+                description: The new name to give the org
+      required: true
     org:
       content:
         application/json:
@@ -1418,7 +1428,6 @@ components:
         application/json:
           schema:
             required:
-            - org_id
             - privilege
             - uid
             type: object
@@ -1429,9 +1438,6 @@ components:
               privilege:
                 type: integer
                 description: the new privileges for the user
-              org_id:
-                type: integer
-                description: The id of the org in which to change the privileges
             additionalProperties: false
       required: true
     election:
@@ -1490,18 +1496,30 @@ components:
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_user
-    member:
+    member_with_org_id:
       type: http
       description: Enforces access to endpoints available to org members
       scheme: bearer
       bearerFormat: JWT
-      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_member
-    admin:
+      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_member_with_org_id
+    member_with_election_id:
+      type: http
+      description: Enforces access to endpoints available to org members
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_member_with_election_id
+    admin_with_election_id:
       type: http
       description: Enforces access to endpoints available to owners and admins
       scheme: bearer
       bearerFormat: JWT
-      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_admin
+      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_admin_with_election_id
+    admin_with_org_id:
+      type: http
+      description: Enforces access to endpoints available to owners and admins
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: swagger_server.controllers.authorization_controller.check_admin_with_org_id
     owner:
       type: http
       description: Enforces access to endpoints available to org owners

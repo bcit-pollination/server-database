@@ -176,8 +176,8 @@ def get_election_questions(election_id):
     return call_proc(PROCEDURE.GETELECTIONQUESTIONS, (election_id,), resp_many=True)
 
 
-def get_public_elections(page, elections_per_page):
-    return call_proc(PROCEDURE.GETPUBLICELECTIONS, (page, elections_per_page), resp_many=True)
+def get_public_elections(elections_per_page, page):
+    return call_proc(PROCEDURE.GETPUBLICELECTIONS, (elections_per_page, page), resp_many=True)
 
 
 def add_question(election_id, description, min_selection_count, max_selection_count, ordered_choices):
@@ -190,7 +190,8 @@ def remove_question(question_id):
 
 
 def update_question(question_id, description, min_selection_count, max_selection_count, ordered_choices):
-    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, min_selection_count, max_selection_count, ordered_choices))
+    return call_proc(PROCEDURE.UPDATEQUESTION,
+                     (question_id, description, min_selection_count, max_selection_count, ordered_choices))
 
 
 def add_question_opt(question_id, option_description):
@@ -218,11 +219,11 @@ def add_choice(vote_id, opt_id, order_position):
 
 
 def get_owner_org_info(uid):
-    return call_proc(PROCEDURE.GETOWNERORGINFO, (uid, ))
+    return call_proc(PROCEDURE.GETOWNERORGINFO, (uid,))
 
 
 def get_questions_and_options(election_id):
-    return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id, ), resp_many=True)
+    return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id,), resp_many=True)
 
 
 def is_eligible(voting_token, election_id):
@@ -235,4 +236,3 @@ def get_user_id(email):
 
 def get_org_name(org_id):
     return call_proc(PROCEDURE.GETORGNAME, (org_id,))
-

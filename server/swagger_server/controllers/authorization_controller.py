@@ -1,28 +1,30 @@
 from typing import List
-from src.auth import authorization_control as ctl
-from src.utils.logging import with_exception_log
-
+import src.auth.authorization_control as ctl
 """
 controller generated to handled auth operation described at:
 https://connexion.readthedocs.io/en/latest/security.html
 """
 
 
-@with_exception_log
-def check_admin(token):
-    return ctl.check_admin(token)
+def check_admin_with_election_id(token):
+    return ctl.check_admin_with_election_id(token)
 
 
-@with_exception_log
-def check_member(token):
-    return ctl.check_member(token)
+def check_admin_with_org_id(token):
+    return ctl.check_admin_with_org_id(token)
 
 
-@with_exception_log
+def check_member_with_election_id(token):
+    return ctl.check_member_with_election_id(token)
+
+
+def check_member_with_org_id(token):
+    return ctl.check_member_with_org_id(token)
+
+
 def check_owner(token):
     return ctl.check_owner(token)
 
 
-@with_exception_log
 def check_user(token):
     return ctl.check_user(token)

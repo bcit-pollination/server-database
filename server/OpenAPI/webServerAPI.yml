@@ -195,7 +195,7 @@ paths:
       security:
         - owner: [ ]
       requestBody:
-        $ref: "#/components/requestBodies/post_org"
+        $ref: "#/components/requestBodies/update_org"
       responses:
         '200':
           description: Org updated
@@ -235,7 +235,7 @@ paths:
         get_org_users
       summary: Fetch org users
       security:
-        - admin: [ ]
+        - admin_with_org_id: [ ]
       parameters:
         - $ref: "#/components/parameters/org_p"
         - in: query
@@ -263,7 +263,7 @@ paths:
       operationId:
         org_invite_user
       security:
-        - admin: [ ]
+        - admin_with_org_id: [ ]
       requestBody:
         $ref: "#/components/requestBodies/org_user_invite"
       responses:
@@ -309,7 +309,7 @@ paths:
       operationId:
         remove_org_user
       security:
-        - admin: [ ]
+        - admin_with_org_id: [ ]
       requestBody:
         $ref: "#/components/requestBodies/org_user"
       responses:
@@ -357,7 +357,7 @@ paths:
       summary: Get password used by ID verifiers to login into voting machine
       operationId: get_verifier_password
       security:
-        - admin: [ ]
+        - admin_with_org_id: [ ]
       requestBody:
         $ref: "#/components/requestBodies/get_org"
       responses:
@@ -380,7 +380,7 @@ paths:
       operationId:
         get_election_list
       security:
-        - member: [ ]
+        - member_with_org_id: [ ]
       parameters:
         - $ref: "#/components/parameters/org_p"
       responses:
@@ -402,7 +402,7 @@ paths:
       operationId:
         get_election
       security:
-        - member: [ ]
+        - member_with_election_id: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -423,7 +423,7 @@ paths:
       operationId:
         create_election
       security:
-        - admin: [ ]
+        - admin_with_org_id: [ ]
       requestBody:
         $ref: "#/components/requestBodies/election"
       responses:
@@ -455,7 +455,7 @@ paths:
       operationId:
         update_election
       security:
-        - admin: [ ]
+        - admin_with_election_id: [ ]
       requestBody:
         $ref: "#/components/requestBodies/election"
       responses:
@@ -477,7 +477,7 @@ paths:
       operationId:
         delete_election
       security:
-        - admin: [ ]
+        - admin_with_election_id: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -560,7 +560,7 @@ paths:
         - org.election.votes
       summary: Create/Update election results
       security:
-        - admin: [ ]
+        - admin_with_election_id: [ ]
       operationId:
         upload_election_votes
       requestBody:
@@ -591,7 +591,7 @@ paths:
           - Verifier password
       operationId: download_voting_package
       security:
-        - admin: [ ]
+        - admin_with_election_id: [ ]
       parameters:
         - $ref: "#/components/parameters/election_p"
       responses:
@@ -1224,7 +1224,16 @@ components:
           schema:
             $ref: "#/components/schemas/new_org"
 
-
+    update_org:
+      required: true
+      description: Used to update an org name
+      content:
+        application/json:
+          schema:
+            properties:
+              name:
+                type: string
+                description: The new name to give the org
 
     org:
       required: true
@@ -1260,7 +1269,6 @@ components:
           schema:
             additionalProperties: false
             required:
-              - org_id
               - uid
               - privilege
             properties:
@@ -1272,10 +1280,6 @@ components:
                   integer
                 description:
                   the new privileges for the user
-              org_id:
-                type:
-                  integer
-                description: The id of the org in which to change the privileges
 
 
     election:
@@ -1357,19 +1361,34 @@ components:
       x-bearerInfoFunc: decode_token_user
       description: Enforces access to endpoints available to all users
 
-    member:
+    member_with_org_id:
       type: http
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: decode_token_invited
       description: Enforces access to endpoints available to org members
 
-    admin:
+    member_with_election_id:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: decode_token_invited
+      description: Enforces access to endpoints available to org members
+
+    admin_with_election_id:
       type: http
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: decode_token_admin
       description: Enforces access to endpoints available to owners and admins
+
+    admin_with_org_id:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: decode_token_admin
+      description: Enforces access to endpoints available to owners and admins
+
 
     owner:
       type: http

@@ -37,7 +37,7 @@ def disband_org(token_info):  # noqa: E501
 
 
 @with_exception_log
-def get_org(org_id, token_info):  # noqa: E501
+def get_org(org_id, token_info):  # noqa:
     """Get org info
 
      # noqa: E501
@@ -77,7 +77,7 @@ def get_verifier_password(body):  # noqa: E501
 
 
 @with_exception_log
-def update_org(body):  # noqa: E501
+def update_org(body, token_info):  # noqa
     """Update org info
 
      # noqa: E501
@@ -87,4 +87,4 @@ def update_org(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.update_org(body)
+    return ctl.update_org(body, token_info)

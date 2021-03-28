@@ -23,7 +23,7 @@ def accept_org_invite(encrypted_data):  # noqa: E501
 
 
 @with_exception_log
-def change_user_privilege(body):  # noqa: E501
+def change_user_privilege(body, token_info):  # noqa
     """Change user privileges
 
     user privileges are:&lt;br&gt; 0 :&#x3D; removed&lt;br&gt; 1 :&#x3D; invited&lt;br&gt; 2 :&#x3D; member&lt;br&gt; 3 :&#x3D; admin&lt;br&gt; 4 :&#x3D; owner  # noqa: E501
@@ -33,7 +33,7 @@ def change_user_privilege(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.change_user_privilege(body)
+    return ctl.change_user_privilege(body, token_info)
 
 
 @with_exception_log
@@ -67,7 +67,7 @@ def org_invite_user(body, token_info):  # noqa: E501
 
 
 @with_exception_log
-def remove_org_user(body):  # noqa: E501
+def remove_org_user(body, token_info):  # noqa
     """Remove user from org
 
      # noqa: E501
@@ -77,4 +77,4 @@ def remove_org_user(body):  # noqa: E501
 
     :rtype: None
     """
-    return ctl.remove_org_user(body)
+    return ctl.remove_org_user(body, token_info)

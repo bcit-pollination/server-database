@@ -92,7 +92,7 @@ def get_verifier_password(body):  # noqa: E501
     return VerifierPassword(verifier_password[0])
 
 
-def update_org(body):  # noqa: E501
+def update_org(body, token_info):  # noqa
     """Update org info
 
      # noqa: E501
@@ -104,6 +104,7 @@ def update_org(body):  # noqa: E501
     """
     name = body[OrgInfoKeys.NAME]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    org_id = body[OrgInfoKeys.ORG_ID]
+    org_id_tuple = db.get_owner_org_info(token_info[JwtTokenKeys.UID])
+    org_id = org_id_tuple[0]
     db.update_organization(org_id, name, verifier_password)
     return None
