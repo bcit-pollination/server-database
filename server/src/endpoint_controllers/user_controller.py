@@ -1,5 +1,5 @@
 from random import random
-
+import secrets
 from werkzeug.exceptions import InternalServerError
 
 from src.constants_enums.obj_keys import JwtTokenKeys
@@ -22,8 +22,7 @@ def app_create_user(body):  # noqa: E501
     :rtype: InlineResponse200
     """
     user_model = User.from_dict(body)
-    random_number = random() * 10000000000000000000
-    fake_voting_token = f"fake_token{random_number}"
+    fake_voting_token = secrets.token_urlsafe(24)
     uid = db.create_user(user_model, fake_voting_token)
     token = generate_token(uid)
     return InlineResponse200(token)
