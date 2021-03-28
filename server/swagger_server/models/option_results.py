@@ -15,7 +15,7 @@ class OptionResults(Option):
 
     Do not edit the class manually.
     """
-    def __init__(self, option_id: int=None, option_description: str=None, total_votes_for: float=None, vote_proportion_percent: float=None):  # noqa: E501
+    def __init__(self, option_id: int=None, option_description: str=None, total_votes_for: float=None, result: float=None):  # noqa: E501
         """OptionResults - a model defined in Swagger
 
         :param option_id: The option_id of this OptionResults.  # noqa: E501
@@ -24,25 +24,25 @@ class OptionResults(Option):
         :type option_description: str
         :param total_votes_for: The total_votes_for of this OptionResults.  # noqa: E501
         :type total_votes_for: float
-        :param vote_proportion_percent: The vote_proportion_percent of this OptionResults.  # noqa: E501
-        :type vote_proportion_percent: float
+        :param result: The vote_proportion_percent of this OptionResults.  # noqa: E501
+        :type result: float
         """
         Option.__init__(self, option_id, option_description )
         self.swagger_types = {
             'option_id': int,
             'option_description': str,
             'total_votes_for': float,
-            'vote_proportion_percent': float
+            'result': float
         }
 
         self.attribute_map = {
             'option_id': 'option_id',
             'option_description': 'option_description',
             'total_votes_for': 'total_votes_for',
-            'vote_proportion_percent': 'vote_proportion_percent'
+            'result': 'result'
         }
         self._total_votes_for = total_votes_for
-        self._vote_proportion_percent = vote_proportion_percent
+        self._vote_proportion_percent = result
 
     @classmethod
     def from_dict(cls, dikt) -> 'OptionResults':

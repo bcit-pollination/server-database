@@ -6,7 +6,7 @@ from swagger_server.models import Option, Question, Election
 from swagger_server.models.option_results import OptionResults
 
 
-def get_question_options(question_id):
+def get_question_options(question_id, ordered):
     options = db.get_question_opt(question_id)
     if options is None or len(options) == 0:
         raise NotFound(f"No question options found question_id: {question_id}")
@@ -18,7 +18,7 @@ def get_question_options(question_id):
     if total_votes_cast == 0:
         return option_model_list
     for option_model in option_model_list:
-        option_model.vote_proportion_percent = option_model.total_votes_for / total_votes_cast * 100
+        option_model.result = option_model.total_votes_for / total_votes_cast * 100
     return option_model_list
 
 
@@ -33,7 +33,7 @@ def get_election_questions(election_id):
         min_selection_count = question[2]
         max_selection_count = question[3]
         ordered_choices = question[4] == 1
-        options = get_question_options(question_id)
+        options = get_question_options(question_id, ordered_choices)
         question_models.append(Question(question_id, question_description, election_id, min_selection_count,
                                         max_selection_count, ordered_choices, options))
     return question_models

@@ -97,7 +97,7 @@ def check_owner(token):
 
 
 def check_user(token):
-    token = jwt.decode_token(token)
-    if not db.get_user(token[JwtTokenKeys.UID]):
+    token_info = jwt.decode_token(token)
+    if not db.get_user(token_info[JwtTokenKeys.UID]):
         raise NotFound("User is not found in db")
-    return token
+    return token_info

@@ -51,3 +51,4 @@ class PROCEDURE:
     GETQUESTIONSANDOPTIONS    = 'GetQuestionsAndOptions'    # election_id
     ISELIGIBLE                = 'IsEligible'                # voting_token, election_id
     GETUSERID                 = 'GetUserId'                 # email
+    GETORGNAME                = 'GetOrgName'                # org_id

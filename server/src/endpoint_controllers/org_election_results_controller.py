@@ -2,6 +2,7 @@ import connexion
 import six
 from werkzeug.exceptions import NotFound, Unauthorized, InternalServerError
 
+from src.auth.jwt import decode_token
 from src.constants_enums.privileges import PrivilegeLevels
 from src.endpoint_controllers.org_controller import get_org
 from src.endpoint_controllers.org_elections_controller import get_election, get_election_with_results
@@ -75,7 +76,7 @@ def evaluate_results_for_ordered_election(election, votes):
                 choice_weight = ordered_questions_weights[choice.question_id]
 
 
-def get_election_results(election_id, token_info):  # noqa: E501
+def get_election_results(election_id):  # noqa: E501
     """Get election voting results
 
     Get the voting results for an election. If the election is private, and the user is not a member of the org, then will respond 401: Unauthorized If there are several results for the same election, the latest version will be  # noqa: E501
@@ -83,6 +84,9 @@ def get_election_results(election_id, token_info):  # noqa: E501
 
     :rtype: ElectionResults
     """
+    # if connexion.request.headers.get('HTTP_AUTHORIZATION'):
+    split_token = connexion.request.headers.get('Authorization', str).split(" ")
+    token_info = decode_token(split_token[1])
     election = get_election_with_results(election_id)
 
     if not election.public_results:

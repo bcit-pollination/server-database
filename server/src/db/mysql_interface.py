@@ -231,3 +231,8 @@ def is_eligible(voting_token, election_id):
 
 def get_user_id(email):
     return call_proc(PROCEDURE.GETUSERID, (email,))
+
+
+def get_org_name(org_id):
+    return call_proc(PROCEDURE.GETORGNAME, (org_id,))
+
