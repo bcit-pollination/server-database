@@ -1,6 +1,7 @@
 USE voting_system;
 
 DROP PROCEDURE IF EXISTS LoginUser;
+DROP PROCEDURE IF EXISTS GetPassword;
 DROP PROCEDURE IF EXISTS GetUserId;
 
 DROP PROCEDURE IF EXISTS DeactivateUser;
@@ -67,12 +68,21 @@ DELIMITER //
  */
 CREATE PROCEDURE LoginUser(
     IN email VARCHAR(40),
-    IN password VARCHAR(72))
+    IN password VARBINARY(200))
 BEGIN
     SELECT user_id FROM Users u
     WHERE u.email = email 
     AND u.password = password;
 END; //
+
+
+CREATE PROCEDURE GetPassword(
+    IN email VARCHAR(40))
+BEGIN
+    SELECT password FROM Users u
+    WHERE u.email = email;
+END; //
+
 
 CREATE PROCEDURE GetUserId(
     IN email VARCHAR(40))
@@ -116,7 +126,7 @@ CREATE PROCEDURE CreateUser(
     IN last_name VARCHAR(40), 
     IN email VARCHAR(40),
     IN dob DATE,
-    IN password VARCHAR(40),
+    IN password VARBINARY(200),
     IN voting_token VARCHAR(36))
 BEGIN
     INSERT INTO Users(first_name, last_name, email, dob, 
@@ -142,7 +152,7 @@ END; //
  */
 CREATE PROCEDURE UpdateUser(
     IN user_id INT,
-    IN password VARCHAR(72))
+    IN password VARBINARY(200))
 BEGIN
     UPDATE Users u
     SET u.password = password
@@ -169,10 +179,6 @@ proc: BEGIN
             ON e.org_id = o.org_id
     WHERE e.user_id = user_id
     AND e.privilege = 4;
-
-    IF (org_id IS NULL) THEN
-        LEAVE proc;
-    END IF;
 
     UPDATE Organization o
     SET o.disabled = TRUE
@@ -209,6 +215,13 @@ CREATE PROCEDURE CreateOrg(
     IN verifier_password VARCHAR(72),
     IN user_org_id VARCHAR(40))
 BEGIN
+    DECLARE orgOwnerCount INT;
+    SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+    IF (orgOwnerCount > 0) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+    END IF;
+    
     INSERT INTO Organization(org_name, verifier_password)
     VALUES(org_name, verifier_password);
     SELECT LAST_INSERT_ID() AS `org_id`;
@@ -357,10 +370,6 @@ proc: BEGIN
     FROM Users u
     WHERE u.email = email;
     
-    IF (user_id IS NULL) THEN
-        LEAVE proc;
-    END IF;
-
     INSERT INTO Enrollment(user_id, org_id, privilege, user_org_id)
     VALUES(user_id, org_id, 1, user_org_id);
     SELECT user_id;
@@ -374,6 +383,13 @@ CREATE PROCEDURE UpdatePrivilege(
     IN org_id INT,
     IN privilege INT)
 BEGIN
+	DECLARE orgOwnerCount INT;
+	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+	IF (privilege = 4 AND orgOwnerCount > 0) THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+    END IF;
+
     UPDATE Enrollment e
     SET e.privilege = privilege
     WHERE e.user_id = user_id
@@ -657,10 +673,12 @@ proc: BEGIN
 		INNER JOIN Election el
             ON el.org_id = o.org_id
     WHERE u.voting_token = voting_token
-    AND el.election_id = election_id;
+    AND el.election_id = election_id
+    AND e.privilege >= 2; /* member and above */
 
     IF (user_id IS NULL OR valid_election IS NULL) THEN
-        LEAVE proc;
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid voting_token or voting_token has no right to vote in this election';
     END IF;
 
     SELECT v.time_stamp, v.vote_id
