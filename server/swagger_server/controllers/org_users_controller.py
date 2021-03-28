@@ -37,7 +37,7 @@ def change_user_privilege(body, token_info):  # noqa
 
 
 @with_exception_log
-def get_org_users(org_id, min_privilege_level=None):  # noqa: E501
+def get_org_users(org_id, min_privilege_level=1):  # noqa: E501
     """Fetch org users
 
     Get all users # noqa: E501
