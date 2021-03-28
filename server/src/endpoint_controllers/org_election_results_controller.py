@@ -84,19 +84,23 @@ def get_election_results(election_id):  # noqa: E501
 
     :rtype: ElectionResults
     """
-    # if connexion.request.headers.get('HTTP_AUTHORIZATION'):
-    split_token = connexion.request.headers.get('Authorization', str).split(" ")
-    token_info = decode_token(split_token[1])
     election = get_election_with_results(election_id)
 
     if not election.public_results:
+        token = connexion.request.headers.get('Authorization', str)
+        if token is None or not isinstance(token, str):
+            raise Unauthorized("No token, or invalid token provided")
+        split_token = token.split(" ")
+        if len(split_token) != 2:
+            raise Unauthorized("No token, or invalid token provided")
+        token_info = decode_token(split_token[1])
         asses_auth_for_election(election.org_id, token_info[JwtTokenKeys.UID])
 
-    user_org = get_org(election.org_id, token_info)
-    org = Org(user_org.org_id, user_org.name)
+    org_name_tuple = db.get_org_name(election.org_id)
+    if not org_name_tuple or len(org_name_tuple) == 0:
+        raise NotFound("No such organization")
 
-    if org is None:
-        raise NotFound("The organization info for this election was not found")
+    org = Org(election.org_id, org_name_tuple[0])
 
     if election.anonymous:
         result_model = ElectionResults(org_info=org, election_info=election)

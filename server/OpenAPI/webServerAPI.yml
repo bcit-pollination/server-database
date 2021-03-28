@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   title: Pollination Web Server
-  version: "1.14"
+  version: "1.15"
   description: >
     All values in this API are required and not nullable unless specifically stated.
 
@@ -914,8 +914,7 @@ components:
               type: number
             result:
               description: >
-                If question is ordered, this is the order position for this option. If not ordered, The voting proportion
-                for this option, in percents. A float
+                The percentage of the proportion of voted for this option versus the total amount of votes
               type: number
 
 
