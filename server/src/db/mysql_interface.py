@@ -11,6 +11,23 @@ def get_db_connection() -> MySQLdb.Connection:
     return MySQLdb.connect(read_default_file='~/.my.cnf')
 
 
+def handle_err(err_code):
+    print("SQL process failed:", err_code)
+    if err_code == 1062:
+        raise Conflict("Already in DB")
+    if err_code == 1366:
+        raise NotFound("Not Found or incorrect string value")
+    if err_code == 1265:
+        raise BadRequest("Argument was not the right type")
+    if err_code == 1406:
+        raise BadRequest("Argument is too large")
+    if err_code == 1048:
+        raise Conflict("Invalid email")
+    if err_code == 1644:
+        raise Conflict("State of request is inconsistent")
+    raise InternalServerError()
+
+
 def call_proc(proc_name, args=None, resp_many=False):
     resp = None
 
@@ -31,16 +48,7 @@ def call_proc(proc_name, args=None, resp_many=False):
                 print("Database return:", resp)
             db.commit()
     except MySQLdb.MySQLError as err:
-        print("SQL process failed:", err)
-        if err.args[0] == 1062:
-            raise Conflict("Already in DB")
-        if err.args[0] == 1366:
-            raise NotFound("Not Found")
-        if err.args[0] == 1265:
-            raise BadRequest("Argument was not the right type")
-        if err.args[0] == 1406:
-            raise BadRequest("Argument is too large")
-        raise InternalServerError()
+        handle_err(err.args[0])
     return resp
 
 
