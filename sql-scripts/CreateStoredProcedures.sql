@@ -87,7 +87,7 @@ END; //
 CREATE PROCEDURE GetUserId(
     IN email VARCHAR(40))
 BEGIN
-    SELECT user_id FROM Users u
+    SELECT user_id, password FROM Users u
     WHERE u.email = email;
 END; //
 
