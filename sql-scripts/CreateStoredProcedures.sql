@@ -235,7 +235,7 @@ END; //
 CREATE PROCEDURE UpdateOrg(
     IN org_id INT, 
     IN org_name VARCHAR(40),
-    IN verifier_password VARCHAR(72))
+    IN verifier_password VARBINARY(200))
 BEGIN
     UPDATE Organization o
     SET o.org_name = org_name,
@@ -262,7 +262,7 @@ END; //
  */
 CREATE PROCEDURE UpdateVerifierPassword(
     IN org_id INT,
-    IN verifier_password VARCHAR(72))
+    IN verifier_password VARBINARY(200))
 BEGIN
     UPDATE Organization o
     SET o.verifier_password = verifier_password
