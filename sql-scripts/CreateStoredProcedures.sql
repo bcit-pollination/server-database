@@ -218,8 +218,10 @@ BEGIN
     DECLARE orgOwnerCount INT;
     SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
     IF (orgOwnerCount > 0) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+        SIGNAL SQLSTATE '23000'
+        SET 
+			MYSQL_ERRNO = 1169,
+			MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
     END IF;
     
     INSERT INTO Organization(org_name, verifier_password)
@@ -386,8 +388,10 @@ BEGIN
 	DECLARE orgOwnerCount INT;
 	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
 	IF (privilege = 4 AND orgOwnerCount > 0) THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+        SIGNAL SQLSTATE '23000'
+        SET 
+			MYSQL_ERRNO = 1169,
+			MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
     END IF;
 
     UPDATE Enrollment e
