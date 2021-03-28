@@ -756,9 +756,10 @@ components:
       properties:
         verifier_password:
           type: string
+          format: binary
       description: The password used by verifiers to login into voting machines
       example:
-        verifier_password: verifier_password
+        verifier_password: ""
     org_user_invite:
       required:
       - email
@@ -1159,6 +1160,7 @@ components:
             OPTIONAL. The password used by id verifiers to access the voting machine.
 
             This will be present if the election is verified
+          format: binary
         voter_list:
           type: array
           description: |
@@ -1170,7 +1172,7 @@ components:
           $ref: '#/components/schemas/election'
       additionalProperties: false
       example:
-        verifier_password: verifier_password
+        verifier_password: ""
         election_info: ""
         voter_list:
         - ""

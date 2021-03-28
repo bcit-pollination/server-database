@@ -677,6 +677,7 @@ components:
       properties:
         verifier_password:
           type: string
+          format: binary
 
     org_user_invite:
       type: object
@@ -1102,6 +1103,7 @@ components:
 
                   This will be present if the election is verified
                 type: string
+                format: binary
               voter_list:
                 description: >
                   The complete voter list. includes::

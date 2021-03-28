@@ -212,7 +212,7 @@ END; //
 CREATE PROCEDURE CreateOrg(
     IN user_id INT, 
     IN org_name VARCHAR(40),
-    IN verifier_password VARCHAR(72),
+    IN verifier_password VARBINARY(200),
     IN user_org_id VARCHAR(40))
 BEGIN
     DECLARE orgOwnerCount INT;

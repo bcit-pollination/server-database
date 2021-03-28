@@ -27,7 +27,7 @@ CREATE TABLE Vote (
 CREATE TABLE Organization (
     org_id 				INT 			NOT NULL 	AUTO_INCREMENT,
     org_name 			VARCHAR(40) 	NOT NULL 	UNIQUE				DEFAULT('Unknown'),
-    verifier_password   VARCHAR(72)     NOT NULL,
+    verifier_password   VARBINARY(200)     NOT NULL,
     disabled			BOOLEAN			NOT NULL    DEFAULT(FALSE),
     PRIMARY KEY (org_id)
 );

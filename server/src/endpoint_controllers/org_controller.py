@@ -1,5 +1,8 @@
+import base64
+
 from werkzeug.exceptions import NotFound
 
+from src.auth.password_hashing import get_hash
 from swagger_server.models import Org
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
@@ -22,7 +25,8 @@ def create_org(body, token_info):  # noqa
     name = body[OrgInfoKeys.NAME]
     user_org_id = body[OrgInfoKeys.USER_ORG_ID]
     verifier_password = body[OrgInfoKeys.VERIFIER_PASSWORD]
-    org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password, user_org_id)
+    verifier_password_hash = get_hash(verifier_password)
+    org_id = db.create_org(token_info[JwtTokenKeys.UID], name, verifier_password_hash, user_org_id)
     return org_id
 
 
@@ -88,8 +92,9 @@ def get_verifier_password(body):  # noqa: E501
     :rtype: VerifierPassword
     """
     org_id = body[OrgInfoKeys.ORG_ID]
-    verifier_password = db.get_verifier_password(org_id)
-    return VerifierPassword(verifier_password[0])
+    verifier_password = db.get_verifier_password(org_id)[0]
+    encoded_verifier_password = base64.b64encode(verifier_password).decode('utf-8')
+    return VerifierPassword(encoded_verifier_password)
 
 
 def update_org(body, token_info):  # noqa
