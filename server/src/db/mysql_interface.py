@@ -10,6 +10,23 @@ def get_db_connection() -> MySQLdb.Connection:
     return MySQLdb.connect(read_default_file='~/.my.cnf')
 
 
+def handle_err(err_code):
+    print("SQL process failed:", err_code)
+    if err_code == 1062:
+        raise Conflict("Already in DB")
+    if err_code == 1366:
+        raise NotFound("Not Found or incorrect string value")
+    if err_code == 1265:
+        raise BadRequest("Argument was not the right type")
+    if err_code == 1406:
+        raise BadRequest("Argument is too large")
+    if err_code == 1048:
+        raise Conflict("Invalid email")
+    if err_code == 1644:
+        raise Conflict("State of request is inconsistent")
+    raise InternalServerError()
+
+
 def call_proc(proc_name, args=None, resp_many=False):
     resp = None
 
@@ -30,16 +47,7 @@ def call_proc(proc_name, args=None, resp_many=False):
                 print("Database return:", resp)
             db.commit()
     except MySQLdb.MySQLError as err:
-        print("SQL process failed:", err)
-        if err.args[0] == 1062:
-            raise Conflict("Already in DB")
-        if err.args[0] == 1366:
-            raise NotFound("Not Found")
-        if err.args[0] == 1265:
-            raise BadRequest("Argument was not the right type")
-        if err.args[0] == 1406:
-            raise BadRequest("Argument is too large")
-        raise InternalServerError()
+        handle_err(err.args[0])
     return resp
 
 
@@ -190,7 +198,8 @@ def remove_question(question_id):
 
 
 def update_question(question_id, description, min_selection_count, max_selection_count, ordered_choices):
-    return call_proc(PROCEDURE.UPDATEQUESTION, (question_id, description, min_selection_count, max_selection_count, ordered_choices))
+    return call_proc(PROCEDURE.UPDATEQUESTION,
+                     (question_id, description, min_selection_count, max_selection_count, ordered_choices))
 
 
 def add_question_opt(question_id, option_description):
@@ -218,11 +227,11 @@ def add_choice(vote_id, opt_id, order_position):
 
 
 def get_owner_org_info(uid):
-    return call_proc(PROCEDURE.GETOWNERORGINFO, (uid, ))
+    return call_proc(PROCEDURE.GETOWNERORGINFO, (uid,))
 
 
 def get_questions_and_options(election_id):
-    return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id, ), resp_many=True)
+    return call_proc(PROCEDURE.GETQUESTIONSANDOPTIONS, (election_id,), resp_many=True)
 
 
 def is_eligible(voting_token, election_id):
