@@ -215,9 +215,9 @@ CREATE PROCEDURE CreateOrg(
     IN verifier_password VARBINARY(200),
     IN user_org_id VARCHAR(40))
 BEGIN
-    DECLARE orgOwnerCount INT;
-    SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id AND e.privilege = 4);
-    IF (orgOwnerCount > 0) THEN
+    DECLARE userOwnerCount INT;
+    SET userOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id AND e.privilege = 4);
+    IF (userOwnerCount > 0) THEN
         SIGNAL SQLSTATE '23000'
         SET 
 			MYSQL_ERRNO = 1169,
@@ -386,13 +386,29 @@ CREATE PROCEDURE UpdatePrivilege(
     IN privilege INT)
 BEGIN
 	DECLARE orgOwnerCount INT;
-	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id AND e.privilege = 4);
+	DECLARE ownerUserId INT;
+    
+	SELECT COUNT(*), e.user_id 
+    INTO orgOwnerCount, ownerUserId 
+    FROM Enrollment e 
+    WHERE e.org_id = org_id
+    AND e.privilege = 4
+    GROUP BY e.user_id LIMIT 1;
+    
 	IF (privilege = 4 AND orgOwnerCount > 0) THEN
         SIGNAL SQLSTATE '23000'
         SET 
 			MYSQL_ERRNO = 1169,
-			MESSAGE_TEXT = 'User cannot be the owner of more than one organization';
+			MESSAGE_TEXT = 'There cannot be more than one owner in this organization';
     END IF;
+
+	IF (user_id = ownerUserId) THEN
+        SIGNAL SQLSTATE '45000'
+        SET 
+			MYSQL_ERRNO = 1644,
+			MESSAGE_TEXT = 'There cannot be more than one owner in this organization';
+    END IF;
+    
 
     UPDATE Enrollment e
     SET e.privilege = privilege
