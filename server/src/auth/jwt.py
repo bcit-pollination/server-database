@@ -5,7 +5,7 @@ from jose import jwt, JWTError
 from werkzeug.exceptions import Unauthorized
 from src.constants_enums.obj_keys import JwtTokenKeys
 
-JWT_ISSUER = 'pollination.live'
+JWT_ISSUER = os.getenv('POLLINATION_URL')
 JWT_SECRET = os.getenv('AUTH_SECRET')
 JWT_LIFETIME_SECONDS = 3600
 JWT_ALGORITHM = 'HS256'
