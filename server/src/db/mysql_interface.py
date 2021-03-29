@@ -26,7 +26,9 @@ def handle_err(err_code):
     if err_code == 1644:
         raise Conflict("Election doesn't exist or the voting token isn't eligible")
     if err_code == 1169:
-        raise Conflict("Cannot own more than one org")
+        raise Conflict("Cannot own more than one org. An org cannot have more than one owner")
+    if err_code == 1072:
+        raise Conflict("You cannot disown organization")
     raise InternalServerError()
 
 
