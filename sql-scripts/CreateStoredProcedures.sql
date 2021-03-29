@@ -216,7 +216,7 @@ CREATE PROCEDURE CreateOrg(
     IN user_org_id VARCHAR(40))
 BEGIN
     DECLARE orgOwnerCount INT;
-    SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+    SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id AND e.privilege = 4);
     IF (orgOwnerCount > 0) THEN
         SIGNAL SQLSTATE '23000'
         SET 
@@ -386,7 +386,7 @@ CREATE PROCEDURE UpdatePrivilege(
     IN privilege INT)
 BEGIN
 	DECLARE orgOwnerCount INT;
-	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id);
+	SET orgOwnerCount = (SELECT COUNT(*) FROM Enrollment e WHERE e.user_id = user_id AND e.privilege = 4);
 	IF (privilege = 4 AND orgOwnerCount > 0) THEN
         SIGNAL SQLSTATE '23000'
         SET 
