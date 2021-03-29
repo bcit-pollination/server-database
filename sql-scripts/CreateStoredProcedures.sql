@@ -586,7 +586,7 @@ END; //
  */
 CREATE PROCEDURE UpdateOption(
     IN option_id INT,
-    IN option_description VARCHAR(40))
+    IN option_description VARCHAR(400))
 BEGIN
     UPDATE Opt o
     SET o.option_description = option_description
