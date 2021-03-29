@@ -394,19 +394,19 @@ BEGIN
     WHERE e.org_id = org_id
     AND e.privilege = 4
     GROUP BY e.user_id LIMIT 1;
-    
+    /* adding another owner */
 	IF (privilege = 4 AND orgOwnerCount > 0) THEN
         SIGNAL SQLSTATE '23000'
         SET 
 			MYSQL_ERRNO = 1169,
 			MESSAGE_TEXT = 'There cannot be more than one owner in this organization';
     END IF;
-
+	/* demoting an owner */
 	IF (user_id = ownerUserId) THEN
         SIGNAL SQLSTATE '45000'
         SET 
-			MYSQL_ERRNO = 1644,
-			MESSAGE_TEXT = 'There cannot be more than one owner in this organization';
+			MYSQL_ERRNO = 1072,
+			MESSAGE_TEXT = 'All organizations must have an owner';
     END IF;
     
 
