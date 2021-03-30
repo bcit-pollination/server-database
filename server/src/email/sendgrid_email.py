@@ -8,7 +8,7 @@ import six
 from jose import jwt, JWTError
 from werkzeug.exceptions import Unauthorized
 
-JWT_ISSUER = 'pollination.live'
+JWT_ISSUER = os.getenv('POLLINATION_URL')
 JWT_SECRET = os.getenv('EMAIL_SECRET')
 JWT_LIFETIME_SECONDS = 86400
 JWT_ALGORITHM = 'HS256'

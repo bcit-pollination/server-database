@@ -1,3 +1,5 @@
+import os
+
 from werkzeug.exceptions import NotFound, Conflict, BadRequest
 
 from src.email.sendgrid_email import send_registration_email, decode_user_info
@@ -23,7 +25,6 @@ def accept_org_invite(encrypted_data):  # noqa: E501
     new_user = decode_user_info(encrypted_data)
     uid_tuple = db.get_user_id(new_user[UserInfoKeys.EMAIL])
     if not uid_tuple or len(uid_tuple) == 0:
-        # TODO we probably want to redirect to home page
         raise NotFound("No user associated with that email")
     org_user_info_tuple = db.get_organization(new_user[OrgInfoKeys.ORG_ID], uid_tuple[0])
     if org_user_info_tuple is None or len(org_user_info_tuple) == 0:
@@ -32,7 +33,8 @@ def accept_org_invite(encrypted_data):  # noqa: E501
         raise Conflict("You can only accept invitations if you are invited")
     db.update_privilege(uid_tuple[0], new_user[OrgInfoKeys.ORG_ID], PrivilegeLevels.MEMBER)
 
-    return "invitation accepted", 301, {'Location': 'https://pollination.live'}
+    url = os.getenv('POLLINATION_URL')
+    return "invitation accepted", 301, {'Location': f'https://{url}'}
 
 
 def change_user_privilege(body, token_info):  # noqa
@@ -52,15 +54,15 @@ def change_user_privilege(body, token_info):  # noqa
     return None
 
 
-def get_org_users(org_id, privilege_level):  # noqa: E501
+def get_org_users(org_id, privilege_level=1):  # noqa: E501
     """Fetch org users
 
     Get all users # noqa: E501
 
     :rtype: InlineResponse2003
     """
-    if org_id is None or privilege_level is None:
-        raise BadRequest("must provide org_id and privilage_level in url params")
+    if org_id is None:
+        raise BadRequest("must provide org_id in url params")
     org_users = db.get_users_from_org(org_id, privilege_level)
     if org_users is None:
         raise NotFound("No such organization")

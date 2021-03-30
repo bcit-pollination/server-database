@@ -24,7 +24,11 @@ def handle_err(err_code):
     if err_code == 1048:
         raise Conflict("Invalid email")
     if err_code == 1644:
-        raise Conflict("State of request is inconsistent")
+        raise Conflict("Election doesn't exist or the voting token isn't eligible")
+    if err_code == 1169:
+        raise Conflict("Cannot own more than one org. An org cannot have more than one owner")
+    if err_code == 1072:
+        raise Conflict("You cannot disown organization")
     raise InternalServerError()
 
 
