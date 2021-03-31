@@ -46,7 +46,7 @@ def _current_timestamp() -> int:
     return int(time.time())
 
 
-def send_registration_email(org_name, org_id, user_email):
+def send_registration_email(org_name, org_id, user_email, voting_token):
     """
     Send a registration email.
 
@@ -61,9 +61,13 @@ def send_registration_email(org_name, org_id, user_email):
         to_emails=user_email,
         subject=f'Pollination: invitation to register at {org_name}',
         html_content=f'''
-        <h1>You have been invited to join: {org_name}</h1>
+        <h1>You have been invited to join: {org_name}</h1><br>
         To accept follow the link below:<br>
-        https://pollination.live/api/org/users/invite/accept?encrypted_data={encrypted_data}''')
+        https://pollination.live/api/org/users/invite/accept?encrypted_data={encrypted_data}<br>
+        <br>
+        Your voting token is: {voting_token}<br>
+        Use it to vote in unverified elections at our voting stations
+        ''')
     api_key = os.environ.get('SENDGRID_API_KEY')
     sg = SendGridAPIClient(api_key)
     response = sg.send(message)
