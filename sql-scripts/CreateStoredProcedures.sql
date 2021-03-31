@@ -455,7 +455,7 @@ END; //
  */
 CREATE PROCEDURE CreateElection(
     IN org_id INT, 
-    IN election_description VARCHAR(40),
+    IN election_description VARCHAR(400),
     IN start_time VARCHAR(40),
     IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
@@ -472,7 +472,7 @@ END;//
  */
 CREATE PROCEDURE UpdateElection(
     IN id INT,
-    IN election_description VARCHAR(40),
+    IN election_description VARCHAR(400),
     IN start_time VARCHAR(40),
     IN end_time VARCHAR(40),
     IN anonymous BOOLEAN,
@@ -521,7 +521,7 @@ END; //
  */
 CREATE PROCEDURE AddQuestion(
     IN election_id INT,
-    IN question_description VARCHAR(40),
+    IN question_description VARCHAR(400),
     IN min_selection_count INT,
     IN max_selection_count INT,
     IN priority_selections BOOLEAN)
@@ -546,7 +546,7 @@ END; //
  */
 CREATE PROCEDURE UpdateQuestion(
     IN question_id INT,
-    IN question_description VARCHAR(40),
+    IN question_description VARCHAR(400),
     IN min_selection_count INT,
     IN max_selection_count INT,
     IN priority_selections BOOLEAN)
@@ -565,7 +565,7 @@ END; //
  */
 CREATE PROCEDURE AddOption(
     IN question_id INT,
-    IN option_description VARCHAR(40))
+    IN option_description VARCHAR(400))
 BEGIN
     INSERT INTO Opt (question_id, option_description) 
     VALUES(question_id, option_description);
@@ -586,7 +586,7 @@ END; //
  */
 CREATE PROCEDURE UpdateOption(
     IN option_id INT,
-    IN option_description VARCHAR(40))
+    IN option_description VARCHAR(400))
 BEGIN
     UPDATE Opt o
     SET o.option_description = option_description
@@ -826,19 +826,21 @@ BEGIN
 END; //
 
 
-/** A combined version of the first three functions,
-    which was what was asked for on the queries document.
-    In this, all the elections that the user is associated with
-    are listed alongside the organization they belong to, as well
-    as the election.*/
-    CREATE PROCEDURE GetElectionsAlternate(IN id INT)
-    BEGIN
-        SELECT e.user_id, e.org_id, election_id, privilege, 
-        start_time, end_time, verified, anonymous, public_results FROM Users u
-        INNER JOIN Enrollment e
-            ON e.user_id = u.user_id
-        INNER JOIN Election el
-            ON el.org_id = e.org_id
-        WHERE e.user_id = id;
-        
-    END; //
+/** 
+ * All the elections that the user is associated with
+ * are listed alongside the organization they belong to,
+ * as well as the election.
+ */
+CREATE PROCEDURE GetElectionsAlternate(IN id INT)
+BEGIN
+	SELECT e.user_id, e.org_id, election_id, privilege, 
+	start_time, end_time, verified, anonymous, public_results FROM Users u
+	INNER JOIN Enrollment e
+		ON e.user_id = u.user_id
+	INNER JOIN Election el
+		ON el.org_id = e.org_id
+	WHERE e.user_id = id;
+	
+END; //
+    
+DELIMITER ;
