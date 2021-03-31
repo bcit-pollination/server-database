@@ -42,7 +42,7 @@ class OptionResults(Option):
             'result': 'result'
         }
         self._total_votes_for = total_votes_for
-        self._vote_proportion_percent = result
+        self.result = result
 
     @classmethod
     def from_dict(cls, dikt) -> 'OptionResults':
