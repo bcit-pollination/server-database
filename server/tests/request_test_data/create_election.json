@@ -1,0 +1,72 @@
+{
+    "anonymous": true,
+    "election_description": "election_description",
+    "election_id": 0,
+    "end_time": "2024-01-23T04:56:07+00:00",
+    "org_id": 1,
+    "public_results": true,
+    "questions": [
+      {
+        "election_id": 1,
+        "max_selection_count": 2,
+        "min_selection_count": 2,
+        "ordered_choices": false,
+        "options": [
+          {
+            "option_description": "q1_op1",
+            "option_id": 5
+          },
+          {
+            "option_description": "q1_op2",
+            "option_id": 5
+          }, 
+          {
+              "option_description": "q1_op3",
+              "option_id": 5
+          }
+        ],
+        "question_description": "q1"
+      },
+      {
+        "election_id": 1,
+        "max_selection_count": 1,
+        "min_selection_count": 1,
+        "ordered_choices": false,
+        "options": [
+          {
+            "option_description": "q2_op1",
+            "option_id": 5
+          },
+          {
+            "option_description": "q2_op2",
+            "option_id": 5
+          }
+        ],
+        "question_description": "q2"
+      },
+      {
+        "election_id": 1,
+        "max_selection_count": 3,
+        "min_selection_count": 3,
+        "ordered_choices": true,
+        "options": [
+          {
+            "option_description": "q3_op1",
+            "option_id": 5
+          },
+          {
+            "option_description": "q3_op2",
+            "option_id": 5
+          }, 
+          {
+              "option_description": "q3_op3",
+              "option_id": 5
+          }
+        ],
+        "question_description": "q3"
+    }
+        
+    ],
+    "start_time": "2000-01-23T04:56:07+00:00",
+    "verified": true
+}
