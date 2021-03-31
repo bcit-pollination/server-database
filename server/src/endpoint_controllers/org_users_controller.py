@@ -3,6 +3,7 @@ import os
 from werkzeug.exceptions import NotFound, Conflict, BadRequest
 
 from src.email.sendgrid_email import send_registration_email, decode_user_info
+from src.utils.logging import Logger
 from swagger_server.models import OrgUser
 from swagger_server.models.inline_response2003 import InlineResponse2003  # noqa: E501
 from src.auth.jwt import decode_token
@@ -97,6 +98,14 @@ def remove_org_user(body, token_info):  # noqa
     return None
 
 
+def log_invite(email, logger):
+    log_string = f"\nREJECTED INVITATION: \n" \
+                 f"Reason: user not found\n" \
+                 f"email: {email}"
+    logger.add_entry(log_string)
+
+
+
 def org_invite_user(body, token_info):  # noqa
     """Add user to org
 
@@ -109,11 +118,19 @@ def org_invite_user(body, token_info):  # noqa
     """
     users_to_invite = body[OrgInfoKeys.INVITES]
     org_id = body[OrgInfoKeys.ORG_ID]
+    logger = Logger(f'logs/invitations/org_{org_id}log')
     org_name_tuple = db.get_organization(org_id, token_info[JwtTokenKeys.UID])
     org_name = org_name_tuple[1]
     for user in users_to_invite:
+        uid_tuple = db.get_user_id(user[UserInfoKeys.EMAIL])
         email = user[UserInfoKeys.EMAIL]
+        if not uid_tuple or len(uid_tuple) == 0:
+            log_invite(email, logger)
+            continue
+        uid = uid_tuple[0]
+        voting_token_tuple = db.get_user_token(uid)
+        voting_token = voting_token_tuple[0]
         user_org_id = user[OrgInfoKeys.USER_ORG_ID]
         db.invite_user(email, user_org_id, org_id)
-        send_registration_email(org_name, org_id, email)
+        send_registration_email(org_name, org_id, email, voting_token)
     return None
