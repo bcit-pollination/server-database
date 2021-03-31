@@ -52,7 +52,7 @@ CALL AddVote('789', '2028-01-04 01:01:04', 1);
 CALL AddChoice(3, 1, 1);
 CALL AddChoice(3, 2, 2);
 
-CALL AddVote('123', '2028-01-04 01:01:01', 2);
+CALL AddVote('123', CURRENT_TIMESTAMP(), 2);
 CALL AddChoice(4, 5, 1);
 CALL AddChoice(4, 6, 2);
 

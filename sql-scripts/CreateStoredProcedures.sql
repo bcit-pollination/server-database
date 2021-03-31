@@ -61,7 +61,6 @@ DROP PROCEDURE IF EXISTS IsEligible;
 DROP PROCEDURE IF EXISTS GetElectionsAlternate;
 
 DELIMITER //
-//
 
 /**
  * Returns the user_id corresponding to the email and password.
@@ -76,6 +75,9 @@ BEGIN
 END; //
 
 
+/**
+ * Gets the password for the user with the email.
+ */
 CREATE PROCEDURE GetPassword(
     IN email VARCHAR(40))
 BEGIN
@@ -83,7 +85,9 @@ BEGIN
     WHERE u.email = email;
 END; //
 
-
+/**
+ * Gets the user and password for the user with the email.
+ */
 CREATE PROCEDURE GetUserId(
     IN email VARCHAR(40))
 BEGIN
@@ -158,8 +162,6 @@ BEGIN
     SET u.password = password
     WHERE u.user_id = user_id;
 END; //
-
-
 
 /**
  * Disbands an organization, kicking everyone
@@ -337,8 +339,6 @@ BEGIN
     AND e.privilege > 1;
 END; //
  
-
-
 /**
  * Gets a list of the users' user_id, first_name, last_name
  * email, dob, privilege, and user_org_id from an organization.
@@ -409,7 +409,6 @@ BEGIN
 			MESSAGE_TEXT = 'All organizations must have an owner';
     END IF;
     
-
     UPDATE Enrollment e
     SET e.privilege = privilege
     WHERE e.user_id = user_id
@@ -427,8 +426,6 @@ BEGIN
     WHERE e.org_id = org_id
     AND e.user_id = user_id;
 END; //
-
-
 
 /**
  * Deletes the specified election.
@@ -515,7 +512,6 @@ BEGIN
     WHERE e.user_id = user_id;
 END; //
 
-
 /**
  * Adds a question to an election.
  */
@@ -559,7 +555,6 @@ BEGIN
         WHERE q.question_id = question_id;
 END; //
     
-
 /** 
  * Adds a choice to a question. 
  */
@@ -592,8 +587,6 @@ BEGIN
     SET o.option_description = option_description
     WHERE o.option_id = option_id;
 END; //
-
-
 
 /**
  * Gets all the details about the specified question's options, 
@@ -630,9 +623,6 @@ BEGIN
         WHERE q.election_id = election_id;
 END; //
 
-
-
-
 /**
  * Gets the first_name, last_name, question_id, question_description,
  * option_id, and option_description pertaining to each of the casted votes
@@ -656,7 +646,6 @@ BEGIN
 		WHERE el.election_id = election_id
 		ORDER BY u.voting_token;
 END; //
-
 
 /**
  * Deletes a vote.
@@ -746,7 +735,6 @@ proc: BEGIN
     END IF;
 END; //
 
-
 /** 
  * Adds a choice to the casted vote.
  */
@@ -770,7 +758,6 @@ BEGIN
 	END IF;
 END; //
 
-
 /**
  * Gets the voter_list for a particular election.
  */
@@ -783,10 +770,7 @@ BEGIN
     INNER JOIN Users u
         ON en.user_id = u.user_id
     WHERE el.election_id = election_id;
-        
 END; //
-
-
 
 /** 
  * Gets all public elections. 
@@ -825,7 +809,6 @@ BEGIN
     AS `is_eligible`;
 END; //
 
-
 /** 
  * All the elections that the user is associated with
  * are listed alongside the organization they belong to,
@@ -840,7 +823,6 @@ BEGIN
 	INNER JOIN Election el
 		ON el.org_id = e.org_id
 	WHERE e.user_id = id;
-	
 END; //
     
 DELIMITER ;
